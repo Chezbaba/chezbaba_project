@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChezBaba - Marketplace</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="common.js" defer></script>
+    <style>
+        /* ===== RÉINITIALISATION DES MARGES ET PADDING ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+        
+        /* ===== HERO SLIDER OPTIMISÉ ===== */
+        .hero-slider {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 400px; /* Hauteur réduite sur desktop */
+        }
+        
+        .categorie_navigation{
+            display: none;
+        }
+        
+        .slide2{
+            background-color:#bdfe00;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 60px; /* Padding réduit */
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide-content {
+            max-width: 450px;
+        }
+
+        .slide-content h1 {
+            font-size: 36px; /* Taille réduite */
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .slide-content p {
+            font-size: 18px; /* Taille réduite */
+            margin: 10px 0 20px;
+            line-height: 1.4;
+        }
+
+        .cta {
+            background: black;
+            color: white;
+            padding: 14px 28px; /* Padding réduit */
+            font-size: 18px; /* Taille réduite */
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cta:hover {
+            transform: scale(1.05);
+        }
+
+        .slide-image {
+            width: 40%; /* Largeur réduite */
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+        }
+
+        /* Pagination */
+        .pagination {
+            position: absolute;
+            bottom: 20px; /* Position remontée */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .pagination span {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pagination .active {
+            background: white;
+            transform: scale(1.3);
+        }
+
+        /* Controls */
+        .controls {
+            position: absolute;
+            bottom: 20px; /* Position remontée */
+            right: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .controls button {
+            background: rgba(255, 255, 255, 0.8);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .controls button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        /* ===== SECTION PRODUITS POPULAIRES SCROLLABLE ===== */
+        .featured-products {
+            padding: 40px 0 20px;
+            background: #f8f9fa;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 15px;
+        }
+
+        .section-header h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 0;
+        }
+
+        .view-all-link {
+            color: #0C1B33;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .view-all-link:hover {
+            color: #1A2B4D;
+            text-decoration: underline;
+        }
+
+        /* Conteneur scrollable AVEC VISIBILITÉ DE 4 PRODUITS */
+        .products-scroll-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            padding: 0 15px;
+        }
+
+        .products-scroll-wrapper {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            gap: 15px;
+            padding: 0 0 20px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #c1c1c1 #f0f0f0;
+            /* Ajustement pour montrer 4 produits sur PC */
+            width: 100%;
+        }
+
+        .products-scroll-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .products-scroll-wrapper::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 3px;
+        }
+
+        .products-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .products-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Boutons de navigation scroll */
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .scroll-btn:hover {
+            opacity: 1;
+            transform: translateY(-50%) scale(1.1);
+            background: #0C1B33;
+            color: white;
+        }
+
+        .scroll-btn.prev {
+            left: 10px;
+        }
+
+        .scroll-btn.next {
+            right: 10px;
+        }
+
+        /* Masquer les boutons sur mobile */
+        .scroll-btn.mobile-hide {
+            display: none;
+        }
+
+        /* ===== CARTE PRODUIT SCROLLABLE - TAILLE POUR 4 VISIBLES ===== */
+        .product-card-scroll {
+            flex: 0 0 auto;
+            width: calc(25% - 12px); /* 4 produits par ligne sur PC */
+            min-width: 250px; /* Largeur minimale */
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid #eaeaea;
+            display: flex;
+            flex-direction: column;
+            height: 380px;
+        }
+
+        .product-card-scroll:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        /* ===== SECTION TOUS LES PRODUITS ===== */
+        .all-products {
+            padding: 40px 0;
+            background: white;
+        }
+
+        .all-products .section-header {
+            margin-bottom: 25px;
+        }
+
+        /* CONTENEUR PRINCIPAL POUR LA GRILLE VERTICALE */
+        .products-vertical-container {
+            width: 100%;
+            padding: 0 15px;
+        }
+
+        /* Grille verticale CORRIGÉE POUR LE RESPONSIVE */
+        .products-vertical-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 colonnes par défaut */
+            gap: 20px;
+            width: 100%;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        /* Carte produit verticale */
+        .product-card-vertical {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid #eaeaea;
+            display: flex;
+            flex-direction: column;
+            height: 380px;
+            width: 100%;
+        }
+
+        .product-card-vertical:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        /* Badge commun */
+        .new-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: linear-gradient(135deg, #0C1B33, #1A2B4D);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 700;
+            z-index: 3;
+        }
+
+        /* Image container commun */
+        .product-image-container {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            background: #f5f5f5;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card-scroll:hover .product-image,
+        .product-card-vertical:hover .product-image {
+            transform: scale(1.03);
+        }
+
+        /* ICÔNES SUR L'IMAGE */
+        .image-actions {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 8px;
+            z-index: 2;
+        }
+
+        .image-action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.9);
+            color: #666;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .image-action-btn:hover {
+            background: white;
+            transform: scale(1.1);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .favorite-btn.active {
+            color: #ff6b6b;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .cart-btn.active {
+            color: #2ecc71;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* CONTENU PRODUIT */
+        .product-content {
+            padding: 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 2.4em;
+            max-height: 2.4em;
+            word-break: break-word;
+        }
+
+        .product-price {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #2ecc71;
+            margin-bottom: 8px;
+        }
+
+        .product-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+            font-size: 0.82em;
+            color: #666;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 0.85em;
+        }
+
+        .rating-number {
+            margin-left: 2px;
+            font-weight: 500;
+        }
+
+        .sold-count, .stock-count {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* Vendeur */
+        .product-seller {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-top: 8px;
+            border-top: 1px solid #eaeaea;
+            margin-top: auto;
+        }
+
+        .seller-logo {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #f5f5f5;
+            flex-shrink: 0;
+        }
+
+        .seller-name {
+            font-size: 0.82em;
+            color: #333;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Bouton Voir plus */
+        .load-more-container {
+            text-align: center;
+            margin-top: 40px;
+            padding: 0 15px;
+        }
+
+        .load-more-btn {
+            background: #0C1B33;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .load-more-btn:hover {
+            background: #1A2B4D;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(12, 27, 51, 0.2);
+        }
+
+        .load-more-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .load-more-btn .spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .load-more-btn.loading .spinner {
+            display: block;
+        }
+
+        /* ===== RESPONSIVE OPTIMISÉ ET CORRIGÉ ===== */
+        
+        /* Desktop Large (1200px et plus) */
+        @media (min-width: 1200px) {
+            .products-vertical-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 25px;
+            }
+
+            
+            .product-card-scroll {
+                width: calc(25% - 12px); /* 4 produits par ligne */
+                min-width: 280px;
+            }
+            
+            .product-card-vertical {
+                width: 100%;
+            }
+            
+            /* Montrer 4 produits dans le conteneur scrollable */
+            .products-scroll-wrapper {
+                scroll-snap-type: x mandatory;
+            }
+            
+            .product-card-scroll {
+                scroll-snap-align: start;
+            }
+        }
+
+        /* Desktop Moyen (992px à 1199px) */
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .products-vertical-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 colonnes */
+                gap: 20px;
+            }
+            
+            
+            .product-card-scroll {
+                width: calc(33.33% - 10px); /* 3 produits par ligne */
+                min-width: 230px;
+            }
+            
+            .product-card-vertical {
+                height: 360px;
+            }
+            
+            .product-image-container {
+                height: 160px;
+            }
+        }
+
+        /* Tablette (768px à 991px) - 3 COLONNES CORRIGÉ */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .hero-slider {
+                height: 350px;
+            }
+            footer{
+                display: none;
+            }
+            
+            .slide {
+                padding: 30px 40px;
+            }
+
+            .slide-content h1 {
+                font-size: 28px;
+            }
+
+            .slide-content p {
+                font-size: 16px;
+            }
+
+            .slide-image {
+                width: 35%;
+                max-height: 250px;
+            }
+
+            .cta {
+                font-size: 16px;
+                padding: 12px 24px;
+            }
+            
+            .products-vertical-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 colonnes */
+                gap: 15px;
+            }
+            
+            .product-card-scroll {
+                width: calc(33.33% - 10px); /* 3 produits par ligne */
+                min-width: 220px;
+                height: 350px;
+            }
+            
+            .product-card-vertical {
+                height: 350px;
+            }
+            
+            .product-image-container {
+                height: 150px;
+            }
+            
+            .product-content {
+                padding: 10px;
+            }
+            
+            .product-name {
+                font-size: 0.9em;
+                min-height: 2em;
+                max-height: 2em;
+            }
+            
+            .product-price {
+                font-size: 1.05em;
+            }
+            
+            .section-header h2 {
+                font-size: 24px;
+            }
+            
+            /* Montrer les boutons scroll sur tablette */
+            .scroll-btn.mobile-hide {
+                display: flex;
+            }
+        }
+
+        /* Mobile Grand (576px à 767px) - 2 COLONNES */
+        @media (min-width: 576px) and (max-width: 767px) {
+            .hero-slider {
+                height: 300px;
+            }
+            footer{
+                display: none;
+            }
+            
+            .slide {
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+                text-align: center;
+            }
+
+            .slide-content {
+                max-width: 100%;
+                margin-bottom: 15px;
+            }
+
+            .slide-content h1 {
+                font-size: 24px;
+            }
+
+            .slide-content p {
+                font-size: 14px;
+                margin: 8px 0 15px;
+            }
+
+            .slide-image {
+                width: 70%;
+                max-height: 180px;
+            }
+
+            .cta {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+            
+            .pagination {
+                bottom: 15px;
+            }
+            
+            .controls {
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .products-vertical-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+                gap: 12px;
+            }
+            
+            .product-card-scroll {
+                width: calc(50% - 8px); /* 2 produits par ligne */
+                min-width: 200px;
+                height: 340px;
+            }
+            
+            .product-card-vertical {
+                height: 340px;
+            }
+            
+            .product-image-container {
+                height: 140px;
+            }
+            
+            .product-content {
+                padding: 10px;
+            }
+            
+            .product-name {
+                font-size: 0.9em;
+                min-height: 2em;
+                max-height: 2em;
+            }
+            
+            .product-price {
+                font-size: 1.05em;
+            }
+            
+            .section-header h2 {
+                font-size: 22px;
+            }
+            
+            /* Masquer les boutons scroll sur mobile */
+            .scroll-btn.mobile-hide {
+                display: none;
+            }
+        }
+
+        /* Mobile Petit (480px à 575px) - 2 COLONNES */
+        @media (min-width: 480px) and (max-width: 575px) {
+            .hero-slider {
+                height: 250px;
+            }
+            
+            .slide-content h1 {
+                font-size: 20px;
+            }
+            footer{
+                display: none;
+            }
+
+            .slide-content p {
+                font-size: 13px;
+                margin: 6px 0 12px;
+            }
+
+            .slide-image {
+                width: 80%;
+                max-height: 150px;
+            }
+
+            .cta {
+                font-size: 13px;
+                padding: 8px 18px;
+            }
+            
+            .pagination span {
+                width: 6px;
+                height: 6px;
+            }
+            
+            .controls button {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+            
+            .products-vertical-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+                gap: 10px;
+            }
+            
+            .product-card-scroll {
+                width: calc(50% - 8px); /* 2 produits par ligne */
+                min-width: 180px;
+                height: 320px;
+            }
+            
+            .product-card-vertical {
+                height: 320px;
+            }
+            
+            .product-image-container {
+                height: 120px;
+            }
+            
+            .product-name {
+                font-size: 0.85em;
+                min-height: 1.8em;
+                max-height: 1.8em;
+            }
+            
+            .image-action-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9em;
+            }
+            
+            .section-header h2 {
+                font-size: 20px;
+            }
+            
+            .load-more-btn {
+                padding: 12px 30px;
+                font-size: 14px;
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Mobile Très Petit (320px à 479px) - 2 COLONNES COMPACT */
+        @media (min-width: 320px) and (max-width: 479px) {
+            .hero-slider {
+                height: 220px;
+            }
+            footer{
+                display: none;
+            }
+            
+            .slide {
+                padding: 15px;
+            }
+            
+            .slide-content h1 {
+                font-size: 18px;
+            }
+            
+            .slide-image {
+                width: 90%;
+                max-height: 120px;
+            }
+            
+            .products-vertical-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+                gap: 8px;
+            }
+            
+            .product-card-scroll {
+                width: calc(50% - 6px); /* 2 produits par ligne */
+                min-width: 160px;
+                height: 300px;
+            }
+            
+            .product-card-vertical {
+                height: 300px;
+            }
+            
+            .product-image-container {
+                height: 110px;
+            }
+            
+            .product-name {
+                font-size: 0.8em;
+                min-height: 1.6em;
+                max-height: 1.6em;
+            }
+            
+            .product-content {
+                padding: 8px;
+            }
+            
+            .product-stats {
+                font-size: 0.75em;
+                gap: 4px;
+            }
+            
+            .section-header {
+                padding: 0 10px;
+            }
+            
+            .products-scroll-container {
+                padding: 0 10px;
+            }
+            
+            .products-vertical-container {
+                padding: 0 10px;
+            }
+            
+            .load-more-btn {
+                padding: 10px 25px;
+                font-size: 13px;
+            }
+        }
+
+        /* iPhone 4/5 (320px) - OPTIMISATION SPÉCIALE */
+        @media (max-width: 320px) {
+            .hero-slider {
+                height: 200px;
+            }
+            
+            .slide-content h1 {
+                font-size: 16px;
+            }
+            
+            .slide-content p {
+                font-size: 12px;
+            }
+            
+            .products-vertical-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+                gap: 6px;
+            }
+            
+            .product-card-scroll {
+                width: calc(50% - 4px); /* 2 produits par ligne */
+                min-width: 140px;
+                height: 280px;
+            }
+            
+            .product-card-vertical {
+                width: 100%;
+                height: 280px;
+            }
+            
+            .product-image-container {
+                height: 100px;
+            }
+            
+            .product-name {
+                font-size: 0.75em;
+                min-height: 1.4em;
+                max-height: 1.4em;
+            }
+            
+            .image-action-btn {
+                width: 26px;
+                height: 26px;
+                font-size: 0.85em;
+            }
+            
+            /* Éviter tout décalage horizontal */
+            body, main, section, div {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+        
+            
+            .products-scroll-container {
+                padding: 0 8px;
+            }
+            
+            .products-vertical-container {
+                padding: 0 8px;
+            }
+        }
+
+        /* Mode paysage mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero-slider {
+                height: 250px;
+            }
+            footer{
+                display: none;
+            }
+            
+            .slide {
+                flex-direction: row;
+                padding: 20px 40px;
+            }
+            
+            .slide-content {
+                max-width: 60%;
+            }
+            
+            .slide-image {
+                width: 30%;
+            }
+            
+            .products-vertical-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 colonnes en paysage */
+                gap: 10px;
+            }
+            
+            .product-card-scroll {
+                width: calc(33.33% - 8px); /* 3 produits par ligne */
+                min-width: 180px;
+                height: 260px;
+            }
+            
+            .product-card-vertical {
+                height: 260px;
+            }
+            
+            .product-image-container {
+                height: 90px;
+            }
+        }
+
+        /* Mode paysage tablette */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            .products-vertical-grid {
+                grid-template-columns: repeat(4, 1fr); /* 4 colonnes en paysage tablette */
+                gap: 15px;
+            }
+            
+            .product-card-scroll {
+                width: calc(25% - 12px); /* 4 produits par ligne */
+                min-width: 200px;
+            }
+           
+        }
+
+        /* Correction pour éviter le scroll horizontal */
+        .products-scroll-container,
+        .products-vertical-container,
+        .featured-products,
+        .all-products,
+        main {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Assurer que la grille ne dépasse pas */
+        .products-vertical-grid {
+            width: 100%;
+        }
+
+        /* Ajustement pour les petits écrans */
+        @media (max-width: 767px) {
+            .section-header,
+            .products-scroll-container,
+            .products-vertical-container,
+            .load-more-container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            footer{
+                display: none;
+            }
+            
+            /* Garantir que les cartes ne dépassent pas */
+            .product-card-scroll,
+            .product-card-vertical {
+                max-width: 100%;
+            }
+            
+            /* Ajustement scroll sur mobile */
+            .products-scroll-wrapper {
+                gap: 10px;
+            }
+        }
+
+        /* Correction spécifique pour iPhone 6/7/8 */
+        @media (min-width: 375px) and (max-width: 667px) and (orientation: portrait) {
+            .products-vertical-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            footer{
+                display: none;
+            }
+            
+            .product-card-scroll {
+                width: calc(50% - 5px);
+                min-width: 170px;
+            }
+            
+            .product-card-vertical {
+                height: 320px;
+            }
+            
+            .product-image-container {
+                height: 130px;
+            }
+        }
+
+        /* Correction spécifique pour iPad */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+            .products-vertical-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 colonnes sur iPad portrait */
+                gap: 15px;
+            }
+            
+            .product-card-scroll {
+                width: calc(33.33% - 10px);
+                min-width: 200px;
+            }
+            
+            .product-card-vertical {
+                height: 350px;
+            }
+            
+            .product-image-container {
+                height: 150px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <nav>
+        <div class="navBar">
+            <div class="navBar_connexion_inscription">
+                <p class="navBar_connexion_inscription_text" >
+                    Bonjour!
+                    <a href="connexion.html" class="connexion_link" id="loginBtn">Connecter vous</a> ou 
+                    <a href="inscription.html" class="inscription_link" id="registerBtn">Inscrivez-vous</a>
+                    <a href="#" class="aide_link">Aide</a>
+                </p>
+            </div>
+            <div class="logo-icone-mobile">
+                <div class="nav-mobile-logo">
+                    <a href="index.html" class="mobile-logo" aria-label="Accueil ChezBaba">
+                        <img src="img/logo-removebg-preview.png" alt="ChezBaba Logo" class="mobile-logo-image">
+                    </a>
+                </div>
+                <div class="mobile-icone">
+                    <a href="panier.html" class="icone" style="position: relative;">
+                        <i class="bi bi-cart3"></i>
+                        <span class="cart-badge" id="cartCountMobile">0</span>
+                    </a>
+                </div>
+            </div>
+            <div class="logo_searchBar_button">
+                <div class="nav_logo">
+                    <a href="index.html" class="logo_link" aria-label="Accueil ChezBaba">
+                        <img src="img/logo-removebg-preview.png" alt="ChezBaba Logo" class="logo-image">
+                    </a>
+                </div>
+                <div class="search_input_button">
+                    <input type="text" name="q" class="search_input" placeholder="Rechercher un produit">
+                    <div class="search-icon-mobile">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <button type="submit" class="search_button" name="q">Rechercher</button>
+                </div>
+                <div class="mobile-category-icon" id="mobileCategoryIcon">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                </div>
+                <div class="button_icons">
+    <button class="button_vendre" id="vendreBtn">Vendre</button>
+    <a href="favoris.html" class="icone" style="position: relative;">
+        <i class="bi bi-heart"></i>
+        <span class="cart-badge favorite-badge" id="favoriteCount" style="background: #e63946; display: none;">0</span>
+    </a>
+    <a href="panier.html" class="icone" style="position: relative;">
+        <i class="bi bi-cart3"></i>
+        <span class="cart-badge" id="cartCount">0</span>
+    </a>                    
+    <a href="profil-acheteur.html" class="icone"><i class="bi bi-person"></i></a>
+</div>
+            </div>
+            <div class="categorie_navigation">
+                <div class="categorie"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- Hero Slider -->
+        <div class="hero-slider">
+            <!-- Slide 1 -->
+            <div class="slide slide1">
+                <div class="slide-content slide1">
+                    <h1>Anticipez Noël avec -10% !</h1>
+                    <p>Profitez-en sur de nombreuses catégories et gâtez vos proches.</p>
+                    <button class="cta">J'en profite</button>
+                </div>
+                <img src="img/jouetsenfant.jfif" class="slide-image">
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide slide2">
+                <div class="slide-content">
+                    <h1>Transformez votre maison</h1>
+                    <p>Rénovation et design : redonnez vie à votre intérieur avec style et confort.</p>
+                    <button class="cta">Découvrir nos projets</button>
+                </div>
+                <img src="img/meuble.jfif" class="slide-image">
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide slide3">
+                <div class="slide-content">
+                    <h1>Exprimez votre style</h1>
+                    <p>Mode tendance : découvrez nos collections pour un look unique et élégant.</p>
+                    <button class="cta">Voir la collection</button>
+                </div>
+                <img src="img/rolex.jpg" class="slide-image">
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination"></div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button id="prev"><</button>
+                <button id="next">></button>
+                <button id="pause">⏸</button>
+            </div>
+        </div>
+
+        <!-- Section Produits Populaires Scrollable -->
+        <section class="featured-products">
+            <div class="products-container">
+                <div class="section-header">
+                    <h2>Produits Populaires</h2>
+                    <a href="produits.html" class="view-all-link">Voir tout</a>
+                </div>
+
+                <div class="products-scroll-container">
+                    <button class="scroll-btn prev mobile-hide">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    
+                    <div class="products-scroll-wrapper" id="scrollableProducts">
+                        <!-- Les produits populaires seront chargés ici -->
+                    </div>
+                    
+                    <button class="scroll-btn next mobile-hide">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Tous les Produits -->
+        <section class="all-products">
+            <div class="products-container">
+                <div class="section-header">
+                    <h2>Tous les Produits</h2>
+                    <div class="products-count">
+                        <span id="totalProductsCount">0</span> produits
+                    </div>
+                </div>
+
+                <div class="products-vertical-container">
+                    <div class="products-vertical-grid" id="allProductsGrid">
+                        <!-- Tous les produits seront chargés ici -->
+                    </div>
+                </div>
+
+                <div class="load-more-container">
+                    <button class="load-more-btn" id="loadMoreBtn">
+                        <span class="spinner"></span>
+                        <span class="btn-text">Voir plus de produits</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section footer-logo-section">
+                <div class="nav-mobile-logo">
+                    <a href="index.html" class="logo_link" aria-label="Accueil ChezBaba">
+                        <img src="img/logo-removebg-preview.png" alt="ChezBaba Logo" class="logo-image">
+                    </a>
+                </div>
+                <p class="footer-description">
+                    La marketplace de référence pour vendre et acheter en toute sécurité. 
+                    Rejoignez des millions d'utilisateurs qui nous font confiance.
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="bi bi-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Liens rapides</h3>
+                <ul class="footer-links">
+                    <li><a href="vitrine.html">Vitrine ChezBaba</a></li>
+                    <li><a href="compte.html">Mon compte</a></li>
+                    <li><a href="categorie.html">Catégories</a></li>
+                    <li><a href="panier.html">Panier</a></li>
+                    <li><a href="favoris.html">Favoris</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="#">À propos</a></li>
+                    <li><a href="index.html">Retour en haut</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Centre d'aide</a></li>
+                    <li><a href="#">Service client</a></li>
+                    <li><a href="#">Signaler problème</a></li>
+                    <li><a href="#">Guide vendeur</a></li>
+                    <li><a href="#">Guide acheteur</a></li>
+                    <li><a href="#">Sécurité</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <div class="footer-contact-info">
+                    <strong>Email:</strong><br>
+                    contact@chezbaba.com<br><br>
+                    <strong>Tél:</strong><br>
+                    +229 01 56 12 40 50<br><br>
+                    <strong>Adresse:</strong><br>
+                    Cotonou Akpaka LomNava
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="footer-copyright">
+                    © 2024 ChezBaba. Tous droits réservés.
+                </div>
+                <div class="footer-legal">
+                    <a href="#">Conditions</a>
+                    <a href="#">Confidentialité</a>
+                    <a href="#">Cookies</a>
+                    <a href="#">Mentions légales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bottom Navigation Bar (Mobile) -->
+    <div class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="index.html" class="nav-item active">
+                <i class="bi bi-house nav-icon"></i>
+                <span class="nav-label">Accueil</span>
+            </a>
+            <a href="categorie.html" class="nav-item">
+                <i class="bi bi-grid-3x3-gap nav-icon"></i>
+                <span class="nav-label">Catégories</span>
+            </a>
+            <a href="favoris.html" class="nav-item">
+                <i class="bi bi-heart nav-icon"></i>
+                <span class="nav-label">Favoris</span>
+            </a>
+            <a href="profil-acheteur.html" class="nav-item">
+                <i class="bi bi-person nav-icon"></i>
+                <span class="nav-label">Compte</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // ===== DONNÉES DES PRODUITS POUR INDEX.HTML =====
+const ALL_PRODUCTS = [
+    {
+        id: 1,
+        name: "iPhone 17 Pro Max 256Go - Noir Titane",
+        price: "550 000 FCFA",
+        oldPrice: "650 000 FCFA",
+        img: "img/iphone17.jfif",
+        rating: 5,
+        sold: 124,
+        stock: "3C",
+        seller: "TechZone",
+        sellerLogo: "https://ui-avatars.com/api/?name=TechZone&background=random",
+        condition: "Neuf",
+        category: "telephones",
+        description: "Smartphone haut de gamme avec écran 6.7\", triple caméra et puce A18 Pro"
+    },
+    {
+        id: 2,
+        name: "Samsung Galaxy S24 Ultra 512Go",
+        price: "480 000 FCFA",
+        oldPrice: "550 000 FCFA",
+        img: "img/samsungS24 Ultra.jfif",
+        rating: 5,
+        sold: 89,
+        stock: "2C",
+        seller: "MobileStore",
+        sellerLogo: "https://ui-avatars.com/api/?name=MobileStore&background=random",
+        condition: "Neuf",
+        category: "telephones",
+        description: "Écran Dynamic AMOLED 2X 6.8\", S Pen intégré, appareil photo 200MP"
+    },
+    {
+        id: 3,
+        name: "AirPods Pro 2ème génération",
+        price: "75 000 FCFA",
+        img: "img/airspod.jfif",
+        rating: 5,
+        sold: 203,
+        stock: "5C",
+        seller: "AudioTech",
+        sellerLogo: "https://ui-avatars.com/api/?name=AudioTech&background=random",
+        condition: "Neuf",
+        category: "accessoires",
+        description: "Écouteurs sans fil avec réduction de bruit active et boîtier MagSafe"
+    },
+    {
+        id: 4,
+        name: "MacBook Pro M3 14\" 512Go",
+        price: "850 000 FCFA",
+        img: "img/mac.jpg",
+        rating: 5,
+        sold: 56,
+        stock: "2C",
+        seller: "AppleStore",
+        sellerLogo: "https://ui-avatars.com/api/?name=AppleStore&background=random",
+        condition: "Neuf",
+        category: "ordinateurs",
+        description: "Ordinateur portable Apple avec écran Liquid Retina XDR et puce M3"
+    },
+    {
+        id: 5,
+        name: "Enceinte Bluetooth JBL Charge 5",
+        price: "45 000 FCFA",
+        img: "img/jbl.jpg",
+        rating: 4.5,
+        sold: 156,
+        stock: "6C",
+        seller: "AudioWorld",
+        sellerLogo: "https://ui-avatars.com/api/?name=AudioWorld&background=random",
+        condition: "Neuf",
+        category: "electronique",
+        description: "Enceinte portable étanche avec batterie longue durée et son puissant"
+    },
+    {
+        id: 6,
+        name: "Moniteur HP 27\" 4K UHD",
+        price: "150 000 FCFA",
+        oldPrice: "180 000 FCFA",
+        img: "img/moniteurs.jfif",
+        rating: 4.5,
+        sold: 42,
+        stock: "4C",
+        seller: "TechVision",
+        sellerLogo: "https://ui-avatars.com/api/?name=TechVision&background=random",
+        condition: "Neuf",
+        category: "electronique",
+        description: "Écran IPS 4K avec technologie HDR et design sans bordure"
+    },
+    {
+        id: 7,
+        name: "Xiaomi 14 Pro 256Go",
+        price: "320 000 FCFA",
+        img: "img/Smartphone.jfif",
+        rating: 4.2,
+        sold: 45,
+        stock: "4C",
+        seller: "MobilePlus",
+        sellerLogo: "https://ui-avatars.com/api/?name=MobilePlus&background=random",
+        condition: "Neuf",
+        category: "telephones",
+        description: "Smartphone Android haut de gamme avec caméra Leica"
+    },
+    {
+        id: 8,
+        name: "Chargeur Rapide 65W GaN",
+        price: "25 000 FCFA",
+        img: "img/Chargeurs.jfif",
+        rating: 4.0,
+        sold: 78,
+        stock: "15C",
+        seller: "CableStore",
+        sellerLogo: "https://ui-avatars.com/api/?name=CableStore&background=random",
+        condition: "Neuf",
+        category: "accessoires",
+        description: "Chargeur compact 65W avec technologie GaN pour charge rapide"
+    },
+    {
+        id: 9,
+        name: "Dell XPS 15 Intel i7",
+        price: "620 000 FCFA",
+        img: "img/dell.jpg",
+        rating: 4.7,
+        sold: 5,
+        stock: "3C",
+        seller: "DellOfficial",
+        sellerLogo: "https://ui-avatars.com/api/?name=DellOfficial&background=random",
+        condition: "Neuf",
+        category: "ordinateurs",
+        description: "PC portable ultraperformant avec écran 4K"
+    },
+    {
+        id: 10,
+        name: "Samsung TV 55\" QLED 4K",
+        price: "450 000 FCFA",
+        img: "img/television.jpg",
+        rating: 4.8,
+        sold: 4,
+        stock: "3C",
+        seller: "TVStore",
+        sellerLogo: "https://ui-avatars.com/api/?name=TVStore&background=random",
+        condition: "Neuf",
+        category: "electronique",
+        description: "Téléviseur QLED 4K avec technologie HDR10+"
+    },
+    {
+        id: 11,
+        name: "Canon EOS R6 Mark II",
+        price: "750 000 FCFA",
+        img: "img/canon.jpg",
+        rating: 5,
+        sold: 2,
+        stock: "1C",
+        seller: "PhotoPro",
+        sellerLogo: "https://ui-avatars.com/api/?name=PhotoPro&background=random",
+        condition: "Neuf",
+        category: "electronique",
+        description: "Appareil photo hybride professionnel 24MP"
+    },
+    {
+        id: 12,
+        name: "Clavier mécanique RGB",
+        price: "15 000 FCFA",
+        img: "img/clavierSouris.jfif",
+        rating: 4.3,
+        sold: 12,
+        stock: "8C",
+        seller: "GamingTech",
+        sellerLogo: "https://ui-avatars.com/api/?name=GamingTech&background=random",
+        condition: "Neuf",
+        category: "ordinateurs",
+        description: "Clavier gaming mécanique avec rétroéclairage RGB"
+    },
+    {
+        id: 13,
+        name: "Projecteur Epson 4K",
+        price: "320 000 FCFA",
+        img: "img/projecteurs.jfif",
+        rating: 4.6,
+        sold: 3,
+        stock: "2C",
+        seller: "HomeCinema",
+        sellerLogo: "https://ui-avatars.com/api/?name=HomeCinema&background=random",
+        condition: "Neuf",
+        category: "electronique",
+        description: "Projecteur 4K Ultra HD pour home cinéma"
+    },
+    {
+        id: 14,
+        name: "Montre Connectée Apple Watch SE",
+        price: "85 000 FCFA",
+        img: "img/rolex.jpg",
+        rating: 4.7,
+        sold: 7,
+        stock: "4C",
+        seller: "WatchStore",
+        sellerLogo: "https://ui-avatars.com/api/?name=WatchStore&background=random",
+        condition: "Neuf",
+        category: "electronique",
+        description: "Montre connectée avec écran Retina et GPS"
+    },
+    {
+        id: 15,
+        name: "Tablette Samsung Galaxy Tab S9",
+        price: "280 000 FCFA",
+        img: "img/tablette.jpg",
+        rating: 4.6,
+        sold: 4,
+        stock: "3C",
+        seller: "TechZone",
+        sellerLogo: "https://ui-avatars.com/api/?name=TechZone&background=random",
+        condition: "Neuf",
+        category: "telephones",
+        description: "Tablette Android avec écran 11\" et S Pen"
+    },
+    {
+        id: 16,
+        name: "Casque Sony WH-1000XM5",
+        price: "75 000 FCFA",
+        img: "img/casque.jpg",
+        rating: 4.8,
+        sold: 9,
+        stock: "5C",
+        seller: "AudioPro",
+        sellerLogo: "https://ui-avatars.com/api/?name=AudioPro&background=random",
+        condition: "Neuf",
+        category: "electronique",
+        description: "Casque sans fil avec réduction de bruit active"
+    },
+    {
+        id: 17,
+        name: "PC Gamer Asus ROG",
+        price: "920 000 FCFA",
+        img: "img/pcgamer.jpg",
+        rating: 4.9,
+        sold: 2,
+        stock: "1C",
+        seller: "GamingStore",
+        sellerLogo: "https://ui-avatars.com/api/?name=GamingStore&background=random",
+        condition: "Neuf",
+        category: "ordinateurs",
+        description: "PC gaming avec RTX 4080 et processeur i9"
+    },
+    {
+        id: 18,
+        name: "Enceinte Sonos Move",
+        price: "120 000 FCFA",
+        img: "img/enceinte.jpg",
+        rating: 4.7,
+        sold: 5,
+        stock: "4C",
+        seller: "AudioWorld",
+        sellerLogo: "https://ui-avatars.com/api/?name=AudioWorld&background=random",
+        condition: "Neuf",
+        category: "electronique",
+        description: "Enceinte Bluetooth portable avec Alexa intégrée"
+    },
+    {
+        id: 19,
+        name: "Souris gaming Logitech G Pro",
+        price: "18 000 FCFA",
+        img: "img/souris.jpg",
+        rating: 4.4,
+        sold: 15,
+        stock: "12C",
+        seller: "GamingTech",
+        sellerLogo: "https://ui-avatars.com/api/?name=GamingTech&background=random",
+        condition: "Neuf",
+        category: "ordinateurs",
+        description: "Souris gaming sans fil avec capteur HERO 25K"
+    },
+    {
+        id: 20,
+        name: "Câble USB-C 2m rapide",
+        price: "2 000 FCFA",
+        img: "img/Cable.jfif",
+        rating: 4.0,
+        sold: 30,
+        stock: "15C",
+        seller: "CableStore",
+        sellerLogo: "https://ui-avatars.com/api/?name=CableStore&background=random",
+        condition: "Neuf",
+        category: "accessoires",
+        description: "Câble USB-C de 2m avec charge rapide 100W"
+    }
+];
+// ===== FONCTIONS SPÉCIFIQUES À INDEX.HTML =====
+
+// SLIDER CODE
+const slides = document.querySelectorAll(".slide");
+const pagination = document.querySelector(".pagination");
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+const pauseBtn = document.getElementById("pause");
+
+let index = 0;
+let playing = true;
+let interval;
+
+// Create pagination bullets
+slides.forEach((_, i) => {
+    const dot = document.createElement("span");
+    dot.addEventListener("click", () => goToSlide(i));
+    pagination.appendChild(dot);
+});
+
+const bullets = pagination.querySelectorAll("span");
+
+function showSlide(i) {
+    slides.forEach(slide => slide.classList.remove("active"));
+    bullets.forEach(dot => dot.classList.remove("active"));
+
+    slides[i].classList.add("active");
+    bullets[i].classList.add("active");
+}
+
+function goToSlide(i) {
+    index = i;
+    showSlide(index);
+}
+
+function nextSlide() {
+    index = (index + 1) % slides.length;
+    showSlide(index);
+}
+
+function prevSlide() {
+    index = (index - 1 + slides.length) % slides.length;
+    showSlide(index);
+}
+
+function startAuto() {
+    interval = setInterval(nextSlide, 3000);
+}
+
+function stopAuto() {
+    clearInterval(interval);
+}
+
+// Charger les produits populaires (scrollables)
+function loadScrollableProducts() {
+    const productsGrid = document.getElementById('scrollableProducts');
+    if (!productsGrid) return;
+    
+    // Prendre les 8 premiers produits comme "populaires"
+    const popularProducts = ALL_PRODUCTS.slice(0, 8);
+    
+    productsGrid.innerHTML = popularProducts.map(product => 
+        createProductCard(product, 'scroll')
+    ).join('');
+}
+
+// Créer une carte produit
+function createProductCard(product, type = 'vertical') {
+    const cardClass = type === 'scroll' ? 'product-card-scroll' : 'product-card-vertical';
+    const isFavoriteProduct = window.isFavorite ? window.isFavorite(product.id) : false;
+    
+    return `
+        <div class="${cardClass}" data-id="${product.id}">
+            ${product.condition === 'Neuf' ? '<div class="new-badge">Neuf</div>' : ''}
+            <div class="product-image-container">
+                <img src="${product.img}" alt="${product.name}" class="product-image" 
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIGZpbGw9IiM5OTk5OTkiPk5vbiBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg=='">
+                <div class="image-actions">
+                    <button class="image-action-btn favorite-btn" data-id="${product.id}" 
+                            title="${isFavoriteProduct ? 'Retirer des favoris' : 'Ajouter aux favoris'}">
+                        <i class="bi ${isFavoriteProduct ? 'bi-heart-fill' : 'bi-heart'}"></i>
+                    </button>
+                    <button class="image-action-btn cart-btn" data-id="${product.id}" title="Ajouter au panier">
+                        <i class="bi bi-cart-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="product-content">
+                <h4 class="product-name" title="${product.name}">${product.name}</h4>
+                <div class="product-price">${product.price}</div>
+                <div class="product-stats">
+                    <div class="product-rating">
+                        <span class="stars">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5-Math.floor(product.rating))}</span>
+                        <span class="rating-number">${product.rating.toFixed(1)}</span>
+                    </div>
+                    <div class="sold-count">
+                        <i class="bi bi-cart-check"></i> ${product.sold}
+                    </div>
+                </div>
+                <div class="product-seller">
+                    <img src="${product.sellerLogo}" alt="${product.seller}" class="seller-logo" 
+                         onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(product.seller)}&size=40&background=random'">
+                    <span class="seller-name">${product.seller}</span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Charger tous les produits (grille verticale)
+function loadAllProducts() {
+    const productsGrid = document.getElementById('allProductsGrid');
+    if (!productsGrid) return;
+    
+    // Afficher tous les produits
+    productsGrid.innerHTML = ALL_PRODUCTS.map(product => 
+        createProductCard(product, 'vertical')
+    ).join('');
+    
+    // Mettre à jour le compteur
+    document.getElementById('totalProductsCount').textContent = ALL_PRODUCTS.length;
+}
+
+// Initialiser les boutons de scroll horizontal
+function initializeScrollButtons() {
+    const scrollContainers = document.querySelectorAll('.products-scroll-container');
+    
+    scrollContainers.forEach(container => {
+        const wrapper = container.querySelector('.products-scroll-wrapper');
+        const prevBtn = container.querySelector('.scroll-btn.prev');
+        const nextBtn = container.querySelector('.scroll-btn.next');
+        
+        if (prevBtn && nextBtn && wrapper) {
+            // Événements pour les boutons
+            prevBtn.addEventListener('click', () => {
+                wrapper.scrollBy({ left: -300, behavior: 'smooth' });
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                wrapper.scrollBy({ left: 300, behavior: 'smooth' });
+            });
+        }
+    });
+}
+// Initialiser les événements des favoris
+function initializeFavoritesEvents() {
+    // Gérer les clics sur les boutons favoris
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.favorite-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const button = e.target.closest('.favorite-btn');
+            const productId = parseInt(button.dataset.id);
+            
+            if (productId) {
+                // Utiliser common.js si disponible, sinon fallback
+                if (typeof toggleFavorite === 'function') {
+                    const wasAdded = toggleFavorite(productId);
+                    updateFavoriteButtonUI(button, wasAdded);
+                } else {
+                    // Fallback local
+                    toggleFavoriteLocal(productId, button);
+                }
+            }
+        }
+        
+        // Bouton ajouter au panier
+        if (e.target.closest('.cart-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const button = e.target.closest('.cart-btn');
+            const productId = parseInt(button.dataset.id);
+            
+            if (productId && typeof addToCart === 'function') {
+                addToCart(productId);
+                button.classList.add('active');
+                setTimeout(() => button.classList.remove('active'), 1000);
+            }
+        }
+    });
+}
+
+// Fallback local pour les favoris (si common.js non chargé)
+function toggleFavoriteLocal(productId, button) {
+    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const index = favorites.indexOf(productId);
+    
+    if (index === -1) {
+        // Ajouter
+        favorites.push(productId);
+        updateFavoriteButtonUI(button, true);
+        showNotificationLocal('❤️ Ajouté aux favoris');
+    } else {
+        // Retirer
+        favorites.splice(index, 1);
+        updateFavoriteButtonUI(button, false);
+        showNotificationLocal('Retiré des favoris');
+    }
+    
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    updateFavoritesBadgeLocal();
+}
+
+// Mettre à jour l'interface du bouton favori
+function updateFavoriteButtonUI(button, isFavorite) {
+    const icon = button.querySelector('i');
+    if (icon) {
+        if (isFavorite) {
+            icon.className = 'bi bi-heart-fill';
+            icon.style.color = '#e63946';
+            button.classList.add('active');
+        } else {
+            icon.className = 'bi bi-heart';
+            icon.style.color = '';
+            button.classList.remove('active');
+        }
+    }
+}
+
+// Mettre à jour le badge favoris
+function updateFavoritesBadgeLocal() {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const total = favorites.length;
+    
+    const badge = document.getElementById('favoriteCount');
+    if (badge) {
+        badge.textContent = total;
+        badge.style.display = total > 0 ? 'flex' : 'none';
+    }
+}
+
+// Notification locale
+function showNotificationLocal(message) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #2ecc71;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+        font-weight: 500;
+        max-width: 300px;
+        font-size: 14px;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// ===== INITIALISATION INDEX.HTML =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialiser le slider
+    showSlide(index);
+    startAuto();
+    
+    // Événements slider
+    pauseBtn.addEventListener("click", () => {
+        if (playing) {
+            stopAuto();
+            pauseBtn.textContent = "▶";
+        } else {
+            startAuto();
+            pauseBtn.textContent = "⏸";
+        }
+        playing = !playing;
+    });
+
+    next.addEventListener("click", nextSlide);
+    prev.addEventListener("click", prevSlide);
+    
+    // Charger les produits
+    loadScrollableProducts();
+    loadAllProducts();
+    
+    // Initialiser les boutons scroll
+    initializeScrollButtons();
+    
+    // Initialiser les événements de favoris
+    initializeFavoritesEvents();
+    
+    // Ajouter les événements de clic sur les produits
+    document.addEventListener('click', function(e) {
+        // Navigation vers la page détail
+        if (e.target.closest('.product-card-scroll, .product-card-vertical')) {
+            const card = e.target.closest('.product-card-scroll, .product-card-vertical');
+            if (!e.target.closest('.image-actions')) {
+                const productId = card.dataset.id;
+                window.location.href = `produit-detail.html?id=${productId}`;
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>

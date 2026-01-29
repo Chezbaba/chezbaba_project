@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catégories - ChezBaba</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .categories-main {
+            padding: 20px 10px 80px; /* Réduit de 40px/20px à 20px/10px */
+            background-color: var(--lightgray);
+            min-height: calc(100vh - 200px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px; /* Réduit de 15px à 10px */
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Réduit de 20px à 15px */
+            margin-bottom: 20px; /* Réduit de 30px à 20px */
+            padding: 15px; /* Réduit de 20px à 15px */
+            background: var(--white);
+            border-radius: 12px; /* Réduit de 15px à 12px */
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06); /* Ombre plus légère */
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 45px; /* Réduit de 50px à 45px */
+            height: 45px;
+            background: var(--lightgray);
+            border: 2px solid var(--lightgray1);
+            border-radius: 10px; /* Réduit de 12px à 10px */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--darkgray1);
+            font-size: 1.3em; /* Réduit de 1.5em à 1.3em */
+        }
+
+        .back-button:hover {
+            background: var(--green);
+            color: var(--white);
+            border-color: var(--green);
+            transform: translateX(-2px); /* Réduit de -3px à -2px */
+        }
+
+        .page-title {
+            font-size: 1.8em; /* Réduit de 2em à 1.8em */
+            color: var(--darkgray1);
+            font-weight: 700;
+            margin: 0;
+            flex: 1;
+        }
+
+        /* ===== GRILLE CATÉGORIES TRÈS OPTIMISÉE ===== */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px; /* Réduit à 15px seulement */
+        }
+
+        /* CARTE CATÉGORIE TRÈS COMPACTE */
+        .category-card {
+            background: var(--white);
+            border-radius: 12px; /* Réduit de 16px à 12px */
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); /* Ombre très légère */
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1.5px solid transparent; /* Réduit de 2px à 1.5px */
+            display: flex;
+            flex-direction: column;
+            aspect-ratio: 1 / 1;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px); /* Réduit de 6px à 4px */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1); /* Ombre réduite */
+            border-color: var(--green);
+        }
+
+        .category-image-container {
+            position: relative;
+            width: 100%;
+            height: 70%; /* Augmenté pour plus d'image */
+            overflow: hidden;
+            background: var(--lightgray);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .category-card:hover .category-image {
+            transform: scale(1.05); /* Réduit de 1.08 à 1.05 */
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 8px; /* Réduit de 12px à 8px */
+            right: 8px; /* Réduit de 12px à 8px */
+            background: rgba(255,255,255,0.95);
+            color: #0C1B33;
+            padding: 3px 8px; /* Très compact */
+            border-radius: 12px; /* Réduit de 16px à 12px */
+            font-size: 0.75em; /* Réduit de 0.8em à 0.75em */
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px; /* Réduit de 5px à 4px */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ombre très légère */
+        }
+
+        .category-content {
+            padding: 12px; /* Réduit de 16px à 12px */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 30%; /* Réduit de 32% à 30% */
+            justify-content: center;
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Réduit de 10px à 8px */
+            margin-bottom: 0;
+        }
+
+        .category-name {
+            font-size: 1.1em; /* Réduit de 1.2em à 1.1em */
+            font-weight: 700;
+            color: var(--darkgray1);
+            line-height: 1.2;
+        }
+
+        /* ===== RESPONSIVE TRÈS OPTIMISÉ ===== */
+        /* Desktop large */
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1320px;
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 18px; /* Un peu plus d'espace sur grand écran */
+            }
+            
+            .category-name {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Desktop extra large */
+        
+        @media (min-width: 1600px) {
+            .container {
+                max-width: 1500px;
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 20px;
+            }
+            
+            .category-name {
+                font-size: 1.3em;
+            }
+        }
+
+        /* Tablette large */
+        @media (max-width: 1199px) and (min-width: 992px) {
+            footer{
+                display: none;
+            }
+            .container {
+                max-width: 960px;
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 14px; /* Réduit de 18px à 14px */
+            }
+            
+            .category-name {
+                font-size: 1.05em;
+            }
+        }
+
+        /* Tablette */
+        @media (max-width: 991px) and (min-width: 768px) {
+            footer{
+                display: none;
+            }
+            .container {
+                max-width: 100%;
+                padding: 0 15px; /* Réduit de 20px à 15px */
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px; /* Réduit de 16px à 12px */
+            }
+            
+            .page-header {
+                margin-bottom: 18px; /* Réduit de 25px à 18px */
+                padding: 14px; /* Réduit de 18px à 14px */
+            }
+            
+            .category-name {
+                font-size: 1em;
+            }
+            
+            .category-content {
+                padding: 10px; /* Réduit de 14px à 10px */
+            }
+        }
+
+        /* Tablette petite / Mobile large */
+        @media (max-width: 767px) and (min-width: 576px) {
+            footer{
+                display: none;
+            }
+            .categories-main {
+                padding: 15px 10px 70px; /* Réduit */
+            }
+            
+            .container {
+                padding: 0 10px; /* Réduit de 15px à 10px */
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px; /* Réduit de 14px à 10px */
+            }
+
+            .page-header {
+                padding: 12px; /* Réduit de 16px à 12px */
+                margin-bottom: 15px; /* Réduit de 20px à 15px */
+                gap: 12px; /* Réduit de 15px à 12px */
+            }
+
+            .page-title {
+                font-size: 1.4em; /* Réduit de 1.6em à 1.4em */
+            }
+            
+            .back-button {
+                min-width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
+
+            .category-name {
+                font-size: 0.95em; /* Réduit de 1em à 0.95em */
+            }
+            
+            .category-content {
+                padding: 8px 10px; /* Réduit */
+            }
+            
+            .category-badge {
+                font-size: 0.7em;
+                padding: 2px 6px; /* Encore plus compact */
+                top: 6px;
+                right: 6px;
+                border-radius: 10px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 575px) {
+            footer{
+                display: none;
+            }
+            .categories-main {
+                padding: 10px 8px 60px; /* Réduit au minimum */
+            }
+            
+            .container {
+                padding: 0 8px; /* Réduit au minimum */
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px; /* Très petit espacement */
+            }
+
+            .page-header {
+                padding: 10px; /* Réduit au minimum */
+                margin-bottom: 12px; /* Réduit au minimum */
+                gap: 10px; /* Réduit au minimum */
+            }
+
+            .page-title {
+                font-size: 1.2em; /* Réduit */
+            }
+            
+            .back-button {
+                min-width: 35px;
+                height: 35px;
+                font-size: 1.1em;
+            }
+
+            .category-name {
+                font-size: 0.9em; /* Très petit mais lisible */
+                font-weight: 600;
+            }
+            
+            .category-content {
+                padding: 8px; /* Réduit au minimum */
+            }
+            
+            .category-image-container {
+                height: 65%;
+            }
+            
+            .category-badge {
+                font-size: 0.65em; /* Très petit */
+                padding: 2px 5px;
+                top: 5px;
+                right: 5px;
+                border-radius: 8px;
+            }
+            
+            .category-card {
+                border-radius: 10px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.06); /* Ombre très légère */
+            }
+            
+            .category-card:hover {
+                transform: translateY(-2px); /* Très subtil */
+            }
+        }
+
+        /* Très petit mobile */
+        @media (max-width: 375px) {
+            footer{
+                display: none;
+            }
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px; /* Espacement minimal */
+            }
+            
+            .page-title {
+                font-size: 1.1em; /* Très compact */
+            }
+            
+            .category-name {
+                font-size: 0.85em; /* Très petit mais lisible */
+                line-height: 1.1;
+            }
+            
+            .category-content {
+                padding: 6px 8px; /* Minimal */
+            }
+            
+            .categories-main {
+                padding: 8px 6px 60px; /* Minimal */
+            }
+            
+            .container {
+                padding: 0 6px; /* Minimal */
+            }
+            
+            .page-header {
+                padding: 8px;
+                gap: 8px;
+            }
+        }
+
+        /* Mode portrait mobile (hauteur importante) */
+        @media (max-height: 700px) and (max-width: 575px) {
+            .category-image-container {
+                height: 60%; /* Moins d'espace pour l'image */
+            }
+            
+            .category-content {
+                height: 40%; /* Plus d'espace pour le texte */
+            }
+            footer{
+                display: none;
+            }
+            
+            .category-name {
+                font-size: 0.8em; /* Un peu plus petit */
+            }
+        }
+
+        /* Mode paysage mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .category-card {
+                aspect-ratio: 1 / 0.8; /* Plus court en hauteur */
+            }
+            
+            
+            .category-image-container {
+                height: 60%;
+            }
+        }
+
+        /* Optimisation pour les écrans carrés (comme certaines tablettes) */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+            
+            .category-name {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="pageLoader"><div class="spinner"></div></div>
+
+    <nav>
+        <div class="navBar">
+            <div class="navBar_connexion_inscription">
+                <p class="navBar_connexion_inscription_text">
+                    Bonjour!
+                    <a href="connexion.html" class="connexion_link" id="loginBtn">Connecter vous</a> ou 
+                    <a href="inscription.html" class="inscription_link" id="registerBtn">Inscrivez-vous</a>
+                    <a href="#" class="aide_link">Aide</a>
+                </p>
+            </div>
+            <div class="logo-icone-mobile">
+                <div class="nav-mobile-logo">
+                    <a href="index.html" class="mobile-logo">
+                        <img src="img/logo-removebg-preview.png" alt="ChezBaba Logo" class="mobile-logo-image">
+                    </a>
+                </div>
+                <div class="mobile-icone">
+                    <a href="panier.html" class="icone" style="position: relative;">
+                        <i class="bi bi-cart3"></i>
+                        <span class="cart-badge" id="cartCountMobile">0</span>
+                    </a>
+                </div>
+            </div>
+            <div class="logo_searchBar_button">
+                <div class="nav_logo">
+                    <a href="index.html" class="logo_link">
+                        <img src="img/logo-removebg-preview.png" alt="ChezBaba Logo" class="logo-image">
+                    </a>
+                </div>
+                <div class="search_input_button">
+                    <input type="text" name="q" class="search_input" placeholder="Rechercher un produit">
+                    <div class="search-icon-mobile">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <button type="submit" class="search_button" name="q">Rechercher</button>
+                </div>
+                <div class="mobile-category-icon" id="mobileCategoryIcon">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                </div>
+                <div class="button_icons">
+                    <button class="button_vendre" id="vendreBtn">Vendre</button>
+                    <a href="favoris.html" class="icone"><i class="bi bi-heart"></i></a>
+                    <a href="panier.html" class="icone" style="position: relative;">
+                        <i class="bi bi-cart3"></i>
+                        <span class="cart-badge" id="cartCount">0</span>
+                    </a>
+                    <a href="profil-acheteur.html" class="icone"><i class="bi bi-person"></i></a>
+                </div>
+            </div>
+            <div class="categorie_navigation">
+                <div class="categorie">
+                    <button id="openCategories" class="categorieBtn">
+                        <i class="bi bi-list"></i><span>Catégories</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="categories-main">
+        <div class="container">
+            <div class="page-header">
+                <button class="back-button" onclick="window.location.href='index.html'">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <h1 class="page-title">Catégories</h1>
+            </div>
+
+            <div class="categories-grid">
+                <!-- Téléphones -->
+                <a href="produits.html?categorie=telephones" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/Smartphone.jfif" alt="Téléphones" class="category-image">
+                        <div class="category-badge">
+                            <i class="bi bi-star-fill"></i> Populaire
+                        </div>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Téléphones & Accessoires</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Ordinateurs -->
+                <a href="produits.html?categorie=ordinateurs" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/PCportable.jfif" alt="Ordinateurs" class="category-image">
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Ordinateurs & Bureau</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Électronique -->
+                <a href="produits.html?categorie=electronique" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/télévision.jfif" alt="Électronique" class="category-image">
+                        <div class="category-badge">
+                            <i class="bi bi-bolt-fill"></i> Nouveau
+                        </div>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Électronique</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Quincaillerie -->
+                <a href="produits.html?categorie=quincaillerie" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/meuleuse.jpg" alt="Quincaillerie" class="category-image">
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Quincaillerie</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Maison & Jardin -->
+                <a href="produits.html?categorie=maison" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/divan.jfif" alt="Maison & Jardin" class="category-image">
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Maison & Jardin</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Jeux & Jouets -->
+                <a href="produits.html?categorie=jeux" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/jouetsenfant.jfif" alt="Jeux & Jouets" class="category-image">
+                        <div class="category-badge">
+                            <i class="bi bi-fire"></i> Tendance
+                        </div>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Jeux & Jouets</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Mode -->
+                <a href="produits.html?categorie=mode" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/vetementhomme.jfif" alt="Mode" class="category-image">
+                        <div class="category-badge">
+                            <i class="bi bi-star-fill"></i> Populaire
+                        </div>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Mode</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Batiment travaux public -->
+                <a href="produits.html?categorie=travaux" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/tuyaupvc.jpg" alt="Batiment travaux public" class="category-image">
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Batiment travaux public</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Véhicules -->
+                <a href="produits.html?categorie=vehicules" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/voiture.jfif" alt="Véhicules" class="category-image">
+                         <div class="category-badge">
+                            <i class="bi bi-fire"></i> Tendance
+                        </div>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Véhicules</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Livres & Médias -->
+                <a href="produits.html?categorie=quincaillerie" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/Livres & Médias.jfif" alt="Livres & Médias" class="category-image">
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Livres & Médias</span>
+                        </div>
+                    </div>
+
+                    <!-- Sports & Fitness -->
+                <a href="produits.html?categorie=quincaillerie" class="category-card">
+                    <div class="category-image-container">
+                        <img src="img/Sports & Fitness.jfif" alt="Sports & Fitness" class="category-image">
+                    </div>
+                    <div class="category-content">
+                        <div class="category-title">
+                            <span class="category-name">Sports & Fitness</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="index.html" class="nav-item">
+                <i class="bi bi-house nav-icon"></i>
+                <span class="nav-label">Accueil</span>
+            </a>
+            <a href="categorie.html" class="nav-item active">
+                <i class="bi bi-grid-3x3-gap nav-icon"></i>
+                <span class="nav-label">Catégories</span>
+            </a>
+            <a href="favoris.html" class="nav-item">
+                <i class="bi bi-heart nav-icon"></i>
+                <span class="nav-label">Favoris</span>
+            </a>
+            <a href="profil-acheteur.html" class="nav-item">
+                <i class="bi bi-person nav-icon"></i>
+                <span class="nav-label">Compte</span>
+            </a>
+        </div>
+    </div>
+
+   <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section footer-logo-section">
+                <div class="nav-mobile-logo">
+                    <a href="index.html" class="logo_link" aria-label="Accueil ChezBaba">
+                        <img src="img/logo-removebg-preview.png" alt="ChezBaba Logo" class="logo-image">
+                    </a>
+                </div>
+                <p class="footer-description">
+                    La marketplace de référence pour vendre et acheter en toute sécurité. 
+                    Rejoignez des millions d'utilisateurs qui nous font confiance.
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <!-- <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="bi bi-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="bi bi-linkedin"></i>
+                    </a> -->
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Liens rapides</h3>
+                <ul class="footer-links">
+                    <li><a href="vitrine.html">Vitrine ChezBaba</a></li>
+                    <li><a href="compte.html">Mon compte</a></li>
+                    <li><a href="categorie.html">Catégories</a></li>
+                    <li><a href="panier.html">Panier</a></li>
+                    <li><a href="favoris.html">Favoris</a></li>
+                    <!-- <li><a href="contact.html">Contact</a></li> -->
+                    <li><a href="vitrine.html">À propos</a></li>
+                    <li><a href="#">Retour en haut</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Centre d'aide</a></li>
+                    <li><a href="#">Service client</a></li>
+                    <li><a href="#">Signaler problème</a></li>
+                    <li><a href="#">Guide vendeur</a></li>
+                    <li><a href="#">Guide acheteur</a></li>
+                    <li><a href="#">Sécurité</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <div class="footer-contact-info">
+                    <strong>Email:</strong><br>
+                    contact@chezbaba.com<br><br>
+                    <strong>Tél:</strong><br>
+                    +229 01 56 12 40 50<br><br>
+                    <strong>Adresse:</strong><br>
+                    Cotonou Akpaka LomNava
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="footer-copyright">
+                    © 2024 ChezBaba. Tous droits réservés.
+                </div>
+                <div class="footer-legal">
+                    <a href="#">Conditions</a>
+                    <a href="#">Confidentialité</a>
+                    <a href="#">Cookies</a>
+                    <a href="#">Mentions légales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('pageLoader').classList.add('hidden'), 300);
+        });
+
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const total = cart.reduce((sum, item) => sum + parseInt(item.quantity || 1), 0);
+            document.querySelectorAll('#cartCount, #cartCountMobile').forEach(b => {
+                b.textContent = total;
+                b.style.display = total > 0 ? 'flex' : 'none';
+            });
+        }
+        
+        updateCartBadge();
+    </script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        main {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .connexion-img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .connexion-img img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .btn-connexion{
+            display: inline-block;
+            padding: 10px 30px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #183057;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        /* RESPONSIVE MEDIA QUERIES - AJOUTÉES SANS MODIFIER VOTRE CODE */
+        
+        /* Pour les écrans très larges (desktop grand écran) */
+        @media (min-width: 1400px) {
+            .connexion-img img {
+                width: 350px;
+                height: 350px;
+            }
+            .btn-connexion {
+                padding: 12px 35px;
+                font-size: 20px;
+            }
+        }
+        
+        /* Pour les écrans de bureau standard */
+        @media (min-width: 1024px) and (max-width: 1399px) {
+            .connexion-img img {
+                width: 320px;
+                height: 320px;
+            }
+        }
+        
+        /* Pour les tablettes en mode paysage */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .connexion-img img {
+                width: 280px;
+                height: 280px;
+            }
+            .btn-connexion {
+                padding: 12px 32px;
+                font-size: 17px;
+            }
+            .search_input_button{
+                display: none;
+            }
+        }
+        
+        /* Pour les tablettes en mode portrait */
+        @media (min-width: 600px) and (max-width: 767px) {
+            .connexion-img img {
+                width: 250px;
+                height: 250px;
+            }
+            .btn-connexion {
+                padding: 11px 28px;
+                font-size: 16px;
+            }
+            .search_input_button{
+                display: none;
+            }
+        }
+        
+        /* Pour les téléphones en mode paysage */
+        @media (min-width: 480px) and (max-width: 599px) {
+            .connexion-img img {
+                width: 220px;
+                height: 220px;
+            }
+            .btn-connexion {
+                padding: 10px 25px;
+                font-size: 16px;
+            }
+            .search_input_button{
+                display: none;
+            }
+        }
+        
+        /* Pour les téléphones en mode portrait */
+        @media (min-width: 375px) and (max-width: 479px) {
+            .connexion-img img {
+                width: 200px;
+                height: 200px;
+            }
+            .btn-connexion {
+                padding: 9px 22px;
+                font-size: 15px;
+            }
+            .search_input_button{
+                display: none;
+            }
+        }
+        
+        /* Pour les très petits téléphones */
+        @media (max-width: 374px) {
+            .connexion-img img {
+                width: 180px;
+                height: 180px;
+            }
+            .btn-connexion {
+                padding: 8px 20px;
+                font-size: 14px;
+            }
+            .search_input_button{
+                display: none;
+            }
+        }
+        
+        /* Pour les très petits écrans (moins de 320px) */
+        @media (max-width: 319px) {
+            .connexion-img img {
+                width: 150px;
+                height: 150px;
+            }
+            .btn-connexion {
+                padding: 7px 18px;
+                font-size: 13px;
+            }
+            .search_input_button{
+                display: none;
+            }
+        }
+        
+        /* Pour les écrans très hauts (orientation paysage sur mobile) */
+        @media (max-height: 500px) and (orientation: landscape) {
+            main {
+                min-height: 90vh;
+                flex-direction: row;
+                gap: 30px;
+            }
+            .connexion-img {
+                margin-bottom: 0;
+            }
+            .connexion-img img {
+                width: 180px;
+                height: 180px;
+            }
+            .search_input_button{
+                display: none;
+            }
+        }
+        
+        /* Pour les écrans ultra larges */
+        @media (min-width: 1920px) {
+            .connexion-img img {
+                width: 400px;
+                height: 400px;
+            }
+            .btn-connexion {
+                padding: 15px 40px;
+                font-size: 22px;
+            }
+            .search_input_button{
+                display: none;
+            }
+        }
+        
+        /* Pour les écrans 4K et plus */
+        @media (min-width: 2560px) {
+            .connexion-img img {
+                width: 500px;
+                height: 500px;
+            }
+            .btn-connexion {
+                padding: 18px 45px;
+                font-size: 24px;
+            }
+            .search_input_button{
+                display: none;
+            }
+        }
+        
+        /* Ajout d'un effet hover pour améliorer l'interaction */
+        .btn-connexion:hover {
+            background-color: #0d1f3a;
+            transform: scale(1.05);
+        }
+        
+        /* Animation pour l'image au chargement */
+        .connexion-img img {
+            animation: fadeInScale 0.8s ease-out;
+        }
+        
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Pour le bouton au survol */
+        .btn-connexion {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navBar">
+            <div class="navBar_connexion_inscription">
+                <p class="navBar_connexion_inscription_text">
+                    Bonjour!
+                    <a href="connexion.html" class="connexion_link" id="loginBtn">Connecter vous</a> ou 
+                    <a href="inscription.html" class="inscription_link" id="registerBtn">Inscrivez-vous</a>
+                    <a href="#" class="aide_link">Aide</a>
+                </p>
+            </div>
+            <div class="logo-icone-mobile">
+                <div class="nav-mobile-logo">
+                    <a href="index.html" class="mobile-logo" aria-label="Accueil ChezBaba">
+                        <img src="img/logo-removebg-preview.png" alt="ChezBaba Logo" class="mobile-logo-image">
+                    </a>
+                </div>
+                <div class="mobile-icone">
+                    <a href="panier.html" class="icone" style="position: relative;">
+                        <i class="bi bi-cart3"></i>
+                        <span class="cart-badge" id="cartCountMobile">0</span>
+                    </a>
+                </div>
+            </div>
+            <div class="logo_searchBar_button">
+                <div class="nav_logo">
+                    <a href="index.html" class="logo_link" aria-label="Accueil ChezBaba">
+                        <img src="img/logo-removebg-preview.png" alt="ChezBaba Logo" class="logo-image">
+                    </a>
+                </div>
+                <div class="search_input_button">
+                    <input type="text" name="q" class="search_input" placeholder="Rechercher un produit">
+                    <div class="search-icon-mobile">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <button type="submit" class="search_button" name="q">Rechercher</button>
+                </div>
+                <div class="mobile-category-icon" id="mobileCategoryIcon">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                </div>
+                <div class="button_icons">
+                    <button class="button_vendre" id="vendreBtn">Vendre</button>
+                    <a href="favoris.html" class="icone" style="position: relative;">
+                        <i class="bi bi-heart"></i>
+                        <span class="cart-badge favorite-badge" id="favoriteCount" style="background: #e63946; display: none;">0</span>
+                    </a>
+                    <a href="panier.html" class="icone" style="position: relative;">
+                        <i class="bi bi-cart3"></i>
+                        <span class="cart-badge" id="cartCount">0</span>
+                    </a>                    
+                    <a href="profil-acheteur.html" class="icone"><i class="bi bi-person"></i></a>
+                </div>
+            </div>
+           
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <div class="connexion-img">
+            <img src="img/connexion-icone.jfif" alt="Image de compte utilisateur" class="compte-image">
+        </div>
+        <a class="btn-connexion" href="connexion.html">Se connecter</a>
+    </main>
+    
+
+    <!-- Bottom Navigation Bar (Mobile) -->
+    <div class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="index.html" class="nav-item">
+                <i class="bi bi-house nav-icon"></i>
+                <span class="nav-label">Accueil</span>
+            </a>
+            <a href="categorie.html" class="nav-item">
+                <i class="bi bi-grid-3x3-gap nav-icon"></i>
+                <span class="nav-label">Catégories</span>
+            </a>
+            <a href="favoris.html" class="nav-item">
+                <i class="bi bi-heart nav-icon"></i>
+                <span class="nav-label">Favoris</span>
+            </a>
+            <a href="profil-acheteur.html" class="nav-item active">
+                <i class="bi bi-person nav-icon"></i>
+                <span class="nav-label">Compte</span>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
