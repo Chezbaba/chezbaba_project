@@ -1,3 +1,17 @@
+@plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:is(.dark *));
+@theme {
+  /* Original theme rules */
+}
+@theme inline {
+  /* Original inline theme rules */
+}
+
+@apply border-border outline-ring/50;
+@apply bg-background text-foreground;
+@apply cursor-pointer;
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -176,12 +190,6 @@
 
 @import "tailwindcss";
 
-@plugin "tailwindcss-animate";
-
-@plugin "@tailwindcss/typography";
-
-@custom-variant dark (&:is(.dark *));
-
 @theme {
   --breakpoint-xs: 375px;
   --breakpoint-sm: 640px;
@@ -339,7 +347,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #fff;
+  background: #0C1B33; /* Updated background color */
   border-top: 1px solid var(--lightgray1);
   height: 60px;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
@@ -440,7 +448,7 @@
       padding-right: 38px;
     }
   }
-  @media (min-width: 901px) {
+  @media (min-width: 900px) {
     .navBar-mobile-top,
     .navBar-mobile-bottom {
       display: none !important;
@@ -449,3 +457,56 @@
       display: flex;
     }
   }
+
+.link {
+  text-decoration: none;
+  color: var(--darkblue);
+  transition: color 0.3s;
+  font-weight: bold;
+}
+
+.link:hover {
+  color: var(--secondary-color);
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+
+@media (max-width: 900px) {
+  .link {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .accept-terms {
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+}
+
+@media (min-width: 901px) {
+  .link {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .accept-terms {
+    font-size: 16px;
+    line-height: 1.8;
+    text-align: left;
+  }
+}
+
+/* Hide mobile search bar on desktop */
+.search_input_button {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .navBar-mobile-top .search_input_button {
+    display: none;
+  }
+}
+
+
+

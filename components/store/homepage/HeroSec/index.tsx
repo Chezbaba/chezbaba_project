@@ -22,17 +22,16 @@ const HeroSec = () => {
               "text-4xl lg:text-[64px] lg:leading-[64px] mb-5 lg:mb-8",
             ])}
           >
-            Votre look, votre choix
+            Vendez et achetez facilement
           </motion.h2>
           <motion.p
             initial={{ y: "100px", opacity: 0 }}
             whileInView={{ y: "0", opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="text-black/60 text-sm lg:text-base mb-6 lg:mb-10 max-w-[545px]"
+            className="text-black/60 text-sm lg:text-base mb-6 lg:mb-10 max-w-[545px] text-[var(--darkblue)]"
           >
-            Découvrez notre large sélection de vêtements soigneusement conçus
-            pour révéler votre personnalité et sublimer votre style.
+            Rejoignez des millions d'utilisateurs sur la marketplace de référence. Vendez vos objets ou découvrez des trésors près de chez vous.
           </motion.p>
           <motion.div
             initial={{ y: "100px", opacity: 0 }}
@@ -42,7 +41,10 @@ const HeroSec = () => {
           >
             <Link
               href="/catalog"
-              className="w-full md:w-[18rem] mb-5 md:mb-12 inline-block text-center bg-black hover:bg-black/80 transition-all text-white px-14 py-4 rounded-full hover:animate-pulse"
+className="w-full md:w-[18rem] mb-5 md:mb-12 inline-block text-center 
+bg-[var(--darkblue)] text-white px-14 py-4 rounded-full
+transition-all duration-300 ease-out
+hover:scale-[1.03] hover:shadow-xl hover:shadow-[var(--darkblue)/30]"
             >
               Commencer le Shopping
             </Link>
@@ -59,7 +61,7 @@ const HeroSec = () => {
         >
           <Image
             priority
-            src="/icons/big-star.svg"
+            src="/images/panier.png"
             height={104}
             width={104}
             alt="big star"
@@ -67,7 +69,7 @@ const HeroSec = () => {
           />
           <Image
             priority
-            src="/icons/small-star.svg"
+            src="/images/panier.png"
             height={56}
             width={56}
             alt="small star"

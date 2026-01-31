@@ -37,9 +37,10 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = searchParams && typeof searchParams.get === 'function' ? searchParams.get("callbackUrl") : null;
   const registerHref = callbackUrl
     ? `/auth/register?callbackUrl=${encodeURIComponent(callbackUrl)}`
     : "/auth/register";
@@ -80,7 +81,7 @@ export function LoginForm({
       toast(responseJson.message || "Connexion réussie.");
 
       // Valider l'URL de redirection (interne uniquement)
-      const callbackUrl = searchParams.get("callbackUrl");
+      const callbackUrl = searchParams && typeof searchParams.get === 'function' ? searchParams.get("callbackUrl") : null;
       const redirectUrl =
         callbackUrl?.startsWith("/") && !callbackUrl.startsWith("//")
           ? callbackUrl
@@ -112,7 +113,7 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="exemple@email.com"
+                  placeholder="exemple@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
@@ -124,7 +125,7 @@ export function LoginForm({
               </div>
 
               {/* password */}
-              <div className="grid gap-3">
+              <div className="grid gap-3 relative">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Mot de passe</Label>
                   <Link
@@ -136,13 +137,22 @@ export function LoginForm({
                 </div>
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
                   required
                 />
+                <button
+                  type="button"
+                  className="absolute right-3 top-3/4 transform -translate-y-1/2 text-gray-500"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  <i
+                    className={`bi ${showPassword ? "bi-eye" : "bi-eye-slash"}`}
+                  ></i>
+                </button>
                 {fieldErrors.password && (
                   <FieldErrorMessage message={fieldErrors.password} />
                 )}

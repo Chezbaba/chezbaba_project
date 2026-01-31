@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import BottomNav from "@/components/common/BottomNav";
+import UserMenu from "@/components/layout/store/Header/UserMenu";
 const Navbar = () => {
   return (
     <>
@@ -32,9 +33,7 @@ const Navbar = () => {
                 <i className="bi bi-cart3"></i>
                 <span className="cart-badge" style={{background: '#EA9010'}}>0</span>
               </Link>
-              <Link href="/profile" className="icone">
-                <i className="bi bi-person"></i>
-              </Link>
+              <UserMenu />
             </div>
           </div>
         </div>
@@ -55,14 +54,12 @@ const Navbar = () => {
           </div>
         </div>
         {/* Mobile : section basse (barre de recherche) */}
-        <div className="navBar navBar-mobile-bottom">
-          <form className="search_input_button" style={{flex: 1}}>
-            <input type="text" className="search_input" placeholder="Rechercher un produit" />
-            <button type="submit" className="search_icon_btn">
-              <i className="bi bi-search"></i>
-            </button>
-          </form>
-        </div>
+        <form className="search_input_button hidden md:flex" style={{flex: 1}}>
+          <input type="text" className="search_input" placeholder="Rechercher un produit" />
+          <button type="submit" className="search_icon_btn">
+            <i className="bi bi-search"></i>
+          </button>
+        </form>
       </nav>
       {/* Bottom navigation mobile only */}
       <BottomNav />

@@ -37,17 +37,22 @@ export function RegisterForm({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = searchParams && typeof searchParams.get === 'function' ? searchParams.get("callbackUrl") : null;
   const loginHref = callbackUrl
     ? `/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}`
     : "/auth/login";
 
-  // Handle the form submission
   const handleSubmitForm = async (e: FormEvent) => {
     e.preventDefault();
+    if (!acceptTerms) {
+      setErrorMessage("Vous devez accepter les Conditions d'utilisation et la Politique de confidentialité.");
+      return;
+    }
     setIsLoading(true);
     setErrorMessage("");
     setFieldErrors({});
@@ -81,18 +86,14 @@ export function RegisterForm({
         return;
       }
 
-      // update the session
       await update();
       toast(responseJson.message || "Inscription réussie.");
 
-      // Valider l'URL de redirection (interne uniquement)
-      const callbackUrl = searchParams.get("callbackUrl");
       const safeCallbackUrl =
         callbackUrl?.startsWith("/") && !callbackUrl.startsWith("//")
           ? callbackUrl
           : "/";
 
-      // Redirect to email verification page, preserving callback
       router.push(
         `/auth/verify-email?callbackUrl=${encodeURIComponent(safeCallbackUrl)}`
       );
@@ -122,7 +123,7 @@ export function RegisterForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="exemple@email.com"
+                  placeholder="exemple@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -133,16 +134,25 @@ export function RegisterForm({
               </div>
 
               {/* password */}
-              <div className="grid gap-3">
+              <div className="grid gap-3 relative">
                 <Label htmlFor="password">Mot de passe</Label>
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="********"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+                <button
+                  type="button"
+                  className="absolute right-3 top-3/4 transform -translate-y-1/2 text-gray-500"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i
+                    className={`bi ${showPassword ? "bi-eye" : "bi-eye-slash"}`}
+                  ></i>
+                </button>
                 {fieldErrors.password && (
                   <FieldErrorMessage message={fieldErrors.password} />
                 )}
@@ -154,7 +164,7 @@ export function RegisterForm({
                 <Input
                   id="nom"
                   type="text"
-                  placeholder="Doe"
+                  placeholder="ZANNOU"
                   value={nom}
                   onChange={(e) => setNom(e.target.value)}
                   required
@@ -170,7 +180,7 @@ export function RegisterForm({
                 <Input
                   id="prenom"
                   type="text"
-                  placeholder="John"
+                  placeholder="Théophile"
                   value={prenom}
                   onChange={(e) => setPrenom(e.target.value)}
                   required
@@ -178,6 +188,20 @@ export function RegisterForm({
                 {fieldErrors.prenom && (
                   <FieldErrorMessage message={fieldErrors.prenom} />
                 )}
+              </div>
+
+              {/* accept terms */}
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="accept-terms"
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  required
+                />
+                <Label htmlFor="accept-terms">
+                  J'accepte les <Link href="/terms">Conditions d'utilisation</Link> et la <Link href="/privacy">Politique de confidentialité</Link>
+                </Label>
               </div>
 
               {/* submit button */}
