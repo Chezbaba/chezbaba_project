@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { fetchDataFromAPI } from "@/lib/utils/fetchData";
 import { UserFromAPI } from "@/lib/types/user.types";
 import { Phone } from "lucide-react";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 interface ContactInfoProps {
   user: UserFromAPI;
@@ -49,12 +50,10 @@ export default function ContactInfo({ user, onUpdate }: ContactInfoProps) {
           <label htmlFor="tel" className="block text-sm font-medium">
             Numéro de téléphone
           </label>
-          <input
-            id="tel"
-            name="tel"
+          <PhoneInput
             value={tel}
-            onChange={(e) => setTel(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md"
+            onChange={setTel}
+            disabled={isLoading}
           />
           <p className="text-xs text-gray-500 mt-1">
             Utilisé pour les mises à jour de commande et les notifications de

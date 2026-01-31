@@ -73,6 +73,7 @@ export const ProductForm = ({
   const [formData, setFormData] = useState<ProductFromAPI>(initialFormData);
   const [mainImage, setMainImage] = useState<File | null>(null);
   const [additionalImages, setAdditionalImages] = useState<File[]>([]);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -100,14 +101,27 @@ export const ProductForm = ({
     return true;
   };
 
+  const validateVideo = (file: File): boolean => {
+    const sizeInMB = file.size / (1024 * 1024);
+    if (sizeInMB > 10) {
+      toast.error("La vidéo dépasse la taille maximale de 10 Mo");
+      return false;
+    }
+    if (!file.type.startsWith("video/")) {
+      toast.error("Le fichier doit être une vidéo.");
+      return false;
+    }
+    return true;
+  };
+
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    isMain: boolean
+    type: "main" | "additional" | "video"
   ) => {
     const files = e.target.files;
     if (!files) return;
 
-    if (isMain) {
+    if (type === "main") {
       const file = files[0];
       if (file && validateImage(file)) {
         setMainImage(file);
@@ -115,16 +129,24 @@ export const ProductForm = ({
         setMainImage(null);
         e.target.value = "";
       }
-    } else {
+    } else if (type === "additional") {
       const newImages = Array.from(files).filter(validateImage);
-      if (newImages.length > 2) {
+      if (newImages.length > 3) {
         toast.error(
-          "Vous ne pouvez ajouter que 2 images supplémentaires maximum."
+          "Vous ne pouvez ajouter que 3 images supplémentaires maximum."
         );
         setAdditionalImages([]);
         e.target.value = "";
       } else {
-        setAdditionalImages(newImages.slice(0, 2));
+        setAdditionalImages(newImages.slice(0, 3));
+      }
+    } else if (type === "video") {
+      const file = files[0];
+      if (file && validateVideo(file)) {
+        setVideoFile(file);
+      } else {
+        setVideoFile(null);
+        e.target.value = "";
       }
     }
   };
@@ -162,6 +184,7 @@ export const ProductForm = ({
         setFormData(initialFormData);
         setMainImage(null);
         setAdditionalImages([]);
+        setVideoFile(null);
         onSubmit();
       }
     } else {
@@ -190,6 +213,7 @@ export const ProductForm = ({
       );
       formDataToSend.append("images", mainImage);
       additionalImages.forEach((img) => formDataToSend.append("images", img));
+      if (videoFile) formDataToSend.append("video", videoFile);
 
       const result = await fetchDataFromAPI<ProductFromAPI>("/api/products", {
         method: "POST",
@@ -204,6 +228,7 @@ export const ProductForm = ({
         setFormData(initialFormData);
         setMainImage(null);
         setAdditionalImages([]);
+        setVideoFile(null);
       }
     }
     setIsLoading(false);
@@ -455,50 +480,69 @@ export const ProductForm = ({
             </div>
           </div>
 
-          {/* Images Section */}
+          {/* Media Section */}
           {!editingProduct && (
             <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
               <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                <ImageIcon className="h-5 w-5 text-gray-600" /> Images
+                <ImageIcon className="h-5 w-5 text-gray-600" /> Médias
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                    <ImageIcon className="h-4 w-4" /> Image principale (requise)
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    onChange={(e) => handleFileChange(e, true)}
-                    className="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black transition-all duration-200"
-                    required
-                  />
-                  {mainImage && (
-                    <p className="mt-1 text-sm text-gray-600 truncate">
-                      {mainImage.name}
-                    </p>
-                  )}
+              <div className="grid grid-cols-1 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <ImageIcon className="h-4 w-4" /> Image principale (requise)
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={(e) => handleFileChange(e, "main")}
+                      className="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black transition-all duration-200"
+                      required
+                    />
+                    {mainImage && (
+                      <p className="mt-1 text-sm text-gray-600 truncate">
+                        {mainImage.name}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <ImageIcon className="h-4 w-4" /> Images supplémentaires
+                      (max 3)
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={(e) => handleFileChange(e, "additional")}
+                      className="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black transition-all duration-200"
+                      multiple
+                    />
+                    {additionalImages.length > 0 && (
+                      <div className="mt-1 text-sm text-gray-600">
+                        {additionalImages.map((img, index) => (
+                          <p key={index} className="truncate">
+                            {img.name}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div>
+
+                <div className="border-t border-gray-200 pt-4">
                   <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                    <ImageIcon className="h-4 w-4" /> Images supplémentaires
-                    (max 2)
+                    <ImageIcon className="h-4 w-4" /> Vidéo de présentation (max 10 Mo)
                   </label>
                   <input
                     type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    onChange={(e) => handleFileChange(e, false)}
+                    accept="video/mp4,video/webm,video/ogg,video/quicktime"
+                    onChange={(e) => handleFileChange(e, "video")}
                     className="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black transition-all duration-200"
-                    multiple
                   />
-                  {additionalImages.length > 0 && (
-                    <div className="mt-1 text-sm text-gray-600">
-                      {additionalImages.map((img, index) => (
-                        <p key={index} className="truncate">
-                          {img.name}
-                        </p>
-                      ))}
-                    </div>
+                  {videoFile && (
+                    <p className="mt-1 text-sm text-gray-600 truncate">
+                      {videoFile.name}
+                    </p>
                   )}
                 </div>
               </div>
@@ -515,8 +559,8 @@ export const ProductForm = ({
               {isLoading
                 ? "Enregistrement..."
                 : editingProduct
-                ? "Mettre à jour"
-                : "Ajouter"}
+                  ? "Mettre à jour"
+                  : "Ajouter"}
             </button>
             <button
               type="button"

@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       return formatValidationErrors(parseResult);
     }
 
-    const { email, password, nom, prenom } = parseResult.data;
+    const { email, password, nom, prenom, tel } = parseResult.data;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
         password: hashedPassword,
         nom,
         prenom,
+        tel,
         role: UserRole.CLIENT,
         client: {
           create: {},

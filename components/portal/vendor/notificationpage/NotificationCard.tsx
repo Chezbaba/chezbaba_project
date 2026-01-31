@@ -73,22 +73,34 @@ export default function NotificationCard({
   };
 
   const getNotificationIcon = (type: NotificationType) => {
+    if (notification.objet.includes("Stock faible")) {
+      return <Package className="h-5 w-5 sm:h-6 sm:w-6 text-orange-500" />;
+    }
+
     switch (type) {
       case NotificationType.COMMANDE:
         return <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-blue-500" />;
       case NotificationType.LIVRAISON:
         return <Package className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />;
+      case NotificationType.PAIEMENT:
+        return <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-purple-500" />;
       default:
         return <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" />;
     }
   };
 
   const getTypeColor = (type: NotificationType) => {
+    if (notification.objet.includes("Stock faible")) {
+      return "text-orange-700 bg-orange-500";
+    }
+
     switch (type) {
       case NotificationType.COMMANDE:
         return "text-blue-700 bg-blue-500";
       case NotificationType.LIVRAISON:
         return "text-green-700 bg-green-600";
+      case NotificationType.PAIEMENT:
+        return "text-purple-700 bg-purple-500";
       default:
         return "text-gray-700 bg-gray-600";
     }
@@ -96,17 +108,15 @@ export default function NotificationCard({
 
   return (
     <motion.div
-      className={`relative p-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1 overflow-hidden w-full ${
-        notification.estLu ? "bg-white" : "bg-blue-50"
-      }`}
+      className={`relative p-0 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1 overflow-hidden w-full ${notification.estLu ? "bg-white" : "bg-blue-50"
+        }`}
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
     >
       <div
-        className={`absolute left-0 top-0 bottom-0 w-1.5 ${
-          getTypeColor(notification.type).split(" ")[1]
-        }`}
+        className={`absolute left-0 top-0 bottom-0 w-1.5 ${getTypeColor(notification.type).split(" ")[1]
+          }`}
       ></div>
       <div className="p-4 sm:p-6 sm:pl-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-4">
@@ -114,18 +124,16 @@ export default function NotificationCard({
             <div className="flex items-center gap-3 mb-3">
               {getNotificationIcon(notification.type)}
               <span
-                className={`font-semibold text-base sm:text-lg ${
-                  getTypeColor(notification.type).split(" ")[0]
-                }`}
+                className={`font-semibold text-base sm:text-lg ${getTypeColor(notification.type).split(" ")[0]
+                  }`}
               >
                 {notification.type}
               </span>
               <span
-                className={`ml-2 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
-                  notification.estLu
+                className={`ml-2 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${notification.estLu
                     ? "bg-gray-100 text-gray-600 border border-gray-200"
                     : "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                }`}
+                  }`}
               >
                 {notification.estLu ? "Lu" : "Non lu"}
               </span>

@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { PhoneInput } from "@/components/ui/phone-input";
 import {
   Card,
   CardContent,
@@ -34,6 +35,7 @@ export function RegisterForm({
   const [password, setPassword] = useState("");
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
+  const [tel, setTel] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -63,6 +65,7 @@ export function RegisterForm({
           password,
           nom,
           prenom,
+          tel,
         }),
       });
 
@@ -177,6 +180,19 @@ export function RegisterForm({
                 />
                 {fieldErrors.prenom && (
                   <FieldErrorMessage message={fieldErrors.prenom} />
+                )}
+              </div>
+
+              {/* téléphone */}
+              <div className="grid gap-3">
+                <Label htmlFor="tel">Téléphone</Label>
+                <PhoneInput
+                  value={tel}
+                  onChange={setTel}
+                  disabled={isLoading}
+                />
+                {fieldErrors.tel && (
+                  <FieldErrorMessage message={fieldErrors.tel} />
                 )}
               </div>
 

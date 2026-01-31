@@ -18,6 +18,7 @@ import {
   fullOrderWithPaymentSchema,
 } from "./order";
 import { reportSchema } from "@/lib/validations/report";
+import { newsletterSchema } from "./newsletter";
 
 import formatValidationErrors from "./formatValidationErrors";
 
@@ -50,6 +51,9 @@ export {
 
   // Report
   reportSchema,
+
+  // Newsletter
+  newsletterSchema,
 
   // Format validation errors
   formatValidationErrors,

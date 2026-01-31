@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/utils/prisma";
-import { ERROR_MESSAGES } from "@/lib/constants/settings";
+import { ERROR_MESSAGES, LOW_STOCK_THRESHOLD } from "@/lib/constants/settings";
 import {
   getPaginationParams,
   getSortingOrdersParams,
@@ -184,6 +184,7 @@ export async function POST(req: NextRequest) {
         // Build order lines, calculate total, AND check/decrement stock
         let total = new Decimal(0);
         const ligneCommandeData = [];
+        const updatedStocksMap = new Map<string, number>();
 
         for (const line of produits) {
           const produit = productMap.get(line.produitId);
@@ -201,11 +202,14 @@ export async function POST(req: NextRequest) {
             );
           }
 
-          // Decrement stock (atomic operation)
-          await tx.produit.update({
+          // Decrement stock (atomic operation) and get updated data
+          const updatedProduit = await tx.produit.update({
             where: { id: produit.id },
             data: { qteStock: { decrement: line.quantite } },
+            select: { qteStock: true },
           });
+
+          updatedStocksMap.set(produit.id, updatedProduit.qteStock);
 
           const prixUnit = produit.prix;
           const sousTotal = prixUnit.mul(line.quantite);
@@ -262,15 +266,31 @@ export async function POST(req: NextRequest) {
         // Map product names for specific vendor messages
         for (const v of vendorsToNotify) {
           const product = productMap.get(v.produitId);
+          const remainingStock = updatedStocksMap.get(v.produitId) ?? 0;
+
+          // Notification de vente
           await tx.notification.create({
             data: {
-              userId: v.vendeurId, // Vendeur ID is a User ID (sharing SAME ID in this schema)
+              userId: v.vendeurId,
               type: "PAIEMENT",
               objet: "Nouvelle vente !",
               text: `Vous avez vendu un exemplaire de "${product?.nom}". Consultez votre tableau de bord vendeur pour plus de détails.`,
               urlRedirection: `/vendor/orders`,
             },
           });
+
+          // Alerte de stock faible
+          if (remainingStock <= LOW_STOCK_THRESHOLD) {
+            await tx.notification.create({
+              data: {
+                userId: v.vendeurId,
+                type: "DEFAULT",
+                objet: "Alert : Stock faible !",
+                text: `Attention, il ne reste plus que ${remainingStock} unité(s) de votre produit "${product?.nom}". Pensez à réapprovisionner !`,
+                urlRedirection: `/vendor/store`,
+              },
+            });
+          }
         }
 
         return { ...newOrder, paiement };

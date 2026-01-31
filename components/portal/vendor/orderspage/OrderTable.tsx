@@ -119,6 +119,11 @@ export default function OrderTable({
                       <p className="text-xs text-gray-600">
                         {order.client?.email}
                       </p>
+                      {order.client?.tel && (
+                        <p className="text-xs text-gray-600">
+                          📞 {order.client.tel}
+                        </p>
+                      )}
                     </div>
                   </td>
                   <td className="px-4 py-2 sm:px-6 sm:py-4 text-xs sm:text-sm text-gray-900 hidden md:table-cell">

@@ -45,6 +45,12 @@ export function getProductSelect() {
         imagePublicId: true,
       },
     },
+    video: {
+      select: {
+        id: true,
+        videoPublicId: true,
+      },
+    },
   };
 }
 
@@ -59,6 +65,7 @@ export function formatProductData(product: ProductFromDB): ProductFromAPI {
     prix,
     qteStock,
     noteMoyenne,
+    video,
     ...rest
   } = product;
 
@@ -67,8 +74,8 @@ export function formatProductData(product: ProductFromDB): ProductFromAPI {
     type: produitBoutique
       ? "boutique"
       : produitMarketplace
-      ? "marketplace"
-      : null,
+        ? "marketplace"
+        : null,
     nom,
     objet,
     description,
@@ -76,18 +83,19 @@ export function formatProductData(product: ProductFromDB): ProductFromAPI {
     qteStock,
     noteMoyenne: noteMoyenne?.toNumber(),
     ...rest,
+    video,
     ...(produitBoutique
       ? { fournisseur: { nom: produitBoutique.fournisseur } }
       : {}),
     ...(produitMarketplace
       ? {
-          vendeur: {
-            id: produitMarketplace.vendeur.id,
-            nomBoutique: produitMarketplace.vendeur.nomBoutique,
-            description: produitMarketplace.vendeur.description,
-            imagePublicId: produitMarketplace.vendeur.client.user.imagePublicId,
-          },
-        }
+        vendeur: {
+          id: produitMarketplace.vendeur.id,
+          nomBoutique: produitMarketplace.vendeur.nomBoutique,
+          description: produitMarketplace.vendeur.description,
+          imagePublicId: produitMarketplace.vendeur.client.user.imagePublicId,
+        },
+      }
       : {}),
   };
 }
