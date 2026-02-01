@@ -100,6 +100,7 @@ export async function POST(req: NextRequest) {
       couleurs: formData.getAll("couleurs"),
       tailles: formData.getAll("tailles"),
       images: formData.getAll("images"),
+      video: formData.get("video"),
     });
 
     if (!parsedData.success) {
@@ -107,8 +108,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Upload Images to Cloudinary
-    const { images } = parsedData.data;
+    const { images, video } = parsedData.data;
     let uploadedImages: string[] = [];
+    let uploadedVideo: string | null = null;
 
     try {
       uploadedImages = await Promise.all(
@@ -117,10 +119,15 @@ export async function POST(req: NextRequest) {
           return result.public_id;
         })
       );
+
+      if (video) {
+        const videoResult = await uploadToCloudinary(video, "products", "video");
+        uploadedVideo = videoResult.public_id;
+      }
     } catch (uploadError) {
-      console.error("Image upload failed:", uploadError);
+      console.error("Media upload failed:", uploadError);
       return NextResponse.json(
-        { error: "Échec du téléversement des images." },
+        { error: "Échec du téléversement des médias." },
         { status: 500 }
       );
     }
@@ -142,19 +149,26 @@ export async function POST(req: NextRequest) {
             : undefined,
           couleurs: parsedData.data.couleurs?.length
             ? {
-                connect: parsedData.data.couleurs.map((id: string) => ({ id })),
-              }
+              connect: parsedData.data.couleurs.map((id: string) => ({ id })),
+            }
             : undefined,
           tailles: parsedData.data.tailles?.length
             ? {
-                connect: parsedData.data.tailles.map((id: string) => ({ id })),
-              }
+              connect: parsedData.data.tailles.map((id: string) => ({ id })),
+            }
             : undefined,
           images: {
             create: uploadedImages.map((publicId) => ({
               imagePublicId: publicId,
             })),
           },
+          video: uploadedVideo
+            ? {
+              create: {
+                videoPublicId: uploadedVideo,
+              },
+            }
+            : undefined,
           ...(isVendeur && {
             produitMarketplace: {
               create: {
@@ -180,16 +194,25 @@ export async function POST(req: NextRequest) {
     } catch (dbError) {
       console.error("Database error:", dbError);
 
-      // If product creation fails, delete the uploaded images
-      await Promise.all(
-        uploadedImages.map(async (publicId) => {
+      // If product creation fails, delete the uploaded images/video
+      await Promise.all([
+        ...uploadedImages.map(async (publicId) => {
           try {
             await deleteFromCloudinary(publicId);
           } catch (deleteError) {
             console.error(`Failed to delete image ${publicId}:`, deleteError);
           }
-        })
-      );
+        }),
+        ...(uploadedVideo ? [
+          (async () => {
+            try {
+              await deleteFromCloudinary(uploadedVideo!, "video");
+            } catch (deleteError) {
+              console.error(`Failed to delete video ${uploadedVideo}:`, deleteError);
+            }
+          })()
+        ] : [])
+      ]);
 
       if (dbError instanceof Prisma.PrismaClientKnownRequestError) {
         if (dbError.code === "P2025") {

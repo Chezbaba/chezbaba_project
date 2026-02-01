@@ -5,16 +5,18 @@ import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 export const runtime = "edge";
 
 const openrouter = createOpenRouter({
-  apiKey: process.env.OPENROUTER_API_KEY!,
+  apiKey: process.env.OPENROUTER_API_KEY?.trim() || "",
 });
 
 export async function POST(req: NextRequest) {
   try {
     const { prompt } = await req.json();
+    console.log("DEBUG - Chat API called. Prompt:", prompt);
+    console.log("DEBUG - API Key present:", !!process.env.OPENROUTER_API_KEY);
 
     const result = streamText({
       // model: openrouter.chat("mistralai/mistral-small-3.1-24b-instruct:free"),
-      model: openrouter.chat("meta-llama/llama-3.3-8b-instruct:free"),
+      model: openrouter.chat("meta-llama/llama-3.1-8b-instruct:free"),
       messages: [
         {
           role: "system",
@@ -104,9 +106,10 @@ export async function POST(req: NextRequest) {
       ],
     });
 
-    return new NextResponse(result.toDataStream());
+    return result.toDataStreamResponse();
+
   } catch (error) {
-    console.error("Error in API route:", error);
+    console.error("DEBUG - OpenRouter Error Details:", error);
     const message = error instanceof Error ? error.message : "Unknown error";
     return new NextResponse("An error occurred: " + message, {
       status: 500,

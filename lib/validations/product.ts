@@ -59,6 +59,15 @@ export const productSchema = z.object({
     .refine((files) => files.length >= 1 && files.length <= 4, {
       message: "Vous devez télécharger entre 1 et 4 images",
     }),
+  video: z
+    .instanceof(File)
+    .refine((file) => file.type.startsWith("video/"), {
+      message: "Le fichier doit être une vidéo",
+    })
+    .refine((file) => file.size <= 10 * 1024 * 1024, {
+      message: "La taille de la vidéo ne peut pas dépasser 10 Mo",
+    })
+    .optional(),
 });
 
 // Définition du schéma de validation Zod pour la mise à jour d'un produit

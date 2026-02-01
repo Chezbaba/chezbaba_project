@@ -133,12 +133,11 @@ export async function PATCH(
       await prisma.notification.create({
         data: {
           type: NotificationType.SIGNALEMENT,
-          objet: `L'administrateur a répondu à votre signalement concernant « ${
-            report.produit?.nom || "un produit"
-          } »`,
+          objet: `L'administrateur a répondu à votre signalement concernant « ${report.produit?.nom || "un produit"
+            } »`,
           text: reponse,
           userId: report.client.user.id,
-          urlRedirection: `/products/${report.produit?.id}`,
+          urlRedirection: `/product/${report.produit?.id}`,
         },
       });
     }

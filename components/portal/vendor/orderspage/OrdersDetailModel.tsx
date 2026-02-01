@@ -79,6 +79,15 @@ export default function OrderDetailModal({
 
             <div>
               <span className="text-gray-700 font-medium text-sm sm:text-base">
+                Téléphone :
+              </span>
+              <span className="text-gray-900 font-semibold block text-sm sm:text-base">
+                {order.client?.tel || "Non renseigné"}
+              </span>
+            </div>
+
+            <div>
+              <span className="text-gray-700 font-medium text-sm sm:text-base">
                 Articles :
               </span>
               <span className="text-gray-900 font-semibold block text-sm sm:text-base">

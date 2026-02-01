@@ -20,6 +20,10 @@ export const registerSchema = z.object({
     .transform(
       (prenom) => prenom.charAt(0).toUpperCase() + prenom.slice(1).toLowerCase()
     ), // Capitaliser le prénom
+  tel: z
+    .string({ required_error: "Le numéro de téléphone est requis." })
+    .min(7, "Numéro de téléphone invalide.")
+    .regex(/^[0-9+\-().\s]{7,20}$/, "Numéro de téléphone invalide."),
 });
 
 export const loginSchema = z.object({

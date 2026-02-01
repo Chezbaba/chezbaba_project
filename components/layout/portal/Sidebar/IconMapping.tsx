@@ -7,6 +7,7 @@ import {
   Package,
   ShieldAlert,
   Briefcase,
+  Quote,
 } from "lucide-react";
 
 export const ICON_MAP = {
@@ -18,6 +19,7 @@ export const ICON_MAP = {
   Package,
   ShieldAlert,
   Briefcase,
+  Quote,
 };
 
 export type IconName = keyof typeof ICON_MAP;

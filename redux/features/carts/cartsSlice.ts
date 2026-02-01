@@ -4,8 +4,8 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export type RemoveCartItem = {
   id: string;
-  color: { id: string; name: string };
-  size: { id: string; name: string };
+  color?: { id: string; name: string };
+  size?: { id: string; name: string };
 };
 
 export type CartItem = {
@@ -13,8 +13,8 @@ export type CartItem = {
   name: string;
   imagePublicId: string;
   price: number;
-  color: { id: string; name: string };
-  size: { id: string; name: string };
+  color?: { id: string; name: string };
+  size?: { id: string; name: string };
   quantity: number;
 };
 
@@ -37,6 +37,15 @@ const initialState: CartsState = {
   action: null,
 };
 
+// Helper function for comparing optional color/size
+const matchItem = (
+  item: CartItem,
+  payload: { id: string; color?: { id: string }; size?: { id: string } }
+) =>
+  item.id === payload.id &&
+  (item.color?.id || "") === (payload.color?.id || "") &&
+  (item.size?.id || "") === (payload.size?.id || "");
+
 export const cartsSlice = createSlice({
   name: "carts",
   initialState,
@@ -52,21 +61,14 @@ export const cartsSlice = createSlice({
         return;
       }
 
-      // find matching item by id, color and size
-      const existing = state.cart.items.find(
-        (item) =>
-          item.id === action.payload.id &&
-          item.color.id === action.payload.color.id &&
-          item.size.id === action.payload.size.id
+      // find matching item by id, color and size (handle optional values)
+      const existing = state.cart.items.find((item) =>
+        matchItem(item, action.payload)
       );
 
       if (existing) {
         state.cart.items = state.cart.items.map((item) => {
-          if (
-            item.id === action.payload.id &&
-            item.color.id === action.payload.color.id &&
-            item.size.id === action.payload.size.id
-          ) {
+          if (matchItem(item, action.payload)) {
             return {
               ...item,
               quantity: item.quantity + action.payload.quantity,
@@ -88,21 +90,14 @@ export const cartsSlice = createSlice({
     removeCartItem: (state, action: PayloadAction<RemoveCartItem>) => {
       if (!state.cart) return;
 
-      const existing = state.cart.items.find(
-        (item) =>
-          item.id === action.payload.id &&
-          item.color.id === action.payload.color.id &&
-          item.size.id === action.payload.size.id
+      const existing = state.cart.items.find((item) =>
+        matchItem(item, action.payload)
       );
       if (!existing) return;
 
       state.cart.items = state.cart.items
         .map((item) => {
-          if (
-            item.id === action.payload.id &&
-            item.color.id === action.payload.color.id &&
-            item.size.id === action.payload.size.id
-          ) {
+          if (matchItem(item, action.payload)) {
             return { ...item, quantity: item.quantity - 1 };
           }
           return item;
@@ -119,21 +114,13 @@ export const cartsSlice = createSlice({
     ) => {
       if (!state.cart) return;
 
-      const existing = state.cart.items.find(
-        (item) =>
-          item.id === action.payload.id &&
-          item.color.id === action.payload.color.id &&
-          item.size.id === action.payload.size.id
+      const existing = state.cart.items.find((item) =>
+        matchItem(item, action.payload)
       );
       if (!existing) return;
 
       state.cart.items = state.cart.items.filter(
-        (item) =>
-          !(
-            item.id === action.payload.id &&
-            item.color.id === action.payload.color.id &&
-            item.size.id === action.payload.size.id
-          )
+        (item) => !matchItem(item, action.payload)
       );
       state.cart.totalQuantities -= existing.quantity;
       state.totalPrice -= existing.price * existing.quantity;

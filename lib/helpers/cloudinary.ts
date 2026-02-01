@@ -13,7 +13,8 @@ interface CloudinaryUploadResult {
 
 export async function uploadToCloudinary(
   file: File,
-  folder: string
+  folder: string,
+  resourceType: "image" | "video" | "auto" = "auto"
 ): Promise<CloudinaryUploadResult> {
   // Convert file to Buffer
   const bytes = await file.arrayBuffer();
@@ -21,7 +22,7 @@ export async function uploadToCloudinary(
 
   return new Promise<CloudinaryUploadResult>((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: `megashop/${folder}` },
+      { folder: `megashop/${folder}`, resource_type: resourceType },
       (error, result) => {
         if (error) {
           console.error("Cloudinary Upload Error:", error);
@@ -36,11 +37,14 @@ export async function uploadToCloudinary(
   });
 }
 
-export async function deleteFromCloudinary(publicId: string) {
+export async function deleteFromCloudinary(
+  publicId: string,
+  resourceType: "image" | "video" = "image"
+) {
   try {
-    await cloudinary.uploader.destroy(publicId);
-    console.log(`Cloudinary ---> Deleted image: ${publicId}`);
+    await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+    console.log(`Cloudinary ---> Deleted ${resourceType}: ${publicId}`);
   } catch (error) {
-    console.error(`Failed to delete image ${publicId}:`, error);
+    console.error(`Failed to delete ${resourceType} ${publicId}:`, error);
   }
 }

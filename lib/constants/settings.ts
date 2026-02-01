@@ -9,12 +9,17 @@ export const DEFAULT_PAGE_SIZE = 12;
 export const DEFAULT_SHOP_PAGE_SIZE = 12;
 export const MAX_PAGE_SIZE = 100;
 
+// Stock Alerts
+export const LOW_STOCK_THRESHOLD = 5;
+
 // Cloud folder names
 export const ALLOWED_FOLDERS = ["products", "avatars"];
 
 // File Upload Limits
 export const MAX_UPLOAD_SIZE_MB = 1;
 export const ALLOWED_IMAGE_FORMATS = ["image/jpeg", "image/png", "image/webp"];
+export const ALLOWED_VIDEO_FORMATS = ["video/mp4", "video/webm", "video/ogg", "video/quicktime"];
+export const MAX_VIDEO_SIZE_MB = 10;
 
 // Error Messages
 export const ERROR_MESSAGES = {
