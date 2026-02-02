@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 // Types
 import { ProductFromAPI } from "@/lib/types/product.types";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const AddToCartBtn = ({
   data,
@@ -23,14 +24,14 @@ const AddToCartBtn = ({
     <button
       type="button"
       className={cn(
-        "bg-black w-full ml-3 sm:ml-5 rounded-full h-11 md:h-[52px] text-sm sm:text-base text-white transition-all",
+        "bg-black w-full ml-3 sm:ml-5 rounded-full h-11 md:h-[52px] text-sm sm:text-base text-white transition-all active:scale-95",
         {
           "hover:bg-black/80 cursor-pointer": data.quantity > 0,
           "bg-gray-400 cursor-not-allowed opacity-60": data.quantity === 0,
         }
       )}
       disabled={data.quantity === 0}
-      onClick={() =>
+      onClick={() => {
         dispatch(
           addToCart({
             id: data.id,
@@ -45,8 +46,9 @@ const AddToCartBtn = ({
               : undefined,
             quantity: data.quantity,
           })
-        )
-      }
+        );
+        toast.success("Produit ajouté au panier");
+      }}
     >
       Ajouter au panier
     </button>

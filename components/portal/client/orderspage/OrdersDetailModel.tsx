@@ -1,10 +1,14 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, CheckCircle } from "lucide-react"; // Import CheckCircle
 import { motion } from "framer-motion";
 import { OrderFromAPI } from "@/lib/types/order.types";
 import { extractDateString } from "@/lib/utils";
 import { getStatusColor, getStatusLabel } from "@/lib/helpers/orderStatus";
+import { useState } from "react";
+import { CommandeStatut } from "@prisma/client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface OrderDetailModalProps {
   order: OrderFromAPI | null;
@@ -15,7 +19,41 @@ export default function OrderDetailModal({
   order,
   onClose,
 }: OrderDetailModalProps) {
+  const router = useRouter(); // To refresh page after update
+  const [isConfirming, setIsConfirming] = useState(false);
+
   if (!order) return null;
+
+  const handleConfirmDelivery = async () => {
+    try {
+      setIsConfirming(true);
+      const response = await fetch(`/api/orders/${order.id}/status`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ statut: CommandeStatut.LIVREE }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Erreur lors de la confirmation");
+      }
+
+      toast.success("Réception confirmée ! Merci.");
+      onClose();
+      // Refresh the page or trigger a data reload - simple page reload for now
+      window.location.reload();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Une erreur est survenue");
+    } finally {
+      setIsConfirming(false);
+    }
+  };
+
+  const showConfirmButton =
+    order.statut !== CommandeStatut.LIVREE &&
+    order.statut !== CommandeStatut.ANNULEE;
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50">
@@ -35,17 +73,30 @@ export default function OrderDetailModal({
 
         <div className="space-y-4 sm:space-y-6">
           {/* En-tête de la commande */}
-          <div className="flex justify-between items-center border-b border-gray-200 pb-3 sm:pb-4 mt-1">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-200 pb-3 sm:pb-4 mt-1 gap-4 sm:gap-0">
             <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
               Commande #{order.id}
             </h3>
-            <span
-              className={`px-3 py-1 rounded-full font-bold ${getStatusColor(
-                order.statut!
-              )}`}
-            >
-              {getStatusLabel(order.statut)}
-            </span>
+            <div className="flex items-center gap-2">
+              <span
+                className={`px-3 py-1 rounded-full font-bold ${getStatusColor(
+                  order.statut!
+                )}`}
+              >
+                {getStatusLabel(order.statut)}
+              </span>
+
+              {showConfirmButton && (
+                <button
+                  onClick={handleConfirmDelivery}
+                  disabled={isConfirming}
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-full text-sm font-semibold transition-colors disabled:opacity-50"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  {isConfirming ? "Confirmation..." : "Confirmer réception"}
+                </button>
+              )}
+            </div>
           </div>
           {/* Informations vendeur */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 bg-gray-50 p-3 sm:p-4 rounded-xl">

@@ -102,7 +102,11 @@ export async function POST(req: NextRequest) {
     // Check if product exists
     const produit = await prisma.produit.findUnique({
       where: { id: productId },
-      select: { noteMoyenne: true, totalEvaluations: true },
+      select: {
+        noteMoyenne: true,
+        totalEvaluations: true,
+        produitMarketplace: { select: { vendeurId: true } },
+      },
     });
 
     if (!produit) {
@@ -141,6 +145,19 @@ export async function POST(req: NextRequest) {
 
     // Format the response data
     const data = formatReviewData(newReview);
+
+    // --- Notification Logic ---
+    if (produit.produitMarketplace?.vendeurId) {
+      await prisma.notification.create({
+        data: {
+          userId: produit.produitMarketplace.vendeurId,
+          type: "EVALUATION", // NotificationType.EVALUATION
+          objet: "Nouvel avis !",
+          text: `Vous avez reçu un avis de ${note}/5 sur votre produit.`,
+          urlRedirection: `/vendor/store`, // Ideally specific product page or reviews page if exists
+        },
+      });
+    }
 
     return NextResponse.json(
       { message: "L'évaluation a été bien enregistrée", data },

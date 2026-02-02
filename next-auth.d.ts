@@ -13,6 +13,7 @@ declare module "next-auth" {
       role: UserRole;
       emailVerifie: boolean;
       imagePublicId: string | null;
+      tel: string | null;
     };
   }
 

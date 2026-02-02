@@ -2,11 +2,28 @@ import bcrypt from "bcryptjs";
 import type { JWT } from "next-auth/jwt";
 import NextAuth, { type Session, type User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 import { prisma } from "@/lib/utils/prisma";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
+    GoogleProvider({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      async profile(profile) {
+        return {
+          id: profile.sub,
+          email: profile.email,
+          nom: profile.family_name || "",
+          prenom: profile.given_name || "",
+          role: "CLIENT",
+          emailVerifie: profile.email_verified,
+          imagePublicId: null,
+          tel: null,
+        };
+      },
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -37,6 +54,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           role: user.role,
           emailVerifie: user.emailVerifie,
           imagePublicId: user.imagePublicId,
+          tel: user.tel,
         };
       },
     }),
@@ -67,6 +85,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.role = user.role;
         token.emailVerifie = user.emailVerifie;
         token.imagePublicId = user.imagePublicId;
+        token.tel = user.tel;
       }
 
       // If the user is updating their session, fetch the latest user data
@@ -81,6 +100,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             role: true,
             emailVerifie: true,
             imagePublicId: true,
+            tel: true,
           },
         });
 
@@ -92,6 +112,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.role = dbUser.role;
           token.emailVerifie = dbUser.emailVerifie;
           token.imagePublicId = dbUser.imagePublicId;
+          token.tel = dbUser.tel;
+        }
+      }
+
+      // For subsequent requests, if it's a first-time Google sign-in (or any sign-in that doesn't trigger "update")
+      // We might want to ensure token.tel is always up to date if it was null before
+      if (!token.tel) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email },
+          select: { tel: true },
+        });
+        if (dbUser) {
+          token.tel = dbUser.tel;
         }
       }
 
@@ -106,6 +139,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.role = token.role;
       session.user.emailVerifie = token.emailVerifie;
       session.user.imagePublicId = token.imagePublicId;
+      session.user.tel = token.tel;
       return session;
     },
   },

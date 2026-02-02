@@ -143,6 +143,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Check if user has a phone number
+  if (!session.user.tel) {
+    return NextResponse.json(
+      { error: "Un numéro de téléphone est requis pour passer une commande. Veuillez l'ajouter à votre profil." },
+      { status: 400 }
+    );
+  }
+
   const body = await req.json();
   const parsed = fullOrderWithPaymentSchema.safeParse(body);
 

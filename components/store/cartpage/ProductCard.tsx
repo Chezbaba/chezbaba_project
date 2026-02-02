@@ -66,18 +66,22 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <PiTrashFill className="text-xl md:text-2xl text-red-600" />
           </Button>
         </div>
-        <div className="-mt-1">
-          <span className="text-black text-xs md:text-sm mr-1">Taille:</span>
-          <span className="text-black/60 text-xs md:text-sm">
-            {data.color.name}
-          </span>
-        </div>
-        <div className="mb-auto -mt-1.5">
-          <span className="text-black text-xs md:text-sm mr-1">Couleur:</span>
-          <span className="text-black/60 boder-1 border-gray-300 text-xs md:text-sm">
-            {data.size.name}
-          </span>
-        </div>
+        {data.color && (
+          <div className="-mt-1">
+            <span className="text-black text-xs md:text-sm mr-1">Couleur:</span>
+            <span className="text-black/60 text-xs md:text-sm">
+              {data.color.name}
+            </span>
+          </div>
+        )}
+        {data.size && (
+          <div className="mb-auto -mt-1.5">
+            <span className="text-black text-xs md:text-sm mr-1">Taille:</span>
+            <span className="text-black/60 boder-1 border-gray-300 text-xs md:text-sm">
+              {data.size.name}
+            </span>
+          </div>
+        )}
         <div className="flex items-center flex-wrap justify-between">
           <span className="font-bold text-black  text-xl xl:text-2xl">
             {data.price}DA
@@ -89,20 +93,20 @@ const ProductCard = ({ data }: ProductCardProps) => {
             onRemove={() =>
               data.quantity === 1
                 ? dispatch(
-                    remove({
-                      id: data.id,
-                      color: data.color,
-                      size: data.size,
-                      quantity: data.quantity,
-                    })
-                  )
+                  remove({
+                    id: data.id,
+                    color: data.color,
+                    size: data.size,
+                    quantity: data.quantity,
+                  })
+                )
                 : dispatch(
-                    removeCartItem({
-                      id: data.id,
-                      color: data.color,
-                      size: data.size,
-                    })
-                  )
+                  removeCartItem({
+                    id: data.id,
+                    color: data.color,
+                    size: data.size,
+                  })
+                )
             }
             isZeroDelete
             className="px-5 py-3 max-h-8 md:max-h-10 min-w-[105px] max-w-[105px] sm:max-w-32"
