@@ -35,7 +35,7 @@ export const updateUserSchema = z
 export const updateAddressSchema = z.object({
   rue: z.string().min(1, "La rue est requise."),
   ville: z.string().min(1, "La ville est requise."),
-  wilaya: z.string().min(1, "La wilaya est requise."),
+  quartier: z.string().min(1, "Le quartier est requis."),
   codePostal: z.string().min(4, "Code postal invalide."),
 });
 

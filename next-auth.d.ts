@@ -25,6 +25,7 @@ declare module "next-auth" {
     role: UserRole;
     emailVerifie: boolean;
     imagePublicId: string | null;
+    tel: string | null;
   }
 }
 
@@ -37,5 +38,17 @@ declare module "next-auth/jwt" {
     role: UserRole;
     emailVerifie: boolean;
     imagePublicId: string | null;
+    tel: string | null;
+  }
+}
+
+declare module "next-auth/adapters" {
+  interface AdapterUser extends User {
+    nom: string;
+    prenom: string;
+    role: UserRole;
+    emailVerifie: boolean;
+    imagePublicId: string | null;
+    tel: string | null;
   }
 }

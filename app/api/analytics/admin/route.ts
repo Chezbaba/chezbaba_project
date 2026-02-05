@@ -97,25 +97,25 @@ export async function GET(_req: NextRequest) {
     // Get the product details for the highest revenue product
     const produitPlusRevenuDetails = produitPlusRevenu[0]?.produitId
       ? await prisma.produit.findUnique({
-          where: { id: produitPlusRevenu[0].produitId },
-          select: {
-            id: true,
-            nom: true,
-            prix: true,
-          },
-        })
+        where: { id: produitPlusRevenu[0].produitId },
+        select: {
+          id: true,
+          nom: true,
+          prix: true,
+        },
+      })
       : null;
 
     // Get the product details for the most sold product
     const produitPlusVenduDetails = produitPlusVendu[0]?.produitId
       ? await prisma.produit.findUnique({
-          where: { id: produitPlusVendu[0].produitId },
-          select: {
-            id: true,
-            nom: true,
-            prix: true,
-          },
-        })
+        where: { id: produitPlusVendu[0].produitId },
+        select: {
+          id: true,
+          nom: true,
+          prix: true,
+        },
+      })
       : null;
 
     // WeekData
@@ -224,16 +224,16 @@ export async function GET(_req: NextRequest) {
       } : null,
       produitPlusRevenu: produitPlusRevenuDetails
         ? {
-            ...produitPlusRevenuDetails,
-            totalRevenu: produitPlusRevenu[0]._sum.prixUnit,
-            quantiteVendue: produitPlusRevenu[0]._sum.quantite,
-          }
+          ...produitPlusRevenuDetails,
+          totalRevenu: produitPlusRevenu[0]._sum.prixUnit,
+          quantiteVendue: produitPlusRevenu[0]._sum.quantite,
+        }
         : null,
       produitPlusVendu: produitPlusVenduDetails
         ? {
-            ...produitPlusVenduDetails,
-            quantiteVendue: produitPlusVendu[0]._sum.quantite,
-          }
+          ...produitPlusVenduDetails,
+          quantiteVendue: produitPlusVendu[0]._sum.quantite,
+        }
         : null,
       weekData,
       monthData,

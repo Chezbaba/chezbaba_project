@@ -25,7 +25,7 @@ export function getOrderSelect() {
         id: true,
         rue: true,
         ville: true,
-        wilaya: true,
+        quartier: true,
         codePostal: true,
       },
     },
@@ -82,13 +82,13 @@ export function formatOrderData(order: OrderFromDB): OrderFromAPI {
     adresse,
     client: client
       ? {
-          id: client.user.id,
-          nom: client.user.nom,
-          prenom: client.user.prenom,
-          email: client.user.email,
-          tel: client.user.tel,
-          imagePublicId: client.user.imagePublicId,
-        }
+        id: client.user.id,
+        nom: client.user.nom,
+        prenom: client.user.prenom,
+        email: client.user.email,
+        tel: client.user.tel,
+        imagePublicId: client.user.imagePublicId,
+      }
       : null,
     produits: lignesCommande.map((ligne) => ({
       ...ligne,

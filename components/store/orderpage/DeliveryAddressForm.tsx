@@ -7,7 +7,7 @@ interface DeliveryAddressFormProps {
   deliveryAddress: {
     street: string;
     city: string;
-    wilaya: string;
+    quartier: string;
     postalCode: string;
   };
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -95,25 +95,25 @@ export default function DeliveryAddressForm({
             <InputGroup.Text
               className={cn(satoshi.className, "text-gray-700 font-medium")}
             >
-              Wilaya
+              Quartier
             </InputGroup.Text>
             <InputGroup.Input
               type="text"
-              name="wilaya"
-              value={deliveryAddress.wilaya}
+              name="quartier"
+              value={deliveryAddress.quartier}
               onChange={onChange}
-              placeholder="Entrez votre wilaya"
+              placeholder="Entrez votre quartier"
               className={cn(
                 satoshi.className,
                 "text-black placeholder:text-gray-400 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none transition-all duration-200",
-                errors["addresse.wilaya"] && "border-red-500"
+                errors["addresse.quartier"] && "border-red-500"
               )}
               required
             />
           </InputGroup>
-          {errors["addresse.wilaya"] && (
+          {errors["addresse.quartier"] && (
             <p className="text-red-500 text-sm float-right">
-              {errors["addresse.wilaya"]}
+              {errors["addresse.quartier"]}
             </p>
           )}
         </div>

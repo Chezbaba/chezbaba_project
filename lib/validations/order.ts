@@ -5,7 +5,7 @@ import { paymentSchema } from "./payment";
 const deliveryAddressSchema = z.object({
   rue: z.string().min(1, "Rue est requise"),
   ville: z.string().min(1, "Ville est requise"),
-  wilaya: z.string().min(1, "Wilaya est requise"),
+  quartier: z.string().min(1, "Le quartier est requis"),
   codePostal: z.string().min(1, "Code postal est requis"),
 });
 

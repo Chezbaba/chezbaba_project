@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import getAuth from "@/lib/auth/getAuth";
+import NextAuth from "next-auth";
+import { authConfig } from "@/lib/auth/auth.config";
 import {
   PRIVATE_ROUTES,
   AUTH_ROUTES,
   VERIFY_EMAIL,
 } from "@/lib/constants/routes";
 
+const { auth } = NextAuth(authConfig);
+
 export async function middleware(req: NextRequest) {
-  const session = await getAuth();
+  const session = await auth();
   const { pathname } = req.nextUrl;
 
   console.log("Middleware : ", pathname);

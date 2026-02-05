@@ -19,7 +19,7 @@ model Adresse {
   id         String     @id @default(cuid()) @db.VarChar(25)
   rue        String     @db.VarChar(255)
   ville      String     @db.VarChar(100)
-  wilaya     String     @db.VarChar(100)
+  quartier   String     @db.VarChar(100)
   codePostal String     @map("code_postal") @db.VarChar(20)
   commandes  Commande[]
   user       User[]
@@ -317,9 +317,9 @@ model TOTPSecret {
 model User {
   id                 String              @id @default(cuid()) @db.VarChar(25)
   email              String              @unique(map: "unique_email") @db.VarChar(255)
-  password           String              @db.VarChar(255)
-  nom                String              @db.VarChar(100)
-  prenom             String              @db.VarChar(100)
+  password           String?             @db.VarChar(255)
+  nom                String              @default("") @db.VarChar(100)
+  prenom             String              @default("") @db.VarChar(100)
   tel                String?             @db.VarChar(20)
   adresseId          String?             @map("adresse_id") @db.VarChar(25)
   imagePublicId      String?             @map("image_public_id") @db.VarChar(255)
@@ -336,8 +336,30 @@ model User {
   notifications      Notification[]
   reponsesEvaluation ReponseEvaluation[]
 
+  accounts           Account[]
   @@index([email], map: "index_email")
   @@map("user")
+}
+
+model Account {
+  id                String  @id @default(cuid()) @db.VarChar(25)
+  userId            String  @map("user_id") @db.VarChar(25)
+  type              String  @db.VarChar(50)
+  provider          String  @db.VarChar(50)
+  providerAccountId String  @map("provider_account_id") @db.VarChar(255)
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String? @db.VarChar(50)
+  scope             String? @db.VarChar(255)
+  id_token          String? @db.Text
+  session_state     String? @db.VarChar(255)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId], map: "index_account_user_id")
+  @@map("account")
 }
 
 model Vendeur {

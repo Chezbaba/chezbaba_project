@@ -35,7 +35,7 @@ export async function GET(
             id: true,
             rue: true,
             ville: true,
-            wilaya: true,
+            quartier: true,
             codePostal: true,
           },
         },
@@ -101,7 +101,7 @@ export async function PUT(
       return formatValidationErrors(parsedData);
     }
 
-    const { rue, ville, wilaya, codePostal } = parsedData.data;
+    const { rue, ville, quartier, codePostal } = parsedData.data;
 
     const currentUser = await prisma.user.findUnique({
       where: { id: userId },
@@ -121,12 +121,12 @@ export async function PUT(
       // Adresse already exists -> update it
       adresse = await prisma.adresse.update({
         where: { id: currentUser.adresseId },
-        data: { rue, ville, wilaya, codePostal },
+        data: { rue, ville, quartier, codePostal },
       });
     } else {
       // No adresse -> create one and link it to user
       adresse = await prisma.adresse.create({
-        data: { rue, ville, wilaya, codePostal },
+        data: { rue, ville, quartier, codePostal },
       });
 
       await prisma.user.update({

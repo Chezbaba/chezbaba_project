@@ -78,13 +78,13 @@ export async function GET(request: NextRequest) {
       where: whereClause,
       orderBy: sortBy === "date"
         ? {
-            commande: {
-              date: sortOrder as Prisma.SortOrder,
-            },
-          }
-        : {
-            [sortBy]: sortOrder as Prisma.SortOrder,
+          commande: {
+            date: sortOrder as Prisma.SortOrder,
           },
+        }
+        : {
+          [sortBy]: sortOrder as Prisma.SortOrder,
+        },
       select: getSellSelect(),
       take: pageSize,
       skip,

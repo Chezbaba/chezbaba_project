@@ -85,8 +85,8 @@ export async function GET(req: NextRequest) {
         sortField === "name"
           ? { nom: sortOrder }
           : sortField === "createdAt"
-          ? { dateCreation: sortOrder }
-          : undefined,
+            ? { dateCreation: sortOrder }
+            : undefined,
       take: pageSize,
       skip,
     });

@@ -42,11 +42,14 @@ export async function POST(req: NextRequest) {
   try {
     // Retrieve all products in a single batch to avoid multiple lookups
     const productIds = produits.map((p) => p.produitId);
+    const couleurIds = produits.map((p) => p.couleurId).filter((id): id is string => id !== undefined);
+    const tailleIds = produits.map((p) => p.tailleId).filter((id): id is string => id !== undefined);
+
     const dbProducts = await prisma.produit.findMany({
       where: {
         id: { in: productIds },
-        couleurs: { some: { id: { in: produits.map((p) => p.couleurId) } } },
-        tailles: { some: { id: { in: produits.map((p) => p.tailleId) } } },
+        ...(couleurIds.length > 0 && { couleurs: { some: { id: { in: couleurIds } } } }),
+        ...(tailleIds.length > 0 && { tailles: { some: { id: { in: tailleIds } } } }),
       },
       select: {
         id: true,

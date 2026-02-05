@@ -237,13 +237,13 @@ export async function PATCH(
         genre: genreId ? { connect: { id: genreId } } : undefined,
         couleurs: couleurs?.length
           ? {
-              set: couleurs.map((id: string) => ({ id })),
-            }
+            set: couleurs.map((id: string) => ({ id })),
+          }
           : undefined,
         tailles: tailles?.length
           ? {
-              set: tailles.map((id: string) => ({ id })),
-            }
+            set: tailles.map((id: string) => ({ id })),
+          }
           : undefined,
       },
       select: getProductSelect(),

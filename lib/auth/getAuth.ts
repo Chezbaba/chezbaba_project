@@ -1,4 +1,4 @@
 import { cache } from "react";
-import { auth } from "@/lib/auth";
+import { auth } from "./index";
 
 export default cache(auth);
