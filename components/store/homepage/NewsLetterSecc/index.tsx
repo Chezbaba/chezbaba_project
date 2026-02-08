@@ -20,17 +20,15 @@ const NewsLetterSection = () => {
             <Link href="/">
               <Image
                 priority
-                src="/icons/logo.svg"
+                src="/icons/slogo.png"
                 height={100}
                 width={175}
-                alt="MEGA SHOP Logo"
-                className="h-[100px] w-[175px]"
+                alt="Chezbaba Logo"
+                className="h-[120px] w-[200px]"
               />
             </Link>
             <p className="text-black/60 max-w-[430px] text-center md:text-start">
-              Découvrez une collection unique de vêtements pour femmes et
-              hommes, conçus pour s&apos;adapter à votre style et vous
-              accompagner avec élégance au quotidien.
+              Découvrez une large gamme de produits pour tous vos besoins : vêtements, accessoires et articles variés, avec qualité, fiabilité et service rapide.
             </p>
           </div>
         </div>

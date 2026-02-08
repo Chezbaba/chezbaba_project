@@ -352,6 +352,16 @@
   height: 60px;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
 }
+<<<<<<< HEAD
+=======
+/* .text-center{ 
+  display: inline-block ;}
+.text-center:hover{
+  transform:rotateX('360');
+
+} */
+
+>>>>>>> 83e1161 (Sauvegarde avant de passer sur Front_Chezbaba)
 .bottom-nav-link {
   flex: 1;
   display: flex;

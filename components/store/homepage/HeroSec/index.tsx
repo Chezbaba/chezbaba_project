@@ -46,7 +46,7 @@ bg-[var(--darkblue)] text-white px-14 py-4 rounded-full
 transition-all duration-300 ease-out
 hover:scale-[1.03] hover:shadow-xl hover:shadow-[var(--darkblue)/30]"
             >
-              Commencer le Shopping
+              Commencer les achats
             </Link>
           </motion.div>
 

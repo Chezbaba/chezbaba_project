@@ -191,18 +191,8 @@ export function RegisterForm({
               </div>
 
               {/* accept terms */}
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="accept-terms"
-                  checked={acceptTerms}
-                  onChange={(e) => setAcceptTerms(e.target.checked)}
-                  required
-                />
-                <Label htmlFor="accept-terms">
-                  J'accepte les <Link href="/terms">Conditions d'utilisation</Link> et la <Link href="/privacy">Politique de confidentialité</Link>
-                </Label>
-              </div>
+              {/* ...accept terms section retiré... */}
+
 
               {/* submit button */}
               <Button type="submit" className="w-full" disabled={isLoading}>
