@@ -8,6 +8,7 @@ import PhotoSection from "./PhotoSection";
 import ColorSelection from "./ColorSelection";
 import SizeSelection from "./SizeSelection";
 import AddToCardSection from "./AddToCardSection";
+import FavoriteButton from "@/components/common/FavoriteButton";
 
 // Utils & Types
 import { cn } from "@/lib/utils";
@@ -26,10 +27,18 @@ const ProductHero = ({ product }: { product: ProductFromAPI }) => {
           <PhotoSection data={product} />
         </div>
         <div className="relative">
+          {/* Favorite Button - Top Right */}
+          <div className="absolute top-0 right-0 z-10">
+            <FavoriteButton
+              productId={product.id}
+              size="lg"
+            />
+          </div>
+
           <h1
             className={cn([
               integralCF.className,
-              "text-2xl md:text-[40px] md:leading-[40px] mb-3 md:mb-3.5 capitalize",
+              "text-2xl md:text-[40px] md:leading-[40px] mb-3 md:mb-3.5 capitalize pr-12",
             ])}
           >
             {product.nom}

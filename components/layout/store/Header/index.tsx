@@ -34,6 +34,9 @@ const Navbar = () => {
             </Link>
             {/* Icônes */}
             <div className="button_icons" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <Link href="/favorites" className="icone" title="Mes Favoris">
+                <i className="bi bi-heart"></i>
+              </Link>
               <Link href="/cart" className="icone" style={{ position: 'relative' }}>
                 <i className="bi bi-cart3"></i>
                 <span className="cart-badge" style={{ background: '#EA9010' }}>{cart ? cart.totalQuantities : 0}</span>

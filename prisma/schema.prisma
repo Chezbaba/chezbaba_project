@@ -219,6 +219,7 @@ model Produit {
   signalements       Signalement[]
   images             ProduitImage[]
   video              ProduitVideo?
+  favoris            Favori[]
 
   @@index([categorieId], map: "index_categorie_id")
   @@index([qteStock], map: "index_qte_stock")
@@ -335,6 +336,7 @@ model User {
   evaluations        Evaluation[]
   notifications      Notification[]
   reponsesEvaluation ReponseEvaluation[]
+  favoris            Favori[]
 
   accounts           Account[]
   @@index([email], map: "index_email")
@@ -436,3 +438,19 @@ model Newsletter {
 
   @@map("newsletter")
 }
+
+model Favori {
+  id        String   @id @default(cuid()) @db.VarChar(25)
+  userId    String   @map("user_id") @db.VarChar(25)
+  produitId String   @map("produit_id") @db.VarChar(25)
+  dateAjout DateTime @default(now()) @map("date_ajout")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  produit Produit @relation(fields: [produitId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([userId, produitId])
+  @@index([userId], map: "index_favori_user_id")
+  @@index([produitId], map: "index_favori_produit_id")
+  @@map("favori")
+}
+

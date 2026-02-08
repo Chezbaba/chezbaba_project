@@ -9,10 +9,10 @@ const Navbar = () => {
       <nav>
         {/* Desktop/navbar classique */}
         <div className="navBar navBar-desktop">
-                    {/* ...section navBar_connexion_inscription retirée... */}
+          {/* ...section navBar_connexion_inscription retirée... */}
           {/* ...section navBar_connexion_inscription retirée... */}
           {/* Ligne unique : logo, recherche, catégorie, icônes */}
-          <div className="logo_searchBar_button" style={{display: 'flex', alignItems: 'center', gap: 32}}>
+          <div className="logo_searchBar_button" style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
             {/* Logo */}
             <div className="nav_logo">
               <Link href="/" className="logo_link" aria-label="Accueil ChezBaba">
@@ -20,18 +20,21 @@ const Navbar = () => {
               </Link>
             </div>
             {/* Barre de recherche */}
-            <form className="search_input_button" style={{flex: 1, margin: '0 24px'}}>
+            <form className="search_input_button" style={{ flex: 1, margin: '0 24px' }}>
               <input type="text" className="search_input" placeholder="Rechercher un produit" />
             </form>
             {/* Bouton Catégories */}
-            <Link href="/categories" className="categorie_button" style={{display: 'inline-block', marginRight: 24}}>
-              <i className="bi bi-grid" style={{marginRight: 6}}></i> Catégories
+            <Link href="/categories" className="categorie_button" style={{ display: 'inline-block', marginRight: 24 }}>
+              <i className="bi bi-grid" style={{ marginRight: 6 }}></i> Catégories
             </Link>
             {/* Icônes */}
-            <div className="button_icons" style={{display: 'flex', alignItems: 'center', gap: 16}}>
-              <Link href="/cart" className="icone" style={{position: 'relative'}}>
+            <div className="button_icons" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <Link href="/favorites" className="icone" title="Mes Favoris">
+                <i className="bi bi-heart"></i>
+              </Link>
+              <Link href="/cart" className="icone" style={{ position: 'relative' }}>
                 <i className="bi bi-cart3"></i>
-                <span className="cart-badge" style={{background: '#EA9010'}}>0</span>
+                <span className="cart-badge" style={{ background: '#EA9010' }}>0</span>
               </Link>
               <UserMenu />
             </div>
@@ -46,16 +49,16 @@ const Navbar = () => {
               </Link>
             </div>
             <div className="navBar_connexion_cart">
-              <Link href="/cart" className="icone" style={{position: 'relative'}}>
+              <Link href="/cart" className="icone" style={{ position: 'relative' }}>
                 <i className="bi bi-cart3"></i>
-                <span className="cart-badge" style={{background: '#EA9010'}}>0</span>
+                <span className="cart-badge" style={{ background: '#EA9010' }}>0</span>
               </Link>
             </div>
           </div>
         </div>
         {/* Mobile : section basse (barre de recherche) */}
         <div className="navBar navBar-mobile-bottom">
-          <form className="search_input_button" style={{flex: 1}}>
+          <form className="search_input_button" style={{ flex: 1 }}>
             <input type="text" className="search_input" placeholder="Rechercher un produit" />
             <button type="submit" className="search_icon_btn">
               <i className="bi bi-search"></i>
