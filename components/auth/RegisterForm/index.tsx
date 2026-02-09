@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Card,
   CardContent,
@@ -34,6 +36,7 @@ export function RegisterForm({
   const [password, setPassword] = useState("");
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
+  const [tel, setTel] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -68,6 +71,7 @@ export function RegisterForm({
           password,
           nom,
           prenom,
+          tel,
         }),
       });
 
@@ -190,8 +194,35 @@ export function RegisterForm({
                 )}
               </div>
 
+              {/* téléphone */}
+              <div className="grid gap-3">
+                <Label htmlFor="tel">Téléphone</Label>
+                <PhoneInput
+                  value={tel}
+                  onChange={setTel}
+                  disabled={isLoading}
+                />
+                {fieldErrors.tel && (
+                  <FieldErrorMessage message={fieldErrors.tel} />
+                )}
+              </div>
+
+
               {/* accept terms */}
-              {/* ...accept terms section retiré... */}
+              <div className="flex items-start gap-2">
+                <Checkbox
+                  id="accept-terms"
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  required
+                  className="mt-1"
+                />
+                <Label htmlFor="accept-terms" className="font-normal leading-snug text-muted-foreground cursor-pointer">
+                  <span>
+                    J&apos;accepte les <Link href="/terms" className="underline underline-offset-4 hover:text-primary">Conditions d&apos;utilisation</Link> et la <Link href="/privacy" className="underline underline-offset-4 hover:text-primary">Politique de confidentialité</Link>
+                  </span>
+                </Label>
+              </div>
 
 
               {/* submit button */}

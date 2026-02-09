@@ -147,11 +147,9 @@ export default function OrderHistoryPage(): JSX.Element {
             `${produit.nomProduit} (${produit.couleur?.nom}, ${produit.taille?.nom}): ${produit.quantite} x ${produit.prixUnit} DA`
         )
         .join(" | "),
-      Adresse: `${order.adresse?.rue ? order.adresse.rue + ", " : ""}${
-        order.adresse?.ville ? order.adresse.ville + ", " : ""
-      }${order.adresse?.wilaya || ""}${
-        order.adresse?.codePostal ? " - " + order.adresse.codePostal : ""
-      }`,
+      Adresse: `${order.adresse?.rue ? order.adresse.rue + ", " : ""}${order.adresse?.ville ? order.adresse.ville + ", " : ""
+        }${order.adresse?.quartier || ""}${order.adresse?.codePostal ? " - " + order.adresse.codePostal : ""
+        }`,
       Statut: order.statut,
     }));
 

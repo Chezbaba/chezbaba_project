@@ -16,20 +16,20 @@ async function insertUsers() {
   // Création du client 0
   await prisma.user.create({
     data: {
-      nom: "Belkacem",
-      prenom: "Krim",
+      nom: "Adjovi",
+      prenom: "Koffi",
       email: "client@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000001",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue de la liberté",
-          ville: "Béjaia",
-          wilaya: "Béjaia",
-          codePostal: "06000",
+          rue: "Boulevard de la Marina",
+          ville: "Cotonou",
+          quartier: "Ganhi",
+          codePostal: "00229",
         },
       },
       client: {
@@ -41,20 +41,20 @@ async function insertUsers() {
   // Création d'un client 1
   await prisma.user.create({
     data: {
-      nom: "Bouhired",
-      prenom: "Djamila",
+      nom: "Houssou",
+      prenom: "Aminou",
       email: "client1@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000002",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue Didouche Mourad",
-          ville: "Alger Centre",
-          wilaya: "Alger",
-          codePostal: "16000",
+          rue: "Rue du Commerce",
+          ville: "Cotonou",
+          quartier: "Akpakpa",
+          codePostal: "00229",
         },
       },
       client: {
@@ -66,20 +66,20 @@ async function insertUsers() {
   // Création du client 2
   await prisma.user.create({
     data: {
-      nom: "Youcef",
-      prenom: "Zighoud",
+      nom: "Dossou",
+      prenom: "Marie",
       email: "client2@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000003",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue Hassiba Ben Bouali",
-          ville: "Alger Centre",
-          wilaya: "Alger",
-          codePostal: "16000",
+          rue: "Avenue Jean-Paul II",
+          ville: "Cotonou",
+          quartier: "Cadjèhoun",
+          codePostal: "00229",
         },
       },
       client: {
@@ -91,20 +91,20 @@ async function insertUsers() {
   // Création d'un client 3
   await prisma.user.create({
     data: {
-      nom: "Ammar",
-      prenom: "Ali",
+      nom: "Ahounou",
+      prenom: "Codjo",
       email: "client3@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000004",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue Hassiba Ben Bouali",
-          ville: "Alger Centre",
-          wilaya: "Alger",
-          codePostal: "16000",
+          rue: "Rue des Cocotiers",
+          ville: "Cotonou",
+          quartier: "Fidjrossè",
+          codePostal: "00229",
         },
       },
       client: {
@@ -116,20 +116,20 @@ async function insertUsers() {
   // Création d'un client 4
   await prisma.user.create({
     data: {
-      nom: "Ben Bouali",
-      prenom: "Hassiba",
+      nom: "Agbossou",
+      prenom: "Victoire",
       email: "client4@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000005",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue Hassiba Ben Bouali",
-          ville: "Alger Centre",
-          wilaya: "Alger",
-          codePostal: "16000",
+          rue: "Boulevard Saint-Michel",
+          ville: "Cotonou",
+          quartier: "Haie Vive",
+          codePostal: "00229",
         },
       },
       client: {
@@ -141,20 +141,20 @@ async function insertUsers() {
   // Création d'un client 5
   await prisma.user.create({
     data: {
-      nom: "Mourad",
-      prenom: "Didouche",
+      nom: "Gbaguidi",
+      prenom: "Pascal",
       email: "client5@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000006",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue Hassiba Ben Bouali",
-          ville: "Alger Centre",
-          wilaya: "Alger",
-          codePostal: "16000",
+          rue: "Rue du Palais",
+          ville: "Porto-Novo",
+          quartier: "Ouando",
+          codePostal: "00229",
         },
       },
       client: {
@@ -166,20 +166,20 @@ async function insertUsers() {
   // Création d'un client 6
   await prisma.user.create({
     data: {
-      nom: "Boudiaf",
-      prenom: "Mohamed",
+      nom: "Sodji",
+      prenom: "Gérard",
       email: "client6@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000007",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue Hassiba Ben Bouali",
-          ville: "Alger Centre",
-          wilaya: "Alger",
-          codePostal: "16000",
+          rue: "Avenue de la Liberté",
+          ville: "Parakou",
+          quartier: "Banikanni",
+          codePostal: "00229",
         },
       },
       client: {
@@ -191,20 +191,20 @@ async function insertUsers() {
   // Création d'un client 7
   await prisma.user.create({
     data: {
-      nom: "N'Soumer",
-      prenom: "Fatma",
+      nom: "Tohoungba",
+      prenom: "Félicienne",
       email: "client7@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000008",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue de la République",
-          ville: "Tizi Ouzou",
-          wilaya: "Tizi Ouzou",
-          codePostal: "15000",
+          rue: "Rue du Marché",
+          ville: "Abomey-Calavi",
+          quartier: "Godomey",
+          codePostal: "00229",
         },
       },
       client: {
@@ -216,20 +216,20 @@ async function insertUsers() {
   // Création d'un client 8
   await prisma.user.create({
     data: {
-      nom: "Aït Hamouda",
-      prenom: "Amirouche",
+      nom: "Azonhoumon",
+      prenom: "Léonce",
       email: "client8@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000009",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue de la République",
-          ville: "Canstantine",
-          wilaya: "Canstantine",
-          codePostal: "25000",
+          rue: "Rue des Martyrs",
+          ville: "Bohicon",
+          quartier: "Bohicon Centre",
+          codePostal: "00229",
         },
       },
       client: {
@@ -241,20 +241,20 @@ async function insertUsers() {
   // Création d'un client 9
   await prisma.user.create({
     data: {
-      nom: "Benboulaïd",
-      prenom: "Mustapha",
+      nom: "Gbenou",
+      prenom: "Aristide",
       email: "client9@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000010",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue de la République",
-          ville: "Batna",
-          wilaya: "Batna",
-          codePostal: "05000",
+          rue: "Avenue de l'Indépendance",
+          ville: "Natitingou",
+          quartier: "Natitingou Centre",
+          codePostal: "00229",
         },
       },
       client: {
@@ -266,20 +266,20 @@ async function insertUsers() {
   // Création d'un client 10
   await prisma.user.create({
     data: {
-      nom: "Boupacha",
-      prenom: "Djamila",
+      nom: "Hounsokou",
+      prenom: "Fabrice",
       email: "client10@email.com",
       password: hashedPassword,
       role: UserRole.CLIENT,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997000011",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Rue Hassiba Ben Bouali",
-          ville: "Alger Centre",
-          wilaya: "Alger",
-          codePostal: "16000",
+          rue: "Boulevard de la République",
+          ville: "Cotonou",
+          quartier: "Zongo",
+          codePostal: "00229",
         },
       },
       client: {
@@ -291,43 +291,43 @@ async function insertUsers() {
   // Création d'un vendeur
   await prisma.user.create({
     data: {
-      nom: "Ben M'hidi",
-      prenom: "Larbi",
+      nom: "Agbodjan",
+      prenom: "Sylvain",
       email: "vendeur@email.com",
       password: hashedPassword,
       role: UserRole.VENDEUR,
       emailVerifie: true,
-      tel: "0666666666",
+      tel: "+22997100001",
       imagePublicId: "clothes_mqs4nn",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Boulevard de la République",
-          ville: "Béjaia",
-          wilaya: "Béjaia",
-          codePostal: "06000",
+          rue: "Rue du Marché Dantokpa",
+          ville: "Cotonou",
+          quartier: "Dantokpa",
+          codePostal: "00229",
         },
       },
       client: {
         create: {
           vendeur: {
             create: {
-              nomBoutique: "Marque Luxe Béjaia",
-              nomBanque: "Algérie Poste",
+              nomBoutique: "Mode Luxe Cotonou",
+              nomBanque: "BOA Bénin",
               rib: "000999554283123",
               description: `
-## Marque Luxe Béjaia
+## Mode Luxe Cotonou
 
-**Marque Luxe Béjaia** propose une collection exclusive de vêtements et accessoires haut de gamme.
+**Mode Luxe Cotonou** propose une collection exclusive de vêtements et accessoires haut de gamme.
 
 - Offre des *vêtements élégants* pour hommes, femmes et enfants
 - Utilise des *matériaux de qualité supérieure* pour un confort optimal
 - Designs modernes et intemporels, parfaits pour toutes les occasions
-- Basée à Béjaia, avec une passion pour la mode locale et internationale
+- Basée à Cotonou, avec une passion pour la mode africaine et internationale
 
 > Découvrez des pièces uniques qui allient style et sophistication pour sublimer votre garde-robe.
 
-**Contact** : Visitez notre boutique à Béjaia ou contactez-nous au 0666666666 pour plus d'informations.
+**Contact** : Visitez notre boutique à Cotonou ou contactez-nous au +22997100001 pour plus d'informations.
               `,
             },
           },
@@ -339,43 +339,43 @@ async function insertUsers() {
   // Création d'un vendeur 1
   await prisma.user.create({
     data: {
-      nom: "Zabana",
-      prenom: "Ahmed",
+      nom: "Kpossou",
+      prenom: "Théophile",
       email: "vendeur1@email.com",
       password: hashedPassword,
       role: UserRole.VENDEUR,
       emailVerifie: true,
-      tel: "0777777777",
+      tel: "+22997100002",
       imagePublicId: "clothes_mqs4nn",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Boulevard de la République",
-          ville: "Alger",
-          wilaya: "Alger",
-          codePostal: "16000",
+          rue: "Avenue Steinmetz",
+          ville: "Cotonou",
+          quartier: "Ganhi",
+          codePostal: "00229",
         },
       },
       client: {
         create: {
           vendeur: {
             create: {
-              nomBoutique: "Marque VIP Alger",
-              nomBanque: "BNP Paribas El Djazaïr",
-              rib: "000999554283123",
+              nomBoutique: "Marque VIP Porto-Novo",
+              nomBanque: "Ecobank Bénin",
+              rib: "000999554283124",
               description: `
-## Marque VIP Alger
+## Marque VIP Porto-Novo
 
-**Marque VIP Alger** propose une collection exclusive de vêtements et accessoires haut de gamme.
+**Marque VIP Porto-Novo** propose une collection exclusive de vêtements et accessoires haut de gamme.
 
 - Offre des *vêtements élégants* pour hommes, femmes et enfants
 - Utilise des *matériaux de qualité supérieure* pour un confort optimal
 - Designs modernes et intemporels, parfaits pour toutes les occasions
-- Basée à Béjaia, avec une passion pour la mode locale et internationale
+- Basée à Porto-Novo, avec une passion pour la mode africaine et internationale
 
 > Découvrez des pièces uniques qui allient style et sophistication pour sublimer votre garde-robe.
 
-**Contact** : Visitez notre boutique à Alger ou contactez-nous au 0777777777 pour plus d'informations.
+**Contact** : Visitez notre boutique à Porto-Novo ou contactez-nous au +22997100002 pour plus d'informations.
               `,
             },
           },
@@ -387,21 +387,21 @@ async function insertUsers() {
   // Création d'un vendeur 2
   await prisma.user.create({
     data: {
-      nom: "Aït Ahmed",
-      prenom: "Hocine",
+      nom: "Dossou-Yovo",
+      prenom: "Marcel",
       email: "vendeur2@email.com",
       password: hashedPassword,
       role: UserRole.VENDEUR,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997100003",
       imagePublicId: "clothes_mqs4nn",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Boulevard de la République",
-          ville: "Oran",
-          wilaya: "Oran",
-          codePostal: "31000",
+          rue: "Boulevard de France",
+          ville: "Cotonou",
+          quartier: "Cocotiers",
+          codePostal: "00229",
         },
       },
       client: {
@@ -409,8 +409,8 @@ async function insertUsers() {
           vendeur: {
             create: {
               nomBoutique: "Votre boutique en ligne",
-              nomBanque: "BNP Paribas El Djazaïr",
-              rib: "000999554283123",
+              nomBanque: "UBA Bénin",
+              rib: "000999554283125",
               description: `
 ## Votre boutique en ligne
 
@@ -419,11 +419,11 @@ async function insertUsers() {
 - Offre des *vêtements élégants* pour hommes, femmes et enfants
 - Utilise des *matériaux de qualité supérieure* pour un confort optimal
 - Designs modernes et intemporels, parfaits pour toutes les occasions
-- Basée à Béjaia, avec une passion pour la mode locale et internationale
+- Basée à Cotonou, avec une passion pour la mode africaine et internationale
 
 > Découvrez des pièces uniques qui allient style et sophistication pour sublimer votre garde-robe.
 
-**Contact** : Contactez-nous au 0555555555 pour plus d'informations.
+**Contact** : Contactez-nous au +22997100003 pour plus d'informations.
               `,
             },
           },
@@ -435,20 +435,20 @@ async function insertUsers() {
   // Création d'un admin
   await prisma.user.create({
     data: {
-      nom: "Ramdane",
-      prenom: "Abane",
+      nom: "Sossou",
+      prenom: "Emmanuel",
       email: "admin@email.com",
       password: hashedPassword,
       role: UserRole.ADMIN,
       emailVerifie: true,
-      tel: "0555555555",
+      tel: "+22997200001",
       dateCreation: getPastDate(Math.floor(Math.random() * 30)),
       adresse: {
         create: {
-          rue: "Boulevard de l'ALN",
-          ville: "Béjaia",
-          wilaya: "Béjaia",
-          codePostal: "06000",
+          rue: "Boulevard de la Marina",
+          ville: "Cotonou",
+          quartier: "Cadjèhoun",
+          codePostal: "00229",
         },
       },
       admin: {

@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { fetchDataFromAPI } from "@/lib/utils/fetchData";
 import { UserFromAPI } from "@/lib/types/user.types";
 import { Home } from "lucide-react";
-import wilayas from "@/lib/data/wilayas";
+import { tousLesQuartiers } from "@/lib/data/benin-locations";
 
 interface AddressInfoProps {
   user: UserFromAPI;
@@ -14,16 +14,16 @@ export default function AddressInfo({ user, onUpdate }: AddressInfoProps) {
   const [formData, setFormData] = useState({
     rue: user.adresse?.rue || "",
     ville: user.adresse?.ville || "",
-    wilaya: user.adresse?.wilaya || "",
+    quartier: user.adresse?.quartier || "",
     codePostal: user.adresse?.codePostal || "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [wilayaFilter, setWilayaFilter] = useState(formData.wilaya);
+  const [quartierFilter, setQuartierFilter] = useState(formData.quartier);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (e.target.name === "wilaya") {
-      setWilayaFilter(e.target.value);
+    if (e.target.name === "quartier") {
+      setQuartierFilter(e.target.value);
     }
   };
 
@@ -46,8 +46,8 @@ export default function AddressInfo({ user, onUpdate }: AddressInfoProps) {
     setIsLoading(false);
   };
 
-  const filteredWilayas = wilayas.filter((wilaya) =>
-    wilaya.toLowerCase().includes(wilayaFilter.toLowerCase())
+  const filteredQuartiers = tousLesQuartiers.filter((quartier) =>
+    quartier.toLowerCase().includes(quartierFilter.toLowerCase())
   );
 
   return (
@@ -94,24 +94,24 @@ export default function AddressInfo({ user, onUpdate }: AddressInfoProps) {
           </div>
           <div>
             <label
-              htmlFor="wilaya"
+              htmlFor="quartier"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Wilaya
+              Quartier
             </label>
             <input
               type="text"
-              id="wilaya"
-              name="wilaya"
-              value={formData.wilaya}
+              id="quartier"
+              name="quartier"
+              value={formData.quartier}
               onChange={handleChange}
-              list="wilayas-list"
+              list="quartiers-list"
               className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-gray-800 placeholder-gray-500 shadow-sm text-base"
-              placeholder="Saisir ou sélectionner une wilaya"
+              placeholder="Saisir ou sélectionner un quartier"
             />
-            <datalist id="wilayas-list" className="max-h-40 overflow-y-auto">
-              {filteredWilayas.map((wilaya) => (
-                <option key={wilaya} value={wilaya} />
+            <datalist id="quartiers-list" className="max-h-40 overflow-y-auto">
+              {filteredQuartiers.map((quartier, index) => (
+                <option key={`${quartier}-${index}`} value={quartier} />
               ))}
             </datalist>
           </div>

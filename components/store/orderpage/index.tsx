@@ -36,7 +36,7 @@ export default function OrderPageMain() {
   const [deliveryAddress, setDeliveryAddress] = useState({
     street: "",
     city: "",
-    wilaya: "",
+    quartier: "",
     postalCode: "",
   });
   const [paymentInfo, setPaymentInfo] = useState({
@@ -62,8 +62,8 @@ export default function OrderPageMain() {
         produits: cart.items.map((item) => ({
           produitId: item.id,
           quantite: item.quantity,
-          couleurId: item.color.id,
-          tailleId: item.size.id,
+          couleurId: item.color?.id,
+          tailleId: item.size?.id,
         })),
       };
 
@@ -142,7 +142,7 @@ export default function OrderPageMain() {
       addresse: {
         rue: deliveryAddress.street,
         ville: deliveryAddress.city,
-        wilaya: deliveryAddress.wilaya,
+        quartier: deliveryAddress.quartier,
         codePostal: deliveryAddress.postalCode,
       },
       payment: {

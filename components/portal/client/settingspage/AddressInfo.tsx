@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { fetchDataFromAPI } from "@/lib/utils/fetchData";
-import wilayas from "@/lib/data/wilayas";
+import { tousLesQuartiers } from "@/lib/data/benin-locations";
 import { MapPin } from "lucide-react";
 import { Adresse as Address } from "@prisma/client";
 
@@ -19,33 +19,33 @@ export default function AddressInfo({
   const [formData, setFormData] = useState({
     rue: address?.rue || "",
     ville: address?.ville || "",
-    wilaya: address?.wilaya || "",
+    quartier: address?.quartier || "",
     codePostal: address?.codePostal || "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [wilayaInput, setWilayaInput] = useState(formData.wilaya);
-  const [filteredWilayas, setFilteredWilayas] = useState<string[]>(wilayas);
-  const [isWilayaDropdownOpen, setIsWilayaDropdownOpen] = useState(false);
+  const [quartierInput, setQuartierInput] = useState(formData.quartier);
+  const [filteredQuartiers, setFilteredQuartiers] = useState<string[]>(tousLesQuartiers);
+  const [isQuartierDropdownOpen, setIsQuartierDropdownOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleWilayaInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuartierInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setWilayaInput(value);
-    setFormData({ ...formData, wilaya: value });
-    const filtered = wilayas.filter((wilaya) =>
-      wilaya.toLowerCase().startsWith(value.toLowerCase())
+    setQuartierInput(value);
+    setFormData({ ...formData, quartier: value });
+    const filtered = tousLesQuartiers.filter((quartier) =>
+      quartier.toLowerCase().startsWith(value.toLowerCase())
     );
-    setFilteredWilayas(filtered);
-    setIsWilayaDropdownOpen(true);
+    setFilteredQuartiers(filtered);
+    setIsQuartierDropdownOpen(true);
   };
 
-  const handleWilayaSelect = (wilaya: string) => {
-    setWilayaInput(wilaya);
-    setFormData({ ...formData, wilaya });
-    setIsWilayaDropdownOpen(false);
+  const handleQuartierSelect = (quartier: string) => {
+    setQuartierInput(quartier);
+    setFormData({ ...formData, quartier });
+    setIsQuartierDropdownOpen(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,38 +109,38 @@ export default function AddressInfo({
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="wilaya" className="block text-sm font-medium">
-              Wilaya
+            <label htmlFor="quartier" className="block text-sm font-medium">
+              Quartier
             </label>
             <div className="relative">
               <input
-                id="wilaya"
-                name="wilaya"
+                id="quartier"
+                name="quartier"
                 type="text"
-                value={wilayaInput}
-                onChange={handleWilayaInputChange}
-                onFocus={() => setIsWilayaDropdownOpen(true)}
+                value={quartierInput}
+                onChange={handleQuartierInputChange}
+                onFocus={() => setIsQuartierDropdownOpen(true)}
                 onBlur={() =>
-                  setTimeout(() => setIsWilayaDropdownOpen(false), 200)
+                  setTimeout(() => setIsQuartierDropdownOpen(false), 200)
                 }
                 className="w-full px-3 py-2 border rounded-md"
                 autoComplete="off"
               />
-              {isWilayaDropdownOpen && (
+              {isQuartierDropdownOpen && (
                 <ul className="absolute z-10 w-full bg-white border rounded-md max-h-60 overflow-y-auto shadow-lg">
-                  {filteredWilayas.length > 0 ? (
-                    filteredWilayas.map((wilaya) => (
+                  {filteredQuartiers.length > 0 ? (
+                    filteredQuartiers.map((quartier, index) => (
                       <li
-                        key={wilaya}
-                        onClick={() => handleWilayaSelect(wilaya)}
+                        key={`${quartier}-${index}`}
+                        onClick={() => handleQuartierSelect(quartier)}
                         className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                       >
-                        {wilaya}
+                        {quartier}
                       </li>
                     ))
                   ) : (
                     <li className="px-3 py-2 text-gray-500">
-                      Aucune wilaya trouvée
+                      Aucun quartier trouvé
                     </li>
                   )}
                 </ul>

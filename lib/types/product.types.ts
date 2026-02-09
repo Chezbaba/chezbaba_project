@@ -47,4 +47,5 @@ export type ProductFromAPI = {
     imagePublicId: string | null;
   };
   images: { id: string; imagePublicId: string }[];
+  video?: { id: string; videoPublicId: string } | null;
 };

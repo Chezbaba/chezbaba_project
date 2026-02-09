@@ -8,6 +8,7 @@ import PhotoSection from "./PhotoSection";
 import ColorSelection from "./ColorSelection";
 import SizeSelection from "./SizeSelection";
 import AddToCardSection from "./AddToCardSection";
+import FavoriteButton from "@/components/common/FavoriteButton";
 
 // Utils & Types
 import { cn } from "@/lib/utils";
@@ -15,16 +16,10 @@ import { ProductFromAPI } from "@/lib/types/product.types";
 
 // Styles
 import { integralCF } from "@/styles/fonts";
-import { useState } from "react";
-import { Flag, X, Store } from "lucide-react";
+import { Flag, Store } from "lucide-react";
 import Link from "next/link";
-import { getImageUrlFromPublicId } from "@/lib/utils";
-import Image from "next/image";
-import MDEditor from "@uiw/react-md-editor";
 
 const ProductHero = ({ product }: { product: ProductFromAPI }) => {
-  const [showVendorInfo, setShowVendorInfo] = useState(false);
-
   return (
     <section className="mb-11">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -32,10 +27,18 @@ const ProductHero = ({ product }: { product: ProductFromAPI }) => {
           <PhotoSection data={product} />
         </div>
         <div className="relative">
+          {/* Favorite Button - Top Right */}
+          <div className="absolute top-0 right-0 z-10">
+            <FavoriteButton
+              productId={product.id}
+              size="lg"
+            />
+          </div>
+
           <h1
             className={cn([
               integralCF.className,
-              "text-2xl md:text-[40px] md:leading-[40px] mb-3 md:mb-3.5 capitalize",
+              "text-2xl md:text-[40px] md:leading-[40px] mb-3 md:mb-3.5 capitalize pr-12",
             ])}
           >
             {product.nom}
@@ -70,7 +73,7 @@ const ProductHero = ({ product }: { product: ProductFromAPI }) => {
           <div className="flex items-center justify-between mb-4">
             {/* Profile Vendeur */}
             <div className="flex items-center relative group">
-              <Store className="w-4 h- mr-2 text-gray-600" />
+              <Store className="w-4 h-4 mr-2 text-gray-600" />
               {product.type === "boutique" ? (
                 <>
                   <div className="text-xs xl:text-sm bg-[#F0EEED] text-black font-medium px-2.5 py-1 rounded-full">
@@ -81,12 +84,12 @@ const ProductHero = ({ product }: { product: ProductFromAPI }) => {
                   </div>
                 </>
               ) : (
-                <button
-                  onClick={() => setShowVendorInfo(!showVendorInfo)}
-                  className="text-xs xl:text-sm bg-[#F0EEED] text-gray-700 font-medium px-2.5 py-1 rounded-full hover:bg-gray-200"
+                <Link
+                  href={`/shops/${product.vendeur!.id}`}
+                  className="text-xs xl:text-sm bg-[#F0EEED] text-gray-700 font-medium px-2.5 py-1 rounded-full hover:bg-gray-200 transition-colors"
                 >
                   Vendu par : {product.vendeur!.nomBoutique}
-                </button>
+                </Link>
               )}
             </div>
 
@@ -108,43 +111,6 @@ const ProductHero = ({ product }: { product: ProductFromAPI }) => {
           <SizeSelection sizes={product.tailles} />
           <hr className="hidden md:block h-[1px] border-t-black/10 my-5" />
           <AddToCardSection data={product} />
-
-          {/* Carte d'information du vendeur */}
-          {showVendorInfo && product.vendeur && (
-            <div className="absolute top-0 right-0 bg-white p-5 shadow-lg rounded-md border border-gray-200 w-72 xs:w-[350px] sm:w-[500px] md:w-[550px] lg:w-[600px] z-10">
-              <button
-                className="float-right"
-                onClick={() => setShowVendorInfo(false)}
-              >
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-
-              <div className="flex items-center mb-4">
-                <Image
-                  width={100}
-                  height={100}
-                  src={
-                    product.vendeur.imagePublicId
-                      ? getImageUrlFromPublicId(product.vendeur.imagePublicId)
-                      : "/icons/user.svg"
-                  }
-                  alt={product.vendeur.nomBoutique}
-                  className="w-16 h-16 rounded-full object-cover mr-3"
-                />
-                <div>
-                  <h3 className="font-semibold text-2xl">
-                    {product.vendeur.nomBoutique}
-                  </h3>
-                </div>
-              </div>
-
-              {product.vendeur.description && (
-                <div className="prose-lg" data-color-mode="light">
-                  <MDEditor.Markdown source={product.vendeur.description} />
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </section>

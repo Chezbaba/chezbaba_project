@@ -36,6 +36,7 @@ export default function AdminLayout({
     },
     { name: "Gestion", href: "/admin/management", iconName: "Briefcase" },
     { name: "Boutique", href: "/admin/store", iconName: "ShoppingBag" },
+    { name: "Témoignages", href: "/admin/testimonials", iconName: "Quote" },
     { name: "Ventes", href: "/admin/sells", iconName: "DollarSign" },
     { name: "Commandes", href: "/admin/orders", iconName: "Package" },
     { name: "Signalements", href: "/admin/reports", iconName: "ShieldAlert" },

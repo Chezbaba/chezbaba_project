@@ -32,3 +32,8 @@ export const getImageUrlFromPublicId = (imagePublicId: string) => {
 
   return `https://res.cloudinary.com/${cloudName}/image/upload/${defaultTransformations}/${imagePublicId}`;
 };
+
+export const getVideoUrlFromPublicId = (videoPublicId: string) => {
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  return `https://res.cloudinary.com/${cloudName}/video/upload/${videoPublicId}`;
+};

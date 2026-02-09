@@ -31,8 +31,8 @@ export default function CartOrderSummary() {
       produits: cart.items.map((item) => ({
         produitId: item.id,
         quantite: item.quantity,
-        couleurId: item.color.id,
-        tailleId: item.size.id,
+        couleurId: item.color?.id,
+        tailleId: item.size?.id,
       })),
     };
 
@@ -89,9 +89,13 @@ export default function CartOrderSummary() {
                 <span className={cn(satoshi.className, "")}>
                   {item.quantity} × {item.name}
                 </span>
-                <span className={cn(satoshi.className, "ml-[25px]")}>
-                  Couleur: {item.color.name}, Taille: {item.size.name}
-                </span>
+                {(item.color || item.size) && (
+                  <span className={cn(satoshi.className, "ml-[25px] text-xs")}>
+                    {item.color && `Couleur: ${item.color.name}`}
+                    {item.color && item.size && ", "}
+                    {item.size && `Taille: ${item.size.name}`}
+                  </span>
+                )}
               </span>
 
               <span

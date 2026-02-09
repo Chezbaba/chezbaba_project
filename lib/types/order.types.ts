@@ -22,7 +22,7 @@ export type OrderFromAPI = {
     id: string;
     rue: string;
     ville: string;
-    wilaya: string;
+    quartier: string;
     codePostal: string;
   } | null;
   produits: {

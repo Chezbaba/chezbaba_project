@@ -8,6 +8,7 @@ import { fetchDataFromAPI } from "@/lib/utils/fetchData";
 import { UserFromAPI } from "@/lib/types/user.types";
 import { getImageUrlFromPublicId } from "@/lib/utils";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import {
   Camera,
   User,
@@ -32,14 +33,26 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<string>("personal");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const searchParams = useSearchParams();
+  const error = searchParams && typeof searchParams.get === 'function' ? searchParams.get("error") : null;
+
+  useEffect(() => {
+    if (error === "missing_phone") {
+      setActiveTab("contact");
+      toast.error("Veuillez ajouter un numéro de téléphone pour continuer votre commande.");
+    }
+  }, [error]);
+
   const hasFetchedRef = useRef(false);
   useEffect(() => {
     if (status === "loading" || hasFetchedRef.current) return;
     const userId = session?.user.id;
     if (!userId) {
       setIsLoading(false);
-      toast.error("Vous devez être connecté pour accéder à cette page.");
-      console.log("No user ID found in session");
+      // Only show error if we're not just waiting for session
+      if (status === "unauthenticated") {
+        toast.error("Vous devez être connecté pour accéder à cette page.");
+      }
       return;
     }
     const fetchData = async () => {
@@ -180,11 +193,10 @@ export default function SettingsPage() {
                   <button
                     key={tab.value}
                     onClick={() => setActiveTab(tab.value)}
-                    className={`w-full text-left px-3 py-2 flex items-center gap-2 rounded-md ${
-                      activeTab === tab.value
-                        ? "bg-gray-100"
-                        : "hover:bg-gray-50"
-                    }`}
+                    className={`w-full text-left px-3 py-2 flex items-center gap-2 rounded-md ${activeTab === tab.value
+                      ? "bg-gray-100"
+                      : "hover:bg-gray-50"
+                      }`}
                   >
                     <tab.icon className="h-4 w-4" />
                     {tab.label}

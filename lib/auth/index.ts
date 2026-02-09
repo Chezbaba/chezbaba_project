@@ -4,8 +4,13 @@ import NextAuth, { type Session, type User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import { prisma } from "@/lib/utils/prisma";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+
+import { authConfig } from "./auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma) as any,
+  ...authConfig,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -19,7 +24,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           where: { email: credentials.email as string },
         });
 
-        if (!user) throw new Error("No user found!");
+        if (!user || !user.password) throw new Error("No user found!");
 
         // Check password
         const isValid = await bcrypt.compare(
@@ -37,16 +42,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           role: user.role,
           emailVerifie: user.emailVerifie,
           imagePublicId: user.imagePublicId,
+          tel: user.tel,
         };
       },
     }),
   ],
 
-  session: {
-    strategy: "jwt",
-  },
-
   callbacks: {
+    ...authConfig.callbacks,
     async jwt({
       token,
       user,
@@ -54,19 +57,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       trigger,
     }: {
       token: JWT;
-      user: User;
+      user?: User;
       session?: Session;
       trigger?: "signIn" | "signUp" | "update";
     }): Promise<JWT> {
-      // If the user is signing in, add user data to the token
+      // Initial sign in
       if (trigger === "signIn" && user) {
         token.id = user.id!;
         token.email = user.email!;
-        token.nom = user.nom;
-        token.prenom = user.prenom;
-        token.role = user.role;
-        token.emailVerifie = user.emailVerifie;
-        token.imagePublicId = user.imagePublicId;
+        token.nom = (user as any).nom;
+        token.prenom = (user as any).prenom;
+        token.role = (user as any).role;
+        token.emailVerifie = (user as any).emailVerifie;
+        token.imagePublicId = (user as any).imagePublicId;
+        token.tel = (user as any).tel;
       }
 
       // If the user is updating their session, fetch the latest user data
@@ -81,6 +85,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             role: true,
             emailVerifie: true,
             imagePublicId: true,
+            tel: true,
           },
         });
 
@@ -92,21 +97,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.role = dbUser.role;
           token.emailVerifie = dbUser.emailVerifie;
           token.imagePublicId = dbUser.imagePublicId;
+          token.tel = dbUser.tel;
         }
       }
 
       return token;
-    },
-
-    async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.email = token.email;
-      session.user.nom = token.nom;
-      session.user.prenom = token.prenom;
-      session.user.role = token.role;
-      session.user.emailVerifie = token.emailVerifie;
-      session.user.imagePublicId = token.imagePublicId;
-      return session;
     },
   },
 });
