@@ -7,24 +7,20 @@ import { SocialNetworks } from "@/lib/types/ui/footer.types";
 const githubLinks: SocialNetworks[] = [
   {
     id: 1,
-    name: "MERSEL Lyes",
-    url: "https://github.com/lyes-mersel",
+    name: "Chezbaba",
+    url: "https://github.com/Chezbaba/chezbaba_project",
   },
   {
     id: 2,
-    name: "BRAHIMI Rayan",
-    url: "https://github.com/BrahimiRayan",
+    name: "Facebook",
+    url: "/",
   },
   {
     id: 3,
-    name: "MECHKOUR Billal",
-    url: "https://github.com/Billalmechekour",
+    name: "Twitter",
+    url: "/",
   },
-  {
-    id: 4,
-    name: "MESSAOUDENE Saïd",
-    url: "https://github.com/Messaoudene-Said",
-  },
+
 ];
 
 const Attribution = () => {
@@ -34,8 +30,7 @@ const Attribution = () => {
 
       <div className="flex flex-col sm:flex-row justify-between items-center pb-3">
         <p className="text-sm text-black/60 text-center sm:text-left mb-4 sm:mb-0">
-          MEGA SHOP © 2025 – Projet académique réalisé par des étudiants en
-          Master 1 Génie Logiciel de l&apos;Université de Béjaïa.
+          © 2026 ChezBaba. Tous droits réservés.
         </p>
         <div className="flex items-center">
           {githubLinks.map((link) => (
