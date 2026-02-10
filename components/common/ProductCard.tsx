@@ -50,6 +50,15 @@ const ProductCard = ({ data, showFavorite = true, showAddToCart = true }: Produc
             </span>
           )}
 
+          {/* Out of Stock Overlay */}
+          {data.qteStock === 0 && (
+            <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center rounded-[13px] lg:rounded-[20px]">
+              <span className="bg-white/90 text-red-600 text-xs xl:text-sm font-bold px-3 py-1.5 rounded-full">
+                Rupture de stock
+              </span>
+            </div>
+          )}
+
           <Image
             src={
               data.images[0]?.imagePublicId
@@ -64,51 +73,57 @@ const ProductCard = ({ data, showFavorite = true, showAddToCart = true }: Produc
           />
         </div>
 
-        {/* Vendeur / Boutique Name */}
-        {data.vendeur?.nomBoutique && (
-          <span className="text-gray-500 text-xs mb-1 block">
-            {data.vendeur.nomBoutique}
-          </span>
-        )}
+        {/* Product Info */}
+        <div className="flex flex-col gap-1 w-full mt-1">
+          {/* Vendeur / Boutique Name */}
+          {data.vendeur?.nomBoutique && (
+            <span className="text-gray-400 text-[11px] xl:text-xs truncate">
+              {data.vendeur.nomBoutique}
+            </span>
+          )}
 
+          <strong className="text-black text-sm xl:text-base text-start line-clamp-1 leading-tight" title={data.nom}>
+            {data.nom}
+          </strong>
 
-        <strong className="text-black xl:text-xl text-start line-clamp-1" title={data.nom}>{data.nom}</strong>
-
-        <div className="w-full flex flex-col sm:flex-row justify-between items-start mb-1 xl:mb-2">
-          {/* Rating removed for brevity if needed, or kept */}
-          <div className="flex items-center">
+          {/* Rating */}
+          <div className="flex items-center gap-1">
             <Rating
               initialValue={data.noteMoyenne}
               allowFraction
               SVGclassName="inline-block"
               emptyClassName="fill-gray-50"
-              size={16}
+              size={14}
               readonly
             />
-            <span className="text-black text-xs xl:text-sm ml-1 pb-0.5 xl:pb-0">
-              {data.noteMoyenne.toFixed(1)} <span className="text-black/60">/5</span>
+            <span className="text-black/70 text-[11px] xl:text-xs">
+              {data.noteMoyenne.toFixed(1)}/5
             </span>
           </div>
-        </div>
 
-        <div className="flex flex-col w-full">
+          {/* Price Row */}
           {data.prixPromo && data.prixPromo > 0 ? (
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-[#FD6C9E] text-xl xl:text-2xl">
-                  {data.prixPromo} FCFA
-                </span>
-                <span className="text-xs font-bold bg-[#FD6C9E]/10 text-[#FD6C9E] px-1.5 py-0.5 rounded">
-                  -{Math.round(((data.prix - data.prixPromo) / data.prix) * 100)}%
-                </span>
-              </div>
-              <span className="text-gray-400 text-sm line-through">
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <span className="font-bold text-[#FD6C9E] text-base xl:text-lg leading-tight">
+                {data.prixPromo} FCFA
+              </span>
+              <span className="text-gray-400 text-xs line-through">
                 {data.prix} FCFA
+              </span>
+              <span className="text-[10px] xl:text-xs font-semibold bg-[#FD6C9E]/10 text-[#FD6C9E] px-1.5 py-0.5 rounded">
+                -{Math.round(((data.prix - data.prixPromo) / data.prix) * 100)}%
               </span>
             </div>
           ) : (
-            <span className="font-bold text-black text-xl xl:text-2xl">
+            <span className="font-bold text-black text-base xl:text-lg leading-tight">
               {data.prix} FCFA
+            </span>
+          )}
+
+          {/* Delivery Badge */}
+          {data.delaiLivraison && (
+            <span className="text-gray-400 text-[10px] xl:text-xs flex items-center gap-1">
+              <span>🚚</span> {data.delaiLivraison}
             </span>
           )}
         </div>

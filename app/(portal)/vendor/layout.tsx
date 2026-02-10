@@ -25,6 +25,7 @@ export default function AdminLayout({
       : null,
     role: "Vendeur" as const,
     badgeColor: "bg-green-100 text-green-800",
+    id: user?.id || "",
   };
 
   // Navigation items

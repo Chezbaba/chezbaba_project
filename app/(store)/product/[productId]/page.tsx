@@ -49,7 +49,11 @@ export default async function ProductPage({
     <main>
       <div className="max-w-frame mx-auto px-4 xl:px-0">
         <hr className="h-[1px] border-t-black/10 mb-5 sm:mb-6" />
-        <BreadcrumbProduct title={product.nom} />
+        <BreadcrumbProduct
+          title={product.nom}
+          genre={product.genre?.nom}
+          categorie={product.categorie?.nom}
+        />
         <ProductHero product={product} />
         <Tabs product={product} />
       </div>

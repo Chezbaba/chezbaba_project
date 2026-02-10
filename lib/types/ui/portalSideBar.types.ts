@@ -12,4 +12,5 @@ export type UserInfo = {
   photoUrl: string | null;
   role: "Administrateur" | "Vendeur";
   badgeColor: string;
+  id: string;
 };

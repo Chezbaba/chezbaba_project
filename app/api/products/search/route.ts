@@ -32,8 +32,14 @@ export async function GET(req: NextRequest) {
   const rawSize = searchParams.get("size");
   const sizeList = rawSize ? rawSize.split(",") : [];
 
+  const rawShoeSize = searchParams.get("shoeSize");
+  const shoeSizeList = rawShoeSize ? rawShoeSize.split(",") : [];
+
   const rawColor = searchParams.get("color");
   const colorList = rawColor ? rawColor.split(",") : [];
+
+  const minRating = searchParams.get("minRating");
+  const promo = searchParams.get("promo");
 
   // where conditions
   const whereClause: Prisma.ProduitWhereInput = {
@@ -67,6 +73,22 @@ export async function GET(req: NextRequest) {
     whereClause.tailles = { some: { nom: { in: sizeList } } };
   }
 
+  if (shoeSizeList.length > 0) {
+    // If both size and shoeSize are provided, combine them with OR
+    if (sizeList.length > 0) {
+      whereClause.tailles = {
+        some: {
+          OR: [
+            { nom: { in: sizeList } },
+            { nom: { in: shoeSizeList } }
+          ]
+        }
+      };
+    } else {
+      whereClause.tailles = { some: { nom: { in: shoeSizeList } } };
+    }
+  }
+
   if (colorList.length > 0) {
     whereClause.couleurs = { some: { nom: { in: colorList } } };
   }
@@ -75,6 +97,14 @@ export async function GET(req: NextRequest) {
     whereClause.prix = {};
     if (minPrice) whereClause.prix.gte = Number(minPrice);
     if (maxPrice) whereClause.prix.lte = Number(maxPrice);
+  }
+
+  if (minRating) {
+    whereClause.noteMoyenne = { gte: Number(minRating) };
+  }
+
+  if (promo === "true") {
+    whereClause.prixPromo = { gt: 0 };
   }
 
   try {

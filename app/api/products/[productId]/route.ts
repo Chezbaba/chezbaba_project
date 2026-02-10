@@ -176,6 +176,7 @@ export async function PATCH(
     const {
       nom,
       prix,
+      prixPromo,
       qteStock,
       objet,
       description,
@@ -183,6 +184,8 @@ export async function PATCH(
       genreId,
       couleurs,
       tailles,
+      delaiLivraison,
+      garantie,
     } = parsedData.data;
 
     // Check if the product exists
@@ -230,9 +233,12 @@ export async function PATCH(
       data: {
         nom,
         prix,
+        prixPromo: prixPromo !== undefined ? prixPromo : undefined,
         qteStock,
         objet,
         description,
+        delaiLivraison: delaiLivraison !== undefined ? delaiLivraison : undefined,
+        garantie: garantie !== undefined ? garantie : undefined,
         categorie: categorieId ? { connect: { id: categorieId } } : undefined,
         genre: genreId ? { connect: { id: genreId } } : undefined,
         couleurs: couleurs?.length

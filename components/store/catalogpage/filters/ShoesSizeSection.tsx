@@ -31,23 +31,27 @@ const sizes: SizeFromAPI[] = [
 ];
 
 interface ShoesSizeSectionProps {
-  selectedNom: string | null;
-  onSelect: (nom: string | null) => void;
+  selectedNoms: string[];
+  onSelect: (noms: string[]) => void;
 }
 
 export default function ShoesSizeSection({
-  selectedNom,
+  selectedNoms,
   onSelect,
 }: ShoesSizeSectionProps) {
   const handleSelect = (nom: string) => {
-    onSelect(selectedNom === nom ? null : nom); // Toggle selection
+    if (selectedNoms.includes(nom)) {
+      onSelect(selectedNoms.filter((n) => n !== nom));
+    } else {
+      onSelect([...selectedNoms, nom]);
+    }
   };
 
   return (
     <Accordion type="single" collapsible defaultValue="filter-size">
       <AccordionItem value="filter-size" className="border-none">
         <AccordionTrigger className="text-black font-bold text-xl hover:no-underline p-0 py-0.5">
-          Tailles chaussures
+          Tailles Chaussures
         </AccordionTrigger>
         <AccordionContent className="pt-4 pb-0">
           <div className="flex items-center flex-wrap">
@@ -57,7 +61,7 @@ export default function ShoesSizeSection({
                 type="button"
                 className={cn([
                   "bg-[#F0F0F0] m-1 flex items-center justify-center px-5 py-2.5 text-sm rounded-full max-h-[39px]",
-                  selectedNom === size.nom && "bg-black font-medium text-white",
+                  selectedNoms.includes(size.nom) && "bg-black font-medium text-white",
                 ])}
                 onClick={() => handleSelect(size.nom)}
               >

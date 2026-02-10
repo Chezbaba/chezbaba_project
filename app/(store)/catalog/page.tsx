@@ -23,8 +23,8 @@ export default function CatalogPage() {
   });
 
   // Local filter states for desktop
-  const [localGender, setLocalGender] = useState<string | null>(
-    searchParams?.get("gender") || null
+  const [localGender, setLocalGender] = useState<string[]>(
+    searchParams?.get("gender") ? searchParams.get("gender")!.split(",") : []
   );
   const [localCategory, setLocalCategory] = useState<string[]>(
     searchParams?.get("category") ? searchParams.get("category")!.split(",") : []
@@ -33,25 +33,41 @@ export default function CatalogPage() {
     parseInt(searchParams?.get("minPrice") || "0"),
     parseInt(searchParams?.get("maxPrice") || "20000"),
   ]);
-  const [localColor, setLocalColor] = useState<string | null>(
-    searchParams?.get("color") || null
+  const [localColor, setLocalColor] = useState<string[]>(
+    searchParams?.get("color") ? searchParams.get("color")!.split(",") : []
   );
-  const [localSize, setLocalSize] = useState<string | null>(
-    searchParams?.get("size") || null
+  const [localSize, setLocalSize] = useState<string[]>(
+    searchParams?.get("size") ? searchParams.get("size")!.split(",") : []
+  );
+  const [localShoeSize, setLocalShoeSize] = useState<string[]>(
+    searchParams?.get("shoeSize") ? searchParams.get("shoeSize")!.split(",") : []
+  );
+  const [localMinRating, setLocalMinRating] = useState<number>(
+    parseInt(searchParams?.get("minRating") || "0")
+  );
+  const [localPromo, setLocalPromo] = useState<boolean>(
+    searchParams?.get("promo") === "true"
   );
 
   // Sync local state with searchParams when they change
   useEffect(() => {
     if (!searchParams) return;
-    setLocalGender(searchParams.get("gender"));
+    const genderParam = searchParams.get("gender");
+    setLocalGender(genderParam ? genderParam.split(",") : []);
     const catParam = searchParams.get("category");
     setLocalCategory(catParam ? catParam.split(",") : []);
     setLocalPriceRange([
       parseInt(searchParams.get("minPrice") || "0"),
       parseInt(searchParams.get("maxPrice") || "20000"),
     ]);
-    setLocalColor(searchParams.get("color"));
-    setLocalSize(searchParams.get("size"));
+    const colorParam = searchParams.get("color");
+    setLocalColor(colorParam ? colorParam.split(",") : []);
+    const sizeParam = searchParams.get("size");
+    setLocalSize(sizeParam ? sizeParam.split(",") : []);
+    const shoeSizeParam = searchParams.get("shoeSize");
+    setLocalShoeSize(shoeSizeParam ? shoeSizeParam.split(",") : []);
+    setLocalMinRating(parseInt(searchParams.get("minRating") || "0"));
+    setLocalPromo(searchParams.get("promo") === "true");
   }, [searchParams]);
 
   // Fetch products based on URL search parameters
@@ -112,12 +128,18 @@ export default function CatalogPage() {
     priceRange,
     color,
     size,
+    shoeSize,
+    minRating,
+    promo,
   }: {
-    gender: string | null;
+    gender: string[];
     category: string[];
     priceRange: [number, number];
-    color: string | null;
-    size: string | null;
+    color: string[];
+    size: string[];
+    shoeSize: string[];
+    minRating: number;
+    promo: boolean;
   }) => {
     const newSearchParams = new URLSearchParams(searchParams?.toString() || "");
     // Preserve existing query parameter if present
@@ -125,7 +147,7 @@ export default function CatalogPage() {
     if (query) newSearchParams.set("query", query);
 
     // Update filter parameters
-    if (gender) newSearchParams.set("gender", gender);
+    if (gender && gender.length > 0) newSearchParams.set("gender", gender.join(","));
     else newSearchParams.delete("gender");
 
     if (category && category.length > 0) newSearchParams.set("category", category.join(","));
@@ -134,11 +156,20 @@ export default function CatalogPage() {
     newSearchParams.set("minPrice", priceRange[0].toString());
     newSearchParams.set("maxPrice", priceRange[1].toString());
 
-    if (color) newSearchParams.set("color", color);
+    if (color && color.length > 0) newSearchParams.set("color", color.join(","));
     else newSearchParams.delete("color");
 
-    if (size) newSearchParams.set("size", size);
+    if (size && size.length > 0) newSearchParams.set("size", size.join(","));
     else newSearchParams.delete("size");
+
+    if (shoeSize && shoeSize.length > 0) newSearchParams.set("shoeSize", shoeSize.join(","));
+    else newSearchParams.delete("shoeSize");
+
+    if (minRating > 0) newSearchParams.set("minRating", minRating.toString());
+    else newSearchParams.delete("minRating");
+
+    if (promo) newSearchParams.set("promo", "true");
+    else newSearchParams.delete("promo");
 
     newSearchParams.set("page", "1");
     router.push(`?${newSearchParams.toString()}`);
@@ -171,6 +202,12 @@ export default function CatalogPage() {
               setLocalColor={setLocalColor}
               localSize={localSize}
               setLocalSize={setLocalSize}
+              localShoeSize={localShoeSize}
+              setLocalShoeSize={setLocalShoeSize}
+              localMinRating={localMinRating}
+              setLocalMinRating={setLocalMinRating}
+              localPromo={localPromo}
+              setLocalPromo={setLocalPromo}
               onApplyFilters={handleApplyFilters}
               onResetFilters={handleResetFilters}
             />
@@ -182,14 +219,17 @@ export default function CatalogPage() {
             onPageChange={handlePageChange}
             onSortChange={handleSortChange}
             isLoading={isLoading}
-            selectedGender={searchParams?.get("gender") || null}
+            selectedGender={searchParams?.get("gender") ? searchParams.get("gender")!.split(",") : []}
             selectedCategory={searchParams?.get("category") ? searchParams.get("category")!.split(",") : []}
             priceRange={[
               parseInt(searchParams?.get("minPrice") || "0"),
               parseInt(searchParams?.get("maxPrice") || "20000"),
             ]}
-            selectedColor={searchParams?.get("color") || null}
-            selectedSize={searchParams?.get("size") || null}
+            selectedColor={searchParams?.get("color") ? searchParams.get("color")!.split(",") : []}
+            selectedSize={searchParams?.get("size") ? searchParams.get("size")!.split(",") : []}
+            selectedShoeSize={searchParams?.get("shoeSize") ? searchParams.get("shoeSize")!.split(",") : []}
+            selectedMinRating={parseInt(searchParams?.get("minRating") || "0")}
+            selectedPromo={searchParams?.get("promo") === "true"}
             onApplyFilters={handleApplyFilters}
             onResetFilters={handleResetFilters}
           />

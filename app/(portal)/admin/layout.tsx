@@ -25,6 +25,7 @@ export default function AdminLayout({
       : null,
     role: "Administrateur" as const,
     badgeColor: "bg-blue-100 text-blue-800",
+    id: user?.id || "",
   };
 
   // Navigation items

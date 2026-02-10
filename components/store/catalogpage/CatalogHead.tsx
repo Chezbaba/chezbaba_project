@@ -16,17 +16,23 @@ interface CatalogHeaderProps {
   currentPage: number;
   pageSize: number;
   onSortChange: (value: string) => void;
-  selectedGender: string | null;
+  selectedGender: string[];
   selectedCategory: string[];
   priceRange: [number, number];
-  selectedColor: string | null;
-  selectedSize: string | null;
+  selectedColor: string[];
+  selectedSize: string[];
+  selectedShoeSize: string[];
+  selectedMinRating: number;
+  selectedPromo: boolean;
   onApplyFilters: (filters: {
-    gender: string | null;
+    gender: string[];
     category: string[];
     priceRange: [number, number];
-    color: string | null;
-    size: string | null;
+    color: string[];
+    size: string[];
+    shoeSize: string[];
+    minRating: number;
+    promo: boolean;
   }) => void;
   onResetFilters: () => void;
 }
@@ -41,6 +47,9 @@ export default function CatalogHead({
   priceRange,
   selectedColor,
   selectedSize,
+  selectedShoeSize,
+  selectedMinRating,
+  selectedPromo,
   onApplyFilters,
   onResetFilters,
 }: CatalogHeaderProps) {
@@ -65,6 +74,9 @@ export default function CatalogHead({
             priceRange={priceRange}
             selectedColor={selectedColor}
             selectedSize={selectedSize}
+            selectedShoeSize={selectedShoeSize}
+            selectedMinRating={selectedMinRating}
+            selectedPromo={selectedPromo}
             onApplyFilters={onApplyFilters}
             onResetFilters={onResetFilters}
           />

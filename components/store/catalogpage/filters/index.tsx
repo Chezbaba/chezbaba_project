@@ -7,24 +7,34 @@ import PriceSection from "@/components/store/catalogpage/filters/PriceSection";
 import SizeSection from "@/components/store/catalogpage/filters/SizeSection";
 import GendersSection from "@/components/store/catalogpage/filters/GendersSection";
 import ShoesSizeSection from "@/components/store/catalogpage/filters/ShoesSizeSection";
+import { Star } from "lucide-react";
 
 interface FiltersProps {
-  localGender: string | null;
-  setLocalGender: (value: string | null) => void;
+  localGender: string[];
+  setLocalGender: (value: string[]) => void;
   localCategory: string[];
   setLocalCategory: (value: string[]) => void;
   localPriceRange: [number, number];
   setLocalPriceRange: (value: [number, number]) => void;
-  localColor: string | null;
-  setLocalColor: (value: string | null) => void;
-  localSize: string | null;
-  setLocalSize: (value: string | null) => void;
+  localColor: string[];
+  setLocalColor: (value: string[]) => void;
+  localSize: string[];
+  setLocalSize: (value: string[]) => void;
+  localShoeSize: string[];
+  setLocalShoeSize: (value: string[]) => void;
+  localMinRating: number;
+  setLocalMinRating: (value: number) => void;
+  localPromo: boolean;
+  setLocalPromo: (value: boolean) => void;
   onApplyFilters: (filters: {
-    gender: string | null;
+    gender: string[];
     category: string[];
     priceRange: [number, number];
-    color: string | null;
-    size: string | null;
+    color: string[];
+    size: string[];
+    shoeSize: string[];
+    minRating: number;
+    promo: boolean;
   }) => void;
   onResetFilters: () => void;
 }
@@ -40,6 +50,12 @@ export default function Filters({
   setLocalColor,
   localSize,
   setLocalSize,
+  localShoeSize,
+  setLocalShoeSize,
+  localMinRating,
+  setLocalMinRating,
+  localPromo,
+  setLocalPromo,
   onApplyFilters,
   onResetFilters,
 }: FiltersProps) {
@@ -50,17 +66,32 @@ export default function Filters({
       priceRange: localPriceRange,
       color: localColor,
       size: localSize,
+      shoeSize: localShoeSize,
+      minRating: localMinRating,
+      promo: localPromo,
     });
   };
 
   const handleResetFilters = () => {
-    setLocalGender(null);
+    setLocalGender([]);
     setLocalCategory([]);
     setLocalPriceRange([0, 20000]);
-    setLocalColor(null);
-    setLocalSize(null);
+    setLocalColor([]);
+    setLocalSize([]);
+    setLocalShoeSize([]);
+    setLocalMinRating(0);
+    setLocalPromo(false);
     onResetFilters();
   };
+
+  const ratingOptions = [
+    { label: "Toutes les notes", value: 0 },
+    { label: "1+ étoile", value: 1 },
+    { label: "2+ étoiles", value: 2 },
+    { label: "3+ étoiles", value: 3 },
+    { label: "4+ étoiles", value: 4 },
+    { label: "5 étoiles", value: 5 },
+  ];
 
   return (
     <>
@@ -71,19 +102,49 @@ export default function Filters({
       />
 
       <hr className="border-t-black/10" />
-      <GendersSection selectedNom={localGender} onSelect={setLocalGender} />
+      <GendersSection selectedNoms={localGender} onSelect={setLocalGender} />
 
       <hr className="border-t-black/10" />
       <PriceSection value={localPriceRange} onChange={setLocalPriceRange} />
 
       <hr className="border-t-black/10" />
-      <ColorsSection selectedNom={localColor} onSelect={setLocalColor} />
+      <ColorsSection selectedNoms={localColor} onSelect={setLocalColor} />
 
       <hr className="border-t-black/10" />
-      <SizeSection selectedNom={localSize} onSelect={setLocalSize} />
+      <SizeSection selectedNoms={localSize} onSelect={setLocalSize} />
 
       <hr className="border-t-black/10" />
-      <ShoesSizeSection selectedNom={localSize} onSelect={setLocalSize} />
+      <ShoesSizeSection selectedNoms={localShoeSize} onSelect={setLocalShoeSize} />
+
+      {/* Rating & Promo Section */}
+      <hr className="border-t-black/10" />
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Star className="h-4 w-4 text-black/40" />
+          <span className="font-bold text-black text-sm">Note minimum</span>
+        </div>
+        <select
+          value={localMinRating}
+          onChange={(e) => setLocalMinRating(Number(e.target.value))}
+          className="w-full px-3 py-2 border border-black/10 rounded-lg text-sm focus:ring-2 focus:ring-black/20 focus:outline-none bg-white"
+        >
+          {ratingOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={localPromo}
+            onChange={(e) => setLocalPromo(e.target.checked)}
+            className="w-4 h-4 rounded border-black/20 text-black focus:ring-black accent-black"
+          />
+          <span className="text-sm font-medium text-black">En promotion</span>
+        </label>
+      </div>
 
       <hr className="border-t-black/10" />
       <Button

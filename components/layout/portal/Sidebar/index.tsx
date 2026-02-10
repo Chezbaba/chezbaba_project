@@ -10,6 +10,7 @@ import ProfileCard from "./ProfileCard";
 import NavigationMenu from "./NavigationMenu";
 import LogoutButton from "@/components/layout/portal/Sidebar/LogoutButton";
 import { NavItem, UserInfo } from "@/lib/types/ui/portalSideBar.types";
+import { useUnreadNotifications } from "@/hooks/useUnreadNotifications";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;
@@ -25,6 +26,14 @@ export default function SidebarLayout({
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Fetch unread notifications
+  const { unreadCount } = useUnreadNotifications(userInfo.id);
+
+  const notificationLink =
+    userInfo.role === "Administrateur"
+      ? "/admin/notifications"
+      : "/vendor/notifications";
 
   // Detect if screen is mobile
   useEffect(() => {
@@ -66,6 +75,8 @@ export default function SidebarLayout({
         <MobileHeader
           isMobileMenuOpen={isMobileMenuOpen}
           toggleMobileMenu={toggleMobileMenu}
+          notificationCount={unreadCount}
+          notificationLink={notificationLink}
         />
       )}
 
@@ -79,21 +90,18 @@ export default function SidebarLayout({
 
       {/* Sidebar */}
       <div
-        className={`h-full bg-white flex flex-col shadow-lg z-50 border-r border-gray-200 transition-all duration-300 ${
-          isMobile
-            ? `fixed right-0 top-0 bottom-0 ${
-                isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-              } w-3/4 max-w-xs`
+        className={`h-full bg-white flex flex-col shadow-lg z-50 border-r border-gray-200 transition-all duration-300 ${isMobile
+            ? `fixed right-0 top-0 bottom-0 ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+            } w-3/4 max-w-xs`
             : `${isCollapsed ? "w-20" : "w-64"} fixed cursor-pointer`
-        }`}
+          }`}
         onClick={isMobile ? undefined : handleSidebarClick}
       >
         {/* Sidebar header - visible only on mobile or expanded desktop */}
         {(isMobile || !isCollapsed) && (
           <div
-            className={`${
-              isMobile ? "h-16" : ""
-            } flex items-center justify-between px-4 py-3 border-b border-gray-200`}
+            className={`${isMobile ? "h-16" : ""
+              } flex items-center justify-between px-4 py-3 border-b border-gray-200`}
           >
             {isMobile ? (
               <h2
@@ -163,13 +171,12 @@ export default function SidebarLayout({
 
       {/* Main content */}
       <div
-        className={`w-full transition-all duration-300 h-screen overflow-auto ${
-          isMobile
+        className={`w-full transition-all duration-300 h-screen overflow-auto ${isMobile
             ? "pt-16" // Space for mobile header
             : isCollapsed
-            ? "ml-20"
-            : "ml-64"
-        }`}
+              ? "ml-20"
+              : "ml-64"
+          }`}
       >
         {children}
       </div>

@@ -80,6 +80,8 @@ model Commande {
 
   @@index([clientId], map: "index_commande_client_id")
   @@index([panierId], map: "index_commande_panier_id")
+  @@index([adresseId], map: "index_commande_adresse_id")
+  @@index([paiementId], map: "index_commande_paiement_id")
   @@map("commande")
 }
 
@@ -124,6 +126,8 @@ model LigneCommande {
 
   @@index([commandeId], map: "index_ligne_commande_commande_id")
   @@index([produitId], map: "index_ligne_commande_produit_id")
+  @@index([couleurId], map: "index_ligne_commande_couleur_id")
+  @@index([tailleId], map: "index_ligne_commande_taille_id")
   @@map("ligne_commande")
 }
 
@@ -144,6 +148,8 @@ model LignePanier {
 
   @@index([panierId], map: "index_ligne_panier_panier_id")
   @@index([produitId], map: "index_ligne_panier_produit_id")
+  @@index([couleurId], map: "index_ligne_panier_couleur_id")
+  @@index([tailleId], map: "index_ligne_panier_taille_id")
   @@map("ligne_panier")
 }
 
@@ -230,6 +236,7 @@ model Produit {
   favoris            Favori[]
 
   @@index([categorieId], map: "index_categorie_id")
+  @@index([genreId], map: "index_genre_id")
   @@index([qteStock], map: "index_qte_stock")
   @@map("produit")
 }
@@ -348,6 +355,7 @@ model User {
 
   accounts           Account[]
   @@index([email], map: "index_email")
+  @@index([adresseId], map: "index_adresse_id")
   @@map("user")
 }
 

@@ -7,11 +7,15 @@ import { Bell, Menu, X } from "lucide-react";
 interface MobileHeaderProps {
   isMobileMenuOpen: boolean;
   toggleMobileMenu: () => void;
+  notificationCount: number;
+  notificationLink: string;
 }
 
 export default function MobileHeader({
   isMobileMenuOpen,
   toggleMobileMenu,
+  notificationCount,
+  notificationLink,
 }: MobileHeaderProps) {
   return (
     <div className="fixed top-0 left-0 right-0 h-16 bg-white z-50 border-b border-gray-200 flex items-center justify-between px-4 shadow-sm">
@@ -30,11 +34,14 @@ export default function MobileHeader({
 
       <div className="flex items-center gap-4">
         {/* Notification badge */}
-        <Link href="/admin/notifications" className="relative">
+        {/* Notification badge */}
+        <Link href={notificationLink} className="relative">
           <Bell className="h-6 w-6 text-gray-700" />
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-            3
-          </span>
+          {notificationCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+              {notificationCount > 9 ? "9+" : notificationCount}
+            </span>
+          )}
         </Link>
 
         {/* Hamburger button */}

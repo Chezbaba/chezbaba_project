@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import ProductDescription from "./ProductDescription";
+import ProductDetails from "./ProductDetails";
 import ReviewsContent from "./ProductReviews";
 import { ProductFromAPI } from "@/lib/types/product.types";
 
@@ -19,6 +20,10 @@ const tabBtnData: TabBtn[] = [
   },
   {
     id: 2,
+    label: "Détails",
+  },
+  {
+    id: 3,
     label: "Evaluations",
   },
 ];
@@ -50,7 +55,8 @@ const Tabs = ({ product }: { product: ProductFromAPI }) => {
         {active === 1 && (
           <ProductDescription description={product.description} />
         )}
-        {active === 2 && <ReviewsContent productId={product.id} />}
+        {active === 2 && <ProductDetails product={product} />}
+        {active === 3 && <ReviewsContent productId={product.id} />}
       </div>
     </div>
   );

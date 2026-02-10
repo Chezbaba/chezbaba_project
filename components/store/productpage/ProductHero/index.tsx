@@ -84,7 +84,7 @@ const ProductHero = ({ product }: { product: ProductFromAPI }) => {
           </div>
 
           {/* Warranty & Delivery */}
-          <div className="flex flex-wrap gap-3 mb-5 text-sm text-gray-700">
+          <div className="flex flex-wrap gap-3 mb-3 text-sm text-gray-700">
             {product.delaiLivraison && (
               <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200">
                 <span className="font-semibold">📦 Livraison:</span> {product.delaiLivraison}
@@ -94,6 +94,26 @@ const ProductHero = ({ product }: { product: ProductFromAPI }) => {
               <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200">
                 <span className="font-semibold">🛡️ Garantie:</span> {product.garantie}
               </div>
+            )}
+          </div>
+
+          {/* Stock Indicator */}
+          <div className="mb-5">
+            {product.qteStock === 0 ? (
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-red-600 bg-red-50 px-3 py-1.5 rounded-full border border-red-200">
+                <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                Rupture de stock
+              </span>
+            ) : product.qteStock <= 5 ? (
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-200">
+                <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+                Stock limité ({product.qteStock} restant{product.qteStock > 1 ? "s" : ""})
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-green-600 bg-green-50 px-3 py-1.5 rounded-full border border-green-200">
+                <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                En stock
+              </span>
             )}
           </div>
 

@@ -13,17 +13,23 @@ import { FiSliders } from "react-icons/fi";
 import Filters from ".";
 
 interface MobileFiltersProps {
-  selectedGender: string | null;
+  selectedGender: string[];
   selectedCategory: string[];
   priceRange: [number, number];
-  selectedColor: string | null;
-  selectedSize: string | null;
+  selectedColor: string[];
+  selectedSize: string[];
+  selectedShoeSize: string[];
+  selectedMinRating: number;
+  selectedPromo: boolean;
   onApplyFilters: (filters: {
-    gender: string | null;
+    gender: string[];
     category: string[];
     priceRange: [number, number];
-    color: string | null;
-    size: string | null;
+    color: string[];
+    size: string[];
+    shoeSize: string[];
+    minRating: number;
+    promo: boolean;
   }) => void;
   onResetFilters: () => void;
 }
@@ -34,17 +40,23 @@ const MobileFilters = ({
   priceRange,
   selectedColor,
   selectedSize,
+  selectedShoeSize,
+  selectedMinRating,
+  selectedPromo,
   onApplyFilters,
   onResetFilters,
 }: MobileFiltersProps) => {
-  const [localGender, setLocalGender] = useState<string | null>(selectedGender);
+  const [localGender, setLocalGender] = useState<string[]>(selectedGender);
   const [localCategory, setLocalCategory] = useState<string[]>(
     selectedCategory
   );
   const [localPriceRange, setLocalPriceRange] =
     useState<[number, number]>(priceRange);
-  const [localColor, setLocalColor] = useState<string | null>(selectedColor);
-  const [localSize, setLocalSize] = useState<string | null>(selectedSize);
+  const [localColor, setLocalColor] = useState<string[]>(selectedColor);
+  const [localSize, setLocalSize] = useState<string[]>(selectedSize);
+  const [localShoeSize, setLocalShoeSize] = useState<string[]>(selectedShoeSize);
+  const [localMinRating, setLocalMinRating] = useState<number>(selectedMinRating);
+  const [localPromo, setLocalPromo] = useState<boolean>(selectedPromo);
 
   // Sync local state with searchParams props when they change
   useEffect(() => {
@@ -53,12 +65,18 @@ const MobileFilters = ({
     setLocalPriceRange(priceRange);
     setLocalColor(selectedColor);
     setLocalSize(selectedSize);
+    setLocalShoeSize(selectedShoeSize);
+    setLocalMinRating(selectedMinRating);
+    setLocalPromo(selectedPromo);
   }, [
     selectedGender,
     selectedCategory,
     priceRange,
     selectedColor,
     selectedSize,
+    selectedShoeSize,
+    selectedMinRating,
+    selectedPromo,
   ]);
 
   return (
@@ -95,6 +113,12 @@ const MobileFilters = ({
               setLocalColor={setLocalColor}
               localSize={localSize}
               setLocalSize={setLocalSize}
+              localShoeSize={localShoeSize}
+              setLocalShoeSize={setLocalShoeSize}
+              localMinRating={localMinRating}
+              setLocalMinRating={setLocalMinRating}
+              localPromo={localPromo}
+              setLocalPromo={setLocalPromo}
               onApplyFilters={onApplyFilters}
               onResetFilters={onResetFilters}
             />

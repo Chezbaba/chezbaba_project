@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type Gender = {
   nom: string;
@@ -33,16 +33,20 @@ const gendersData: Gender[] = [
 ];
 
 interface GendersSectionProps {
-  selectedNom: string | null;
-  onSelect: (nom: string | null) => void;
+  selectedNoms: string[];
+  onSelect: (noms: string[]) => void;
 }
 
 export default function GendersSection({
-  selectedNom,
+  selectedNoms,
   onSelect,
 }: GendersSectionProps) {
   const handleSelect = (nom: string) => {
-    onSelect(selectedNom === nom ? null : nom); // Toggle selection
+    if (selectedNoms.includes(nom)) {
+      onSelect(selectedNoms.filter((n) => n !== nom));
+    } else {
+      onSelect([...selectedNoms, nom]);
+    }
   };
 
   return (
@@ -52,19 +56,22 @@ export default function GendersSection({
           Genre
         </AccordionTrigger>
         <AccordionContent className="pt-4 pb-0 overflow-visible">
-          <div className="flex flex-col space-y-1 text-black/80">
+          <div className="flex flex-col space-y-3 text-black/80">
             {gendersData.map((gender) => (
               <div className="relative group" key={gender.nom}>
-                <button
-                  onClick={() => handleSelect(gender.nom)}
-                  className={`flex items-center justify-between w-full py-2 px-3 rounded-lg transition ${
-                    selectedNom === gender.nom
-                      ? "bg-black text-white"
-                      : "hover:bg-black/10"
-                  }`}
-                >
-                  {gender.nom} <MdKeyboardArrowRight />
-                </button>
+                <div className="flex items-center space-x-3">
+                  <Checkbox
+                    id={`gender-${gender.nom}`}
+                    checked={selectedNoms.includes(gender.nom)}
+                    onChange={() => handleSelect(gender.nom)}
+                  />
+                  <label
+                    htmlFor={`gender-${gender.nom}`}
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                  >
+                    {gender.nom}
+                  </label>
+                </div>
                 <div className="absolute z-10 hidden group-hover:block w-64 bg-white border border-gray-200 shadow-md text-sm text-gray-700 p-2 rounded-md top-full mt-1 left-0">
                   {gender.description}
                 </div>

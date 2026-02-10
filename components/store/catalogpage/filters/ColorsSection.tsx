@@ -25,16 +25,20 @@ const colors: ColorFromAPI[] = [
 ];
 
 interface ColorsSectionProps {
-  selectedNom: string | null;
-  onSelect: (nom: string | null) => void;
+  selectedNoms: string[];
+  onSelect: (noms: string[]) => void;
 }
 
 export default function ColorsSection({
-  selectedNom,
+  selectedNoms,
   onSelect,
 }: ColorsSectionProps) {
   const handleSelect = (nom: string) => {
-    onSelect(selectedNom === nom ? null : nom); // Toggle selection
+    if (selectedNoms.includes(nom)) {
+      onSelect(selectedNoms.filter((n) => n !== nom));
+    } else {
+      onSelect([...selectedNoms, nom]);
+    }
   };
 
   return (
@@ -53,11 +57,10 @@ export default function ColorsSection({
                 className="rounded-full w-9 sm:w-10 h-9 sm:h-10 flex items-center justify-center border border-black/20"
                 onClick={() => handleSelect(color.nom)}
               >
-                {selectedNom === color.nom && (
+                {selectedNoms.includes(color.nom) && (
                   <IoMdCheckmark
-                    className={`text-base ${
-                      color.nom === "Noir" ? "text-white" : "text-black"
-                    }`}
+                    className={`text-base ${color.nom === "Noir" ? "text-white" : "text-black"
+                      }`}
                   />
                 )}
               </button>

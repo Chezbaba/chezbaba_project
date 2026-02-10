@@ -37,3 +37,5 @@ export const getVideoUrlFromPublicId = (videoPublicId: string) => {
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
   return `https://res.cloudinary.com/${cloudName}/video/upload/${videoPublicId}`;
 };
+
+export const fetcher = (url: string) => fetch(url).then((res) => res.json());

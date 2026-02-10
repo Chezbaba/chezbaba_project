@@ -160,14 +160,14 @@ export const ProductForm = ({
         objet: formData.objet || "",
         description: formData.description || "",
         prix: formData.prix,
+        prixPromo: formData.prixPromo || null,
         qteStock: formData.qteStock,
-        categories: formData.categorie ? [formData.categorie.id] : [],
-        genres: formData.genre ? [formData.genre.id] : [],
+        categorieId: formData.categorie ? formData.categorie.id : undefined,
+        genreId: formData.genre ? formData.genre.id : undefined,
         couleurs: formData.couleurs.map((c) => c.id),
         tailles: formData.tailles.map((t) => t.id),
-        delaiLivraison: formData.delaiLivraison,
-        prixPromo: formData.prixPromo,
-        garantie: formData.garantie,
+        delaiLivraison: formData.delaiLivraison || null,
+        garantie: formData.garantie || null,
       };
 
       const result = await fetchDataFromAPI<ProductFromAPI>(
