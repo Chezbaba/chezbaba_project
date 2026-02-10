@@ -29,13 +29,13 @@ interface CatalogProductsProps {
   onSortChange: (value: string) => void;
   onPageChange: (page: number) => void;
   selectedGender: string | null;
-  selectedCategory: string | null;
+  selectedCategory: string[];
   priceRange: [number, number];
   selectedColor: string | null;
   selectedSize: string | null;
   onApplyFilters: (filters: {
     gender: string | null;
-    category: string | null;
+    category: string[];
     priceRange: [number, number];
     color: string | null;
     size: string | null;
@@ -115,11 +115,10 @@ const CatalogProducts = ({
                     onPageChange(pagination.currentPage - 1);
                   }
                 }}
-                className={`border border-black/10 ${
-                  pagination.currentPage === 1
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
+                className={`border border-black/10 ${pagination.currentPage === 1
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
+                  }`}
               />
               <PaginationContent>
                 {pagination.totalPages > 5 && pagination.currentPage > 3 && (
@@ -149,11 +148,10 @@ const CatalogProducts = ({
                     <PaginationItem key={page}>
                       <PaginationLink
                         onClick={() => onPageChange(page)}
-                        className={`text-black/50 font-medium text-sm cursor-pointer ${
-                          pagination.currentPage === page
-                            ? "text-black font-bold"
-                            : ""
-                        }`}
+                        className={`text-black/50 font-medium text-sm cursor-pointer ${pagination.currentPage === page
+                          ? "text-black font-bold"
+                          : ""
+                          }`}
                         isActive={pagination.currentPage === page}
                       >
                         {page}
@@ -183,11 +181,10 @@ const CatalogProducts = ({
                     onPageChange(pagination.currentPage + 1);
                   }
                 }}
-                className={`border border-black/10 ${
-                  pagination.currentPage === pagination.totalPages
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
+                className={`border border-black/10 ${pagination.currentPage === pagination.totalPages
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
+                  }`}
               />
             </Pagination>
           </>

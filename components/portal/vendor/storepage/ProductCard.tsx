@@ -48,13 +48,12 @@ export const ProductCard = ({
           className="object-cover"
         />
         <div
-          className={`absolute inset-0 flex items-center justify-center gap-3 transition-opacity duration-300 bg-black/40 ${
-            isMobile
+          className={`absolute inset-0 flex items-center justify-center gap-3 transition-opacity duration-300 bg-black/40 ${isMobile
               ? showActions
                 ? "opacity-100"
                 : "opacity-0"
               : "opacity-0 group-hover:opacity-100"
-          }`}
+            }`}
         >
           <button
             onClick={(e) => {
@@ -92,7 +91,7 @@ export const ProductCard = ({
           <span
             className={`text-lg font-semibold text-gray-900 ${montserrat.className}`}
           >
-            DA {product.prix.toFixed(2)}
+            {product.prix.toFixed(2)} FCFA
           </span>
           <button
             onClick={(e) => {

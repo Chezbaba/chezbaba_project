@@ -51,7 +51,7 @@ export default function OrderSummary({
                 "text-sm md:text-base font-medium"
               )}
             >
-              {item.quantite * item.prixUnit} DA
+              {item.quantite * item.prixUnit} FCFA
             </span>
           </div>
         ))}
@@ -73,7 +73,7 @@ export default function OrderSummary({
               "text-xl md:text-2xl font-bold text-black"
             )}
           >
-            {orderSummary.montant} DA
+            {orderSummary.montant} FCFA
           </span>
         </div>
       </div>

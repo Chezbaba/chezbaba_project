@@ -16,14 +16,24 @@ export async function GET(req: NextRequest) {
   const { sortBy, sortOrder } = getSortingProductsParams(req);
 
   // Extract search params
+  // Extract search params (support multi-select via comma separation)
   const query = searchParams.get("query") || "";
   const type = searchParams.get("type");
-  const gender = searchParams.get("gender");
-  const category = searchParams.get("category");
+
+  const rawGender = searchParams.get("gender");
+  const genderList = rawGender ? rawGender.split(",") : [];
+
+  const rawCategory = searchParams.get("category");
+  const categoryList = rawCategory ? rawCategory.split(",") : [];
+
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
-  const size = searchParams.get("size");
-  const color = searchParams.get("color");
+
+  const rawSize = searchParams.get("size");
+  const sizeList = rawSize ? rawSize.split(",") : [];
+
+  const rawColor = searchParams.get("color");
+  const colorList = rawColor ? rawColor.split(",") : [];
 
   // where conditions
   const whereClause: Prisma.ProduitWhereInput = {
@@ -38,10 +48,28 @@ export async function GET(req: NextRequest) {
   if (type === "boutique") whereClause.produitBoutique = { isNot: null };
   if (type === "marketplace") whereClause.produitMarketplace = { isNot: null };
 
-  if (gender) whereClause.genre = { nom: containsFilter(gender) };
-  if (category) whereClause.categorie = { nom: containsFilter(category) };
-  if (size) whereClause.tailles = { some: { nom: containsFilter(size) } };
-  if (color) whereClause.couleurs = { some: { nom: containsFilter(color) } };
+  if (genderList.length > 0) {
+    whereClause.genre = { nom: { in: genderList } };
+  }
+
+  if (categoryList.length > 0) {
+    // Also include subcategories if parent is selected (requires more complex logic or frontend to send all IDs/Names)
+    // For now, simple multi-select on name
+    whereClause.categorie = {
+      OR: [
+        { nom: { in: categoryList } },
+        { parent: { nom: { in: categoryList } } } // Include children of selected parents
+      ]
+    };
+  }
+
+  if (sizeList.length > 0) {
+    whereClause.tailles = { some: { nom: { in: sizeList } } };
+  }
+
+  if (colorList.length > 0) {
+    whereClause.couleurs = { some: { nom: { in: colorList } } };
+  }
 
   if (minPrice || maxPrice) {
     whereClause.prix = {};

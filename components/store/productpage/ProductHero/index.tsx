@@ -62,9 +62,40 @@ const ProductHero = ({ product }: { product: ProductFromAPI }) => {
             </span>
           </div>
 
-          <span className="font-bold text-black text-2xl sm:text-[32px]">
-            {product.prix} DA
-          </span>
+
+          <div className="flex flex-col mb-4">
+            {product.prixPromo && product.prixPromo > 0 ? (
+              <div className="flex items-center gap-3">
+                <span className="font-bold text-black text-2xl sm:text-[32px]">
+                  {product.prixPromo} FCFA
+                </span>
+                <span className="font-bold text-gray-400 text-lg sm:text-xl line-through">
+                  {product.prix} FCFA
+                </span>
+                <span className="text-sm font-bold bg-[#FF3333]/10 text-[#FF3333] px-2 py-1 rounded">
+                  -{Math.round(((product.prix - product.prixPromo) / product.prix) * 100)}%
+                </span>
+              </div>
+            ) : (
+              <span className="font-bold text-black text-2xl sm:text-[32px]">
+                {product.prix} FCFA
+              </span>
+            )}
+          </div>
+
+          {/* Warranty & Delivery */}
+          <div className="flex flex-wrap gap-3 mb-5 text-sm text-gray-700">
+            {product.delaiLivraison && (
+              <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200">
+                <span className="font-semibold">📦 Livraison:</span> {product.delaiLivraison}
+              </div>
+            )}
+            {product.garantie && (
+              <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200">
+                <span className="font-semibold">🛡️ Garantie:</span> {product.garantie}
+              </div>
+            )}
+          </div>
 
           <p className="text-sm sm:text-base text-black/60 mb-5">
             {product.objet}

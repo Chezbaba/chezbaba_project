@@ -37,3 +37,21 @@ export const ERROR_MESSAGES = {
   // 500
   INTERNAL_ERROR: "Une erreur est survenue. Veuillez réessayer plus tard.",
 };
+export const DELIVERY_OPTIONS = [
+  "24h",
+  "48h",
+  "3 à 5 jours",
+  "1 semaine",
+  "2 semaines",
+  "3 semaines",
+  "4 semaines",
+  "1 mois",
+];
+
+export const WARRANTY_OPTIONS = [
+  "Aucune",
+  "1 mois",
+  "3 mois",
+  "6 mois",
+  "1 an",
+];

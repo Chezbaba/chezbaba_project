@@ -11,8 +11,8 @@ import ShoesSizeSection from "@/components/store/catalogpage/filters/ShoesSizeSe
 interface FiltersProps {
   localGender: string | null;
   setLocalGender: (value: string | null) => void;
-  localCategory: string | null;
-  setLocalCategory: (value: string | null) => void;
+  localCategory: string[];
+  setLocalCategory: (value: string[]) => void;
   localPriceRange: [number, number];
   setLocalPriceRange: (value: [number, number]) => void;
   localColor: string | null;
@@ -21,7 +21,7 @@ interface FiltersProps {
   setLocalSize: (value: string | null) => void;
   onApplyFilters: (filters: {
     gender: string | null;
-    category: string | null;
+    category: string[];
     priceRange: [number, number];
     color: string | null;
     size: string | null;
@@ -55,7 +55,7 @@ export default function Filters({
 
   const handleResetFilters = () => {
     setLocalGender(null);
-    setLocalCategory(null);
+    setLocalCategory([]);
     setLocalPriceRange([0, 20000]);
     setLocalColor(null);
     setLocalSize(null);
@@ -65,13 +65,13 @@ export default function Filters({
   return (
     <>
       <hr className="border-t-black/10" />
-      <GendersSection selectedNom={localGender} onSelect={setLocalGender} />
-
-      <hr className="border-t-black/10" />
       <CategoriesSection
-        selectedNom={localCategory}
+        selectedCategories={localCategory}
         onSelect={setLocalCategory}
       />
+
+      <hr className="border-t-black/10" />
+      <GendersSection selectedNom={localGender} onSelect={setLocalGender} />
 
       <hr className="border-t-black/10" />
       <PriceSection value={localPriceRange} onChange={setLocalPriceRange} />

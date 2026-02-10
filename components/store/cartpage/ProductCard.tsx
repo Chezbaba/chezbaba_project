@@ -84,7 +84,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
         )}
         <div className="flex items-center flex-wrap justify-between">
           <span className="font-bold text-black  text-xl xl:text-2xl">
-            {data.price}DA
+            {data.price} FCFA
           </span>
 
           <CartCounter

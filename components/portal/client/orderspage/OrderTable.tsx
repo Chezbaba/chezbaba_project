@@ -87,7 +87,7 @@ export default function OrderTable({
                       {order.produits.length}
                     </td>
                     <td className="w-1/5 px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold text-gray-900">
-                      {order.montant.toFixed(2)} DA
+                      {order.montant.toFixed(2)} FCFA
                     </td>
                   </tr>
                 ))}

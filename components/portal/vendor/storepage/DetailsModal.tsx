@@ -71,9 +71,8 @@ export const DetailsModal = ({
                       <Image
                         key={img.id}
                         src={getImageUrlFromPublicId(img.imagePublicId)}
-                        alt={`Image supplémentaire ${index + 1} de ${
-                          product.nom
-                        }`}
+                        alt={`Image supplémentaire ${index + 1} de ${product.nom
+                          }`}
                         width={60}
                         height={60}
                         className="w-16 h-16 object-cover rounded-md shadow-sm hover:shadow-md transition-shadow duration-300"
@@ -145,7 +144,7 @@ export const DetailsModal = ({
                   <DollarSign className="h-4 w-4" /> Prix
                 </label>
                 <p className="mt-1 text-base font-medium text-gray-900">
-                  DA {product.prix.toFixed(2)}
+                  {product.prix.toFixed(2)} FCFA
                 </p>
               </div>
               <div>
@@ -239,9 +238,8 @@ export const DetailsModal = ({
                     {product.couleurs.map((color) => (
                       <span
                         key={color.id}
-                        className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm shadow-md transition-transform duration-300 hover:scale-105 bg-gray-700 ${
-                          color.code === "#FFFFFF" ? "text-black" : "text-white"
-                        }`}
+                        className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm shadow-md transition-transform duration-300 hover:scale-105 bg-gray-700 ${color.code === "#FFFFFF" ? "text-black" : "text-white"
+                          }`}
                         style={{ backgroundColor: color.code }}
                       >
                         {color.nom}

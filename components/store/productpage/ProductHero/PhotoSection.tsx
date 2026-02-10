@@ -23,8 +23,8 @@ const PhotoSection = ({ data }: { data: ProductFromAPI }) => {
               key={image.id}
               type="button"
               className={`bg-[#F0EEED] rounded-[13px] xl:rounded-[20px] w-full max-w-[111px] xl:max-w-[152px] max-h-[106px] xl:max-h-[167px] xl:min-h-[167px] aspect-square overflow-hidden flex-shrink-0 border-2 transition-all ${selectedType === "image" && selectedId === image.imagePublicId
-                  ? "border-black"
-                  : "border-transparent"
+                ? "border-black"
+                : "border-transparent"
                 }`}
               onClick={() => {
                 setSelectedType("image");
@@ -66,6 +66,12 @@ const PhotoSection = ({ data }: { data: ProductFromAPI }) => {
       )}
 
       <div className="flex items-center justify-center bg-[#F0EEED] rounded-[13px] sm:rounded-[20px] w-full sm:w-96 md:w-full mx-auto h-full max-h-[530px] min-h-[330px] lg:min-h-[380px] xl:min-h-[530px] overflow-hidden mb-3 lg:mb-0 relative">
+        {/* Badge New */}
+        {new Date(data.dateCreation) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
+          <span className="absolute top-4 left-4 bg-[#EA9010] text-white text-sm font-bold px-3 py-1.5 rounded-full z-20 shadow-md">
+            New
+          </span>
+        )}
         {selectedType === "image" ? (
           <Image
             src={getImageUrlFromPublicId(selectedId)}

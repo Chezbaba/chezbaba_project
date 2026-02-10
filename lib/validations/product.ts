@@ -24,6 +24,12 @@ export const productSchema = z.object({
     .string()
     .max(MAX_ID_LENGTH, "L'ID de la catégorie est invalide")
     .optional(),
+  delaiLivraison: z.string().max(50, "Le délai est trop long").optional(),
+  prixPromo: z
+    .number({ invalid_type_error: "Le prix promo doit être un nombre" })
+    .min(0, "Le prix promo ne peut pas être négatif")
+    .optional(),
+  garantie: z.string().max(50, "La garantie est trop longue").optional(),
   genreId: z
     .string()
     .max(MAX_ID_LENGTH, "L'ID du genre est invalide")
@@ -96,6 +102,12 @@ export const updateProductSchema = z
       .string()
       .max(MAX_ID_LENGTH, "L'ID de la catégorie est invalide")
       .optional(),
+    delaiLivraison: z.string().max(50, "Le délai est trop long").optional(),
+    prixPromo: z
+      .number({ invalid_type_error: "Le prix promo doit être un nombre" })
+      .min(0, "Le prix promo ne peut pas être négatif")
+      .optional(),
+    garantie: z.string().max(50, "La garantie est trop longue").optional(),
     genreId: z
       .string()
       .max(MAX_ID_LENGTH, "L'ID du genre est invalide")

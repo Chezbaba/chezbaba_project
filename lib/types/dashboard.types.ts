@@ -45,8 +45,8 @@ export type AdminDashboardStats = {
     vendeurs: number;
   };
   produitsVendus: number;
-  meilleurProduit: ProductStats;
-  pireProduit: ProductStats;
+  meilleurProduit: ProductStats | null;
+  pireProduit: ProductStats | null;
   produitPlusRevenu: ProductWithRevenue | null;
   produitPlusVendu: ProductWithQuantity | null;
   weekData: WeekData[];

@@ -98,7 +98,7 @@ export default function SaleDetailModal({
                   Prix Unitaire :
                 </span>
                 <span className="text-gray-900 block text-xs sm:text-sm">
-                  {sale.prixUnit.toFixed(2)} DA
+                  {sale.prixUnit.toFixed(2)} FCFA
                 </span>
               </div>
               <div className="bg-gray-50 p-2 rounded-lg">
@@ -115,7 +115,7 @@ export default function SaleDetailModal({
                 Total :
               </span>
               <span className="text-green-900 font-bold text-base sm:text-lg">
-                {sale.total.toFixed(2)} DA
+                {sale.total.toFixed(2)} FCFA
               </span>
             </div>
             <div className="bg-gray-50 p-2 rounded-lg">

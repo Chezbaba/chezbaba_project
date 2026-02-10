@@ -13,6 +13,9 @@ export function getProductSelect() {
     totalEvaluations: true,
     dateCreation: true,
     dateModification: true,
+    delaiLivraison: true,
+    prixPromo: true,
+    garantie: true,
     // Relations
     genre: true,
     categorie: true,
@@ -66,6 +69,9 @@ export function formatProductData(product: ProductFromDB): ProductFromAPI {
     qteStock,
     noteMoyenne,
     video,
+    delaiLivraison,
+    prixPromo,
+    garantie,
     ...rest
   } = product;
 
@@ -82,6 +88,9 @@ export function formatProductData(product: ProductFromDB): ProductFromAPI {
     prix: prix.toNumber(),
     qteStock,
     noteMoyenne: noteMoyenne?.toNumber(),
+    delaiLivraison,
+    prixPromo: (prixPromo as any)?.toNumber() ?? null,
+    garantie,
     ...rest,
     video,
     ...(produitBoutique

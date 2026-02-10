@@ -31,7 +31,7 @@ const ProductCard = ({ data, showFavorite = true, showAddToCart = true }: Produc
           <QuickAddToCartButton
             productId={data.id}
             productName={data.nom}
-            productPrice={data.prix}
+            productPrice={data.prixPromo || data.prix}
             productImagePublicId={data.images[0]?.imagePublicId || null}
             size="sm"
           />
@@ -40,9 +40,16 @@ const ProductCard = ({ data, showFavorite = true, showAddToCart = true }: Produc
 
       <Link
         href={`/product/${data.id}`}
-        className="flex flex-col items-start justify-start w-full"
+        className="flex flex-col items-start justify-start w-full relative"
       >
-        <div className="bg-[#F0EEED] rounded-[13px] lg:rounded-[20px] w-full lg:max-w-[295px] aspect-square mb-2.5 xl:mb-4 overflow-hidden">
+        <div className="bg-[#F0EEED] rounded-[13px] lg:rounded-[20px] w-full lg:max-w-[295px] aspect-square mb-2.5 xl:mb-4 overflow-hidden relative">
+          {/* Badge New */}
+          {new Date(data.dateCreation) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
+            <span className="absolute top-2 left-2 bg-[#EA9010] text-white text-[10px] xl:text-xs font-bold px-2 py-1 rounded-full z-20">
+              New
+            </span>
+          )}
+
           <Image
             src={
               data.images[0]?.imagePublicId
@@ -56,49 +63,53 @@ const ProductCard = ({ data, showFavorite = true, showAddToCart = true }: Produc
             priority
           />
         </div>
-        <strong className="text-black xl:text-xl text-start">{data.nom}</strong>
+
+        {/* Vendeur / Boutique Name */}
+        {data.vendeur?.nomBoutique && (
+          <span className="text-gray-500 text-xs mb-1 block">
+            {data.vendeur.nomBoutique}
+          </span>
+        )}
+
+
+        <strong className="text-black xl:text-xl text-start line-clamp-1" title={data.nom}>{data.nom}</strong>
+
         <div className="w-full flex flex-col sm:flex-row justify-between items-start mb-1 xl:mb-2">
-          <Rating
-            initialValue={data.noteMoyenne}
-            allowFraction
-            SVGclassName="inline-block"
-            emptyClassName="fill-gray-50"
-            size={19}
-            readonly
-          />
-          <div>
-            <span className="text-black text-xs xl:text-sm sm:ml-[11px] xl:ml-[13px] pb-0.5 xl:pb-0">
-              {data.noteMoyenne.toFixed(1)}
-              <span className="text-black/60">/5</span>
-            </span>
-            <span className="text-black text-xs xl:text-sm ml-[11px] xl:ml-[13px] pb-0.5 xl:pb-0">
-              {`(${data.totalEvaluations} avis)`}
+          {/* Rating removed for brevity if needed, or kept */}
+          <div className="flex items-center">
+            <Rating
+              initialValue={data.noteMoyenne}
+              allowFraction
+              SVGclassName="inline-block"
+              emptyClassName="fill-gray-50"
+              size={16}
+              readonly
+            />
+            <span className="text-black text-xs xl:text-sm ml-1 pb-0.5 xl:pb-0">
+              {data.noteMoyenne.toFixed(1)} <span className="text-black/60">/5</span>
             </span>
           </div>
         </div>
-        <div className="flex items-center justify-between w-full">
-          <span className="font-bold text-black text-xl xl:text-2xl">
-            {data.prix}DA
-          </span>
 
-          {data.type === "marketplace" ? (
-            <div className="relative group">
-              <div className="text-xs xl:text-sm bg-[#F0EEED] text-gray-700 font-medium px-2.5 py-1 rounded-full">
-                Marketplace
+        <div className="flex flex-col w-full">
+          {data.prixPromo && data.prixPromo > 0 ? (
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-[#FD6C9E] text-xl xl:text-2xl">
+                  {data.prixPromo} FCFA
+                </span>
+                <span className="text-xs font-bold bg-[#FD6C9E]/10 text-[#FD6C9E] px-1.5 py-0.5 rounded">
+                  -{Math.round(((data.prix - data.prixPromo) / data.prix) * 100)}%
+                </span>
               </div>
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-black text-white text-xs rounded px-2 py-1 z-10 w-max max-w-[200px] text-center">
-                Vendu par un vendeur tiers inscrit sur notre plateforme.
-              </div>
+              <span className="text-gray-400 text-sm line-through">
+                {data.prix} FCFA
+              </span>
             </div>
           ) : (
-            <div className="relative group">
-              <div className="text-xs xl:text-sm bg-[#F0EEED] text-black font-medium px-2.5 py-1 rounded-full">
-                Boutique
-              </div>
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-black text-white text-xs rounded px-2 py-1 z-10 w-max max-w-[200px] text-center">
-                Vendu et expédié directement par notre boutique.
-              </div>
-            </div>
+            <span className="font-bold text-black text-xl xl:text-2xl">
+              {data.prix} FCFA
+            </span>
           )}
         </div>
       </Link>

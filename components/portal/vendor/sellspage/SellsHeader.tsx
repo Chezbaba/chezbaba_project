@@ -22,8 +22,8 @@ export default function SellsHeader({ sells, onExport }: SellsHeaderProps) {
       Client: sell.commande.client ? `${sell.commande.client.nom} ${sell.commande.client.prenom}` : "N/A",
       Email: sell.commande.client?.email || "N/A",
       Date: new Date(sell.commande.date).toLocaleDateString("fr-FR"),
-      "Prix unitaire (DA)": sell.prixUnit.toFixed(2),
-      "Total (DA)": sell.total.toFixed(2),
+      "Prix unitaire (FCFA)": sell.prixUnit.toFixed(2),
+      "Total (FCFA)": sell.total.toFixed(2),
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(data);

@@ -259,7 +259,7 @@ export async function POST(req: NextRequest) {
             userId: userId,
             type: "COMMANDE",
             objet: "Commande confirmée !",
-            text: `Votre commande n°${newOrder.id} d'un montant de ${total} DA a été validée avec succès.`,
+            text: `Votre commande n°${newOrder.id} d'un montant de ${total} FCFA a été validée avec succès.`,
             urlRedirection: `/client/orders`,
           },
         });

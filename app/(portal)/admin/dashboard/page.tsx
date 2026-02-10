@@ -33,18 +33,8 @@ export default function DashboardPage() {
       vendeurs: 0,
     },
     produitsVendus: 0,
-    meilleurProduit: {
-      id: "",
-      nom: "",
-      noteMoyenne: "0",
-      totalEvaluations: 0,
-    },
-    pireProduit: {
-      id: "",
-      nom: "",
-      noteMoyenne: "0",
-      totalEvaluations: 0,
-    },
+    meilleurProduit: null,
+    pireProduit: null,
     produitPlusRevenu: null,
     produitPlusVendu: null,
     weekData: [],
@@ -91,8 +81,8 @@ export default function DashboardPage() {
     selectedPeriod === "week"
       ? dashboardData.weekData
       : selectedPeriod === "month"
-      ? dashboardData.monthData
-      : dashboardData.yearData;
+        ? dashboardData.monthData
+        : dashboardData.yearData;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 py-6 px-4 sm:px-6 lg:px-10">
@@ -134,10 +124,9 @@ export default function DashboardPage() {
           <StatsCard
             icon={Users}
             title="Utilisateurs"
-            value={`${
-              dashboardData.utilisateurs.clients +
+            value={`${dashboardData.utilisateurs.clients +
               dashboardData.utilisateurs.vendeurs
-            } utilisateurs`}
+              } utilisateurs`}
             subtitle={`${dashboardData.utilisateurs.clients} clients, ${dashboardData.utilisateurs.vendeurs} vendeurs`}
             color="violet"
           />
@@ -174,16 +163,18 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-10">
           <ProductRatingCard
             title="Meilleur note produit"
-            productName={dashboardData.meilleurProduit.nom}
-            rating={dashboardData.meilleurProduit.noteMoyenne}
-            totalEvaluations={dashboardData.meilleurProduit.totalEvaluations}
+            productName={dashboardData.meilleurProduit?.nom || "Aucun produit"}
+            rating={dashboardData.meilleurProduit?.noteMoyenne || "0"}
+            totalEvaluations={
+              dashboardData.meilleurProduit?.totalEvaluations || 0
+            }
             color="violet"
           />
           <ProductRatingCard
             title="Pire note produit"
-            productName={dashboardData.pireProduit.nom}
-            rating={dashboardData.pireProduit.noteMoyenne}
-            totalEvaluations={dashboardData.pireProduit.totalEvaluations}
+            productName={dashboardData.pireProduit?.nom || "Aucun produit"}
+            rating={dashboardData.pireProduit?.noteMoyenne || "0"}
+            totalEvaluations={dashboardData.pireProduit?.totalEvaluations || 0}
             color="rose"
           />
         </div>

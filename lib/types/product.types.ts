@@ -35,6 +35,9 @@ export type ProductFromAPI = {
   totalEvaluations: number;
   dateCreation: Date;
   dateModification: Date;
+  delaiLivraison?: string | null;
+  prixPromo?: number | null;
+  garantie?: string | null;
   genre: { id: string; nom: string } | null;
   categorie: { id: string; nom: string } | null;
   couleurs: { id: string; nom: string; code: string }[];

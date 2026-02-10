@@ -17,13 +17,13 @@ interface CatalogHeaderProps {
   pageSize: number;
   onSortChange: (value: string) => void;
   selectedGender: string | null;
-  selectedCategory: string | null;
+  selectedCategory: string[];
   priceRange: [number, number];
   selectedColor: string | null;
   selectedSize: string | null;
   onApplyFilters: (filters: {
     gender: string | null;
-    category: string | null;
+    category: string[];
     priceRange: [number, number];
     color: string | null;
     size: string | null;

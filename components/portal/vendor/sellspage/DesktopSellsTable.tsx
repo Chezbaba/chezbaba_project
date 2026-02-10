@@ -116,7 +116,7 @@ export default function DesktopSellsTable({ sells, onSellClick }: DesktopSellsTa
                   {extractDateString(sell.commande.date)}
                 </td>
                 <td className="px-4 py-2 sm:px-6 sm:py-4 text-xs sm:text-sm font-semibold text-green-600">
-                  {sell.total.toFixed(2)} DA
+                  {sell.total.toFixed(2)} FCFA
                 </td>
               </tr>
             ))}

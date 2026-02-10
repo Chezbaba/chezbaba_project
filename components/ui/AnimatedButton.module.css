@@ -1,0 +1,64 @@
+.animatedButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 218px;
+    /* Match original button width */
+    height: 54px;
+    /* Match original button height roughly */
+    border-radius: 9999px;
+    /* Rounded full like original */
+    border: 1px solid #0C1B33;
+    /* Dark Blue */
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease-in;
+    z-index: 1;
+    text-decoration: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.animatedButton::before,
+.animatedButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    transform: skew(15deg);
+    transition: all 0.5s;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.animatedButton::before {
+    left: -10px;
+    background: #bdfe00;
+    /* Neon Green */
+}
+
+.animatedButton::after {
+    right: -10px;
+    background: #0C1B33;
+    /* Dark Blue */
+}
+
+.animatedButton:hover::before,
+.animatedButton:hover::after {
+    width: 58%;
+}
+
+.animatedButton:hover span {
+    color: #fff;
+    transition: 0.3s;
+}
+
+.animatedButton span {
+    color: #0C1B33;
+    /* Dark Blue */
+    font-size: 16px;
+    /* sm:text-base */
+    font-weight: 500;
+    transition: all 0.3s ease-in;
+}

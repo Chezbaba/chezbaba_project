@@ -64,11 +64,15 @@ export async function GET(
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ userId: string }> }
 ) {
   const { userId } = await params;
   const session = await auth();
+
+  console.log("DELETE /api/users/[userId] - Debug Auth");
+  console.log("Session:", session ? "Present" : "Missing");
+  console.log("Cookies:", req.cookies.getAll().map(c => c.name));
 
   // Authentication Check
   if (!session) {
@@ -127,33 +131,32 @@ export async function DELETE(
     }
 
     // If the user is a vendor & has products
-
-    // Uncomment the following lines if you want to delete images from Cloudinary
-    // Keep it commented for now to avoid accidental deletions
-    // const produits = user?.client?.vendeur?.produitMarketplace || [];
-    // if (produits.length > 0) {
-    //   // Delete all his product images from Cloudinary
-    //   await Promise.all(
-    //     produits.flatMap((pm) =>
-    //       (pm.produit?.images || []).map((img) =>
-    //         deleteFromCloudinary(img.imagePublicId)
-    //       )
-    //     )
-    //   );
-    //   // Delete all his products from the database
-    //   const productIds = produits.map((p) => p.produitId);
-    //   await prisma.produit.deleteMany({
-    //     where: { id: { in: productIds } },
-    //   });
-    // }
+    const produits = user?.client?.vendeur?.produitMarketplace || [];
+    if (produits.length > 0) {
+      // Delete all his product images from Cloudinary
+      await Promise.all(
+        produits.flatMap((pm) =>
+          (pm.produit?.images || []).map((img) =>
+            deleteFromCloudinary(img.imagePublicId)
+          )
+        )
+      );
+      // Delete all his products from the database
+      const productIds = produits.map((p) => p.produitId);
+      await prisma.produit.deleteMany({
+        where: { id: { in: productIds } },
+      });
+    }
 
     // Delete user
     await prisma.user.delete({
       where: { id: userId },
     });
 
-    // Delete the session
-    await signOut({ redirect: false });
+    // Only sign out if the user is deleting themselves
+    if (session.user.id === userId) {
+      await signOut({ redirect: false });
+    }
 
     return NextResponse.json(
       { message: `L'utilisateur avec l'ID ${userId} a été supprimé.` },
@@ -162,7 +165,7 @@ export async function DELETE(
   } catch (error) {
     console.error("API Error [DELETE /api/users/[userId]]:", error);
     return NextResponse.json(
-      { error: ERROR_MESSAGES.INTERNAL_ERROR },
+      { error: error instanceof Error ? error.message : ERROR_MESSAGES.INTERNAL_ERROR },
       { status: 500 }
     );
   }

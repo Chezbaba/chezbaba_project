@@ -75,7 +75,7 @@ export default function MobileSalesCards({
             Date: {extractDateString(sale.commande.date)}
           </div>
           <div className="text-xs font-semibold text-green-600">
-            Total: {sale.total.toFixed(2)} DA
+            Total: {sale.total.toFixed(2)} FCFA
           </div>
         </div>
       ))}

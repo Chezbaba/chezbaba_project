@@ -103,14 +103,19 @@ export default function ManagementPage() {
       const response = await fetch(`/api/users/${userToDelete.id}`, {
         method: "DELETE",
       });
-      if (!response.ok) throw new Error("Failed to delete user");
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to delete user");
+      }
+
       setUsers(
         users.filter((user) => user.id !== userToDelete.id) as typeof users
       );
       toast.success("Utilisateur supprimé avec succès");
     } catch (error) {
       console.error("Error deleting user:", error);
-      toast.error("Erreur lors de la suppression de l'utilisateur");
+      toast.error(error instanceof Error ? error.message : "Erreur lors de la suppression de l'utilisateur");
     } finally {
       setShowDeleteModal(false);
       setUserToDelete(null);

@@ -1,11 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { Store, Star, Package, MessageCircle, Calendar, ShieldCheck } from "lucide-react";
+import { Store, Star, Package, MessageCircle, Calendar, ShieldCheck, Share2 } from "lucide-react";
 import { getImageUrlFromPublicId } from "@/lib/utils";
 import { integralCF } from "@/styles/fonts";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface ShopHeaderProps {
     shop: {
@@ -32,101 +35,142 @@ const ShopHeader = ({ shop }: ShopHeaderProps) => {
         month: "long",
     });
 
+    const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+    const handleShare = async () => {
+        const url = window.location.href;
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: shop.nomBoutique,
+                    text: shop.description || `Découvrez la boutique ${shop.nomBoutique} sur MEGA SHOP`,
+                    url: url,
+                });
+            } else {
+                await navigator.clipboard.writeText(url);
+                toast.success("Lien de la boutique copié !");
+            }
+        } catch (error) {
+            console.error("Error sharing:", error);
+            // Fallback to clipboard if share fails or is cancelled
+            await navigator.clipboard.writeText(url);
+            toast.success("Lien de la boutique copié !");
+        }
+    };
+
     return (
-        <section className="relative overflow-hidden bg-white border-b border-gray-100">
-            {/* Hero Background with glassmorphism effect */}
-            <div className="h-48 md:h-64 relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-black to-gray-900">
+        <section className="bg-white dark:bg-slate-950">
+            {/* Banner Section */}
+            <div className="relative h-48 md:h-80 w-full overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-black">
                     <div className="absolute inset-0 opacity-20 bg-[url('/images/pattern.png')] bg-repeat" />
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1 }}
-                        className="absolute inset-0 overflow-hidden"
-                    >
-                        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-white/5 rounded-full blur-[100px]" />
-                        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-[100px]" />
-                    </motion.div>
+                    {/* Decorative Elements */}
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="relative -mt-24 md:-mt-32 pb-10">
-                    <div className="flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-10">
-                        {/* Logo Shop avec Animation */}
+            {/* Profile Section */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative mb-8">
+                <div className="flex flex-col md:flex-row gap-6 md:gap-8 -mt-20 md:-mt-24">
+                    {/* Logo - Overlapping Banner */}
+                    <div className="relative shrink-0 flex flex-row items-start gap-3 mx-auto md:mx-0">
                         <motion.div
-                            initial={{ scale: 0.8, opacity: 0 }}
+                            initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            transition={{ type: "spring", damping: 15 }}
-                            className="relative group"
+                            className="w-32 h-32 md:w-48 md:h-48 rounded-2xl border-4 border-white dark:border-slate-950 shadow-xl overflow-hidden bg-white relative z-10"
                         >
-                            <div className="w-40 h-40 md:w-52 md:h-52 rounded-2xl overflow-hidden border-[6px] border-white shadow-2xl bg-gray-50 flex items-center justify-center">
-                                <Image
-                                    src={
-                                        shop.imagePublicId
-                                            ? getImageUrlFromPublicId(shop.imagePublicId)
-                                            : "/icons/user.svg"
-                                    }
-                                    alt={shop.nomBoutique}
-                                    width={208}
-                                    height={208}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                />
-                            </div>
-                            <div className="absolute -bottom-3 -right-3 bg-black text-white p-3 rounded-xl shadow-lg border-2 border-white">
-                                <Store className="w-6 h-6" />
-                            </div>
+                            <Image
+                                src={
+                                    shop.imagePublicId
+                                        ? getImageUrlFromPublicId(shop.imagePublicId)
+                                        : "/icons/user.svg"
+                                }
+                                alt={shop.nomBoutique}
+                                fill
+                                className="object-cover"
+                            />
                         </motion.div>
+                        <div className="bg-black text-white p-2 md:p-3 rounded-xl shadow-lg border-2 border-white dark:border-slate-950 mt-2 md:mt-4 z-20">
+                            <Store className="w-5 h-5 md:w-6 md:h-6" />
+                        </div>
+                    </div>
 
-                        {/* Shop Details */}
-                        <div className="flex-1 text-center md:text-left pt-4">
-                            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 mb-3">
-                                <h1 className={cn([integralCF.className, "text-3xl md:text-5xl text-gray-900"])}>
+                    {/* Info Section */}
+                    <div className="flex-1 pt-2 md:pt-24 pb-4">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                            <div>
+                                <h1 className={cn(integralCF.className, "text-3xl md:text-4xl text-gray-900 dark:text-white mb-2 text-center md:text-left")}>
                                     {shop.nomBoutique}
                                 </h1>
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-semibold border border-green-100 self-center md:self-auto">
-                                    <ShieldCheck className="w-4 h-4" />
-                                    Vendeur Vérifié
+                                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 rounded-full text-sm font-semibold">
+                                        <ShieldCheck className="w-4 h-4" />
+                                        Vendeur Vérifié
+                                    </div>
+                                    <span className="text-gray-500 dark:text-gray-400 text-sm flex items-center gap-1">
+                                        <Calendar className="w-4 h-4" />
+                                        Depuis {memberSince}
+                                    </span>
                                 </div>
                             </div>
 
-                            <p className="text-gray-600 text-base md:text-lg mb-6 max-w-2xl mx-auto md:mx-0 leading-relaxed italic">
-                                {shop.description || "Une boutique passionnée par la mode et la qualité sur MEGA SHOP."}
-                            </p>
+                            <Button
+                                onClick={handleShare}
+                                variant="outline"
+                                className="w-full md:w-auto gap-2 rounded-full border-gray-200 hover:bg-gray-50 dark:border-slate-800 dark:hover:bg-slate-900"
+                            >
+                                <Share2 className="w-4 h-4" />
+                                Partager la boutique
+                            </Button>
+                        </div>
 
-                            {/* Stats Bar */}
-                            <div className="flex flex-wrap justify-center md:justify-start gap-3 md:gap-6">
-                                <div className="flex flex-col items-center md:items-start">
-                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Produits</span>
-                                    <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
-                                        <Package className="w-4 h-4 text-black" />
-                                        <span className="font-bold text-gray-900">{shop.stats.totalProduits}</span>
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            {/* Description */}
+                            <div className="lg:col-span-2">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">À propos</h3>
+                                <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    <div className={cn("relative transition-all duration-300", !isDescriptionExpanded && "max-h-[120px] overflow-hidden")}>
+                                        <p className="whitespace-pre-line">
+                                            {shop.description || "Une boutique passionnée par la mode et la qualité sur MEGA SHOP. Découvrez nos produits exclusifs et profitez de nos offres exceptionnelles."}
+                                        </p>
+                                        {!isDescriptionExpanded && (shop.description?.length || 0) > 200 && (
+                                            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white dark:from-slate-950 to-transparent" />
+                                        )}
                                     </div>
+                                    {(shop.description?.length || 0) > 200 && (
+                                        <button
+                                            onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                                            className="mt-2 text-sm font-medium text-orange-600 dark:text-orange-400 hover:underline flex items-center gap-1"
+                                        >
+                                            {isDescriptionExpanded ? "Voir moins" : "Lire la suite"}
+                                        </button>
+                                    )}
                                 </div>
+                            </div>
 
-                                <div className="flex flex-col items-center md:items-start">
-                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Note</span>
-                                    <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
-                                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                                        <span className="font-bold text-gray-900">{shop.stats.noteMoyenne.toFixed(1)}</span>
-                                        <span className="text-gray-400 text-sm">/5</span>
+                            {/* Stats Cards */}
+                            <div className="grid grid-cols-3 gap-4 lg:grid-cols-1">
+                                <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 flex flex-col items-center justify-center text-center border border-gray-100 dark:border-slate-800">
+                                    <div className="mb-2 p-2 bg-white dark:bg-slate-800 rounded-full shadow-sm">
+                                        <Package className="w-5 h-5 text-blue-600" />
                                     </div>
+                                    <span className="text-xl font-bold text-gray-900 dark:text-white">{shop.stats.totalProduits}</span>
+                                    <span className="text-xs text-gray-500 font-medium uppercase">Produits</span>
                                 </div>
-
-                                <div className="flex flex-col items-center md:items-start">
-                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Avis</span>
-                                    <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
-                                        <MessageCircle className="w-4 h-4 text-black" />
-                                        <span className="font-bold text-gray-900">{shop.stats.totalAvis}</span>
+                                <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 flex flex-col items-center justify-center text-center border border-gray-100 dark:border-slate-800">
+                                    <div className="mb-2 p-2 bg-white dark:bg-slate-800 rounded-full shadow-sm">
+                                        <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                                     </div>
+                                    <span className="text-xl font-bold text-gray-900 dark:text-white">{shop.stats.noteMoyenne.toFixed(1)}/5</span>
+                                    <span className="text-xs text-gray-500 font-medium uppercase">Note Moyenne</span>
                                 </div>
-
-                                <div className="flex flex-col items-center md:items-start">
-                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Ancienneté</span>
-                                    <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
-                                        <Calendar className="w-4 h-4 text-black" />
-                                        <span className="text-sm font-medium text-gray-600">{memberSince}</span>
+                                <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 flex flex-col items-center justify-center text-center border border-gray-100 dark:border-slate-800">
+                                    <div className="mb-2 p-2 bg-white dark:bg-slate-800 rounded-full shadow-sm">
+                                        <MessageCircle className="w-5 h-5 text-purple-600" />
                                     </div>
+                                    <span className="text-xl font-bold text-gray-900 dark:text-white">{shop.stats.totalAvis}</span>
+                                    <span className="text-xs text-gray-500 font-medium uppercase">Avis Clients</span>
                                 </div>
                             </div>
                         </div>

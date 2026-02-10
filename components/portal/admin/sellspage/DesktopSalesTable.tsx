@@ -129,7 +129,7 @@ export default function DesktopSalesTable({
                   {extractDateString(sale.commande.date)}
                 </td>
                 <td className="px-4 py-2 sm:px-6 sm:py-4 text-xs sm:text-sm font-semibold text-green-600">
-                  {sale.total.toFixed(2)} DA
+                  {sale.total.toFixed(2)} FCFA
                 </td>
               </tr>
             ))}

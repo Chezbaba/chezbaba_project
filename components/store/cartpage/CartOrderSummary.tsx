@@ -104,7 +104,7 @@ export default function CartOrderSummary() {
                   "text-sm md:text-base font-medium"
                 )}
               >
-                {item.quantity * item.price} DA
+                {item.quantity * item.price} FCFA
               </span>
             </div>
           ))}
@@ -126,7 +126,7 @@ export default function CartOrderSummary() {
                 "text-xl md:text-2xl font-bold text-black"
               )}
             >
-              {totalPrice} DA
+              {totalPrice} FCFA
             </span>
           </div>
         </div>

@@ -28,11 +28,16 @@ model Adresse {
 }
 
 model Categorie {
-  id          String    @id @default(cuid()) @db.VarChar(25)
-  nom         String    @unique(map: "nom") @db.VarChar(100)
-  description String?   @db.VarChar(255)
-  produits    Produit[]
+  id             String      @id @default(cuid()) @db.VarChar(25)
+  nom            String      @unique(map: "nom") @db.VarChar(100)
+  description    String?     @db.VarChar(255)
+  imagePublicId  String?     @map("image_public_id") @db.VarChar(255)
+  parentId       String?     @map("parent_id") @db.VarChar(25)
+  parent         Categorie?  @relation("CategorieParent", fields: [parentId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  sousCategories Categorie[] @relation("CategorieParent")
+  produits       Produit[]
 
+  @@index([parentId], map: "index_categorie_parent_id")
   @@map("categorie")
 }
 
@@ -209,6 +214,9 @@ model Produit {
   genreId            String?             @map("genre_id") @db.VarChar(25)
   produitBoutique    ProduitBoutique?
   produitMarketplace ProduitMarketplace?
+  delaiLivraison     String?             @map("delai_livraison") @db.VarChar(50)
+  prixPromo          Decimal?            @map("prix_promo") @db.Decimal(10, 2)
+  garantie           String?             @db.VarChar(50)
   categorie          Categorie?          @relation(fields: [categorieId], references: [id], onUpdate: NoAction)
   genre              Genre?              @relation(fields: [genreId], references: [id], onUpdate: NoAction)
   couleurs           Couleur[]           @relation("ProduitCouleurs")

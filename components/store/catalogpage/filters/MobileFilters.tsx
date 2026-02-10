@@ -14,13 +14,13 @@ import Filters from ".";
 
 interface MobileFiltersProps {
   selectedGender: string | null;
-  selectedCategory: string | null;
+  selectedCategory: string[];
   priceRange: [number, number];
   selectedColor: string | null;
   selectedSize: string | null;
   onApplyFilters: (filters: {
     gender: string | null;
-    category: string | null;
+    category: string[];
     priceRange: [number, number];
     color: string | null;
     size: string | null;
@@ -38,7 +38,7 @@ const MobileFilters = ({
   onResetFilters,
 }: MobileFiltersProps) => {
   const [localGender, setLocalGender] = useState<string | null>(selectedGender);
-  const [localCategory, setLocalCategory] = useState<string | null>(
+  const [localCategory, setLocalCategory] = useState<string[]>(
     selectedCategory
   );
   const [localPriceRange, setLocalPriceRange] =

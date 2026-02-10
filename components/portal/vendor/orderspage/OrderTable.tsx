@@ -66,7 +66,7 @@ export default function OrderTable({
                 Date: {extractDateString(order.date)}
               </div>
               <div className="text-xs font-semibold text-green-600 mb-2">
-                Total: {order.montant.toFixed(2)} DA
+                {order.montant.toFixed(2)} FCFA
               </div>
             </div>
           ))

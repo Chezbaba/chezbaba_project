@@ -24,26 +24,28 @@ export default function CatalogPage() {
 
   // Local filter states for desktop
   const [localGender, setLocalGender] = useState<string | null>(
-    searchParams.get("gender")
+    searchParams?.get("gender") || null
   );
-  const [localCategory, setLocalCategory] = useState<string | null>(
-    searchParams.get("category")
+  const [localCategory, setLocalCategory] = useState<string[]>(
+    searchParams?.get("category") ? searchParams.get("category")!.split(",") : []
   );
   const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([
-    parseInt(searchParams.get("minPrice") || "0"),
-    parseInt(searchParams.get("maxPrice") || "20000"),
+    parseInt(searchParams?.get("minPrice") || "0"),
+    parseInt(searchParams?.get("maxPrice") || "20000"),
   ]);
   const [localColor, setLocalColor] = useState<string | null>(
-    searchParams.get("color")
+    searchParams?.get("color") || null
   );
   const [localSize, setLocalSize] = useState<string | null>(
-    searchParams.get("size")
+    searchParams?.get("size") || null
   );
 
   // Sync local state with searchParams when they change
   useEffect(() => {
+    if (!searchParams) return;
     setLocalGender(searchParams.get("gender"));
-    setLocalCategory(searchParams.get("category"));
+    const catParam = searchParams.get("category");
+    setLocalCategory(catParam ? catParam.split(",") : []);
     setLocalPriceRange([
       parseInt(searchParams.get("minPrice") || "0"),
       parseInt(searchParams.get("maxPrice") || "20000"),
@@ -54,6 +56,7 @@ export default function CatalogPage() {
 
   // Fetch products based on URL search parameters
   useEffect(() => {
+    if (!searchParams) return;
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
@@ -77,13 +80,15 @@ export default function CatalogPage() {
 
   // Handler functions to update URL parameters
   const handlePageChange = (newPage: number) => {
-    const newSearchParams = new URLSearchParams(searchParams);
+    if (!searchParams) return;
+    const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("page", newPage.toString());
     router.push(`?${newSearchParams.toString()}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSortChange = (value: string) => {
+    if (!searchParams) return;
     const sortOptions = [
       { value: "most-popular", sortBy: "noteMoyenne", sortOrder: "desc" },
       { value: "low-price", sortBy: "prix", sortOrder: "asc" },
@@ -93,7 +98,7 @@ export default function CatalogPage() {
     ];
     const selectedOption = sortOptions.find((option) => option.value === value);
     if (selectedOption) {
-      const newSearchParams = new URLSearchParams(searchParams);
+      const newSearchParams = new URLSearchParams(searchParams.toString());
       newSearchParams.set("sortBy", selectedOption.sortBy);
       newSearchParams.set("sortOrder", selectedOption.sortOrder);
       newSearchParams.set("page", "1");
@@ -109,26 +114,32 @@ export default function CatalogPage() {
     size,
   }: {
     gender: string | null;
-    category: string | null;
+    category: string[];
     priceRange: [number, number];
     color: string | null;
     size: string | null;
   }) => {
-    const newSearchParams = new URLSearchParams(searchParams);
+    const newSearchParams = new URLSearchParams(searchParams?.toString() || "");
     // Preserve existing query parameter if present
-    const query = searchParams.get("query");
+    const query = searchParams?.get("query");
     if (query) newSearchParams.set("query", query);
+
     // Update filter parameters
     if (gender) newSearchParams.set("gender", gender);
     else newSearchParams.delete("gender");
-    if (category) newSearchParams.set("category", category);
+
+    if (category && category.length > 0) newSearchParams.set("category", category.join(","));
     else newSearchParams.delete("category");
+
     newSearchParams.set("minPrice", priceRange[0].toString());
     newSearchParams.set("maxPrice", priceRange[1].toString());
+
     if (color) newSearchParams.set("color", color);
     else newSearchParams.delete("color");
+
     if (size) newSearchParams.set("size", size);
     else newSearchParams.delete("size");
+
     newSearchParams.set("page", "1");
     router.push(`?${newSearchParams.toString()}`);
   };
@@ -171,14 +182,14 @@ export default function CatalogPage() {
             onPageChange={handlePageChange}
             onSortChange={handleSortChange}
             isLoading={isLoading}
-            selectedGender={searchParams.get("gender")}
-            selectedCategory={searchParams.get("category")}
+            selectedGender={searchParams?.get("gender") || null}
+            selectedCategory={searchParams?.get("category") ? searchParams.get("category")!.split(",") : []}
             priceRange={[
-              parseInt(searchParams.get("minPrice") || "0"),
-              parseInt(searchParams.get("maxPrice") || "20000"),
+              parseInt(searchParams?.get("minPrice") || "0"),
+              parseInt(searchParams?.get("maxPrice") || "20000"),
             ]}
-            selectedColor={searchParams.get("color")}
-            selectedSize={searchParams.get("size")}
+            selectedColor={searchParams?.get("color") || null}
+            selectedSize={searchParams?.get("size") || null}
             onApplyFilters={handleApplyFilters}
             onResetFilters={handleResetFilters}
           />

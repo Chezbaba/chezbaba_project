@@ -84,7 +84,7 @@ export default function SellDetailModal({ selectedSell, onClose }: SellDetailMod
                 Total :
               </span>
               <span className="text-green-900 font-bold text-base sm:text-lg">
-                {selectedSell.total.toFixed(2)} DA
+                {selectedSell.total.toFixed(2)} FCFA
               </span>
             </div>
             <div className="bg-gray-50 p-2 rounded-lg">
@@ -93,7 +93,7 @@ export default function SellDetailModal({ selectedSell, onClose }: SellDetailMod
               </span>
               <div className="flex justify-between text-xs sm:text-sm text-gray-900 mb-1">
                 <span>Prix unitaire :</span>
-                <span className="font-semibold">{selectedSell.prixUnit.toFixed(2)} DA</span>
+                <span className="font-semibold">{selectedSell.prixUnit.toFixed(2)} FCFA</span>
               </div>
               {selectedSell.couleur && (
                 <div className="flex justify-between text-xs sm:text-sm text-gray-900 mb-1">

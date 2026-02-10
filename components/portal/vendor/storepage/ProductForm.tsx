@@ -21,11 +21,23 @@ import {
   Palette,
   Ruler,
   Image as ImageIcon,
+  ChevronDown,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import {
   MAX_UPLOAD_SIZE_MB,
   ALLOWED_IMAGE_FORMATS,
   MAX_PRODUCT_DESCRIPTION_LENGTH,
+  DELIVERY_OPTIONS,
+  WARRANTY_OPTIONS,
 } from "@/lib/constants/settings";
 
 interface ProductFormProps {
@@ -46,7 +58,10 @@ const initialFormData: ProductFromAPI = {
   objet: "",
   description: "",
   prix: 0,
+  prixPromo: undefined,
   qteStock: 0,
+  delaiLivraison: "",
+  garantie: "",
   noteMoyenne: 0,
   totalEvaluations: 0,
   dateCreation: new Date(),
@@ -166,6 +181,9 @@ export const ProductForm = ({
         genres: formData.genre ? [formData.genre.id] : [],
         couleurs: formData.couleurs.map((c) => c.id),
         tailles: formData.tailles.map((t) => t.id),
+        delaiLivraison: formData.delaiLivraison,
+        prixPromo: formData.prixPromo,
+        garantie: formData.garantie,
       };
 
       const result = await fetchDataFromAPI<ProductFromAPI>(
@@ -202,6 +220,10 @@ export const ProductForm = ({
       formDataToSend.append("description", formData.description || "");
       formDataToSend.append("prix", formData.prix.toString());
       formDataToSend.append("qteStock", formData.qteStock.toString());
+      if (formData.delaiLivraison) formDataToSend.append("delaiLivraison", formData.delaiLivraison);
+      if (formData.prixPromo) formDataToSend.append("prixPromo", formData.prixPromo.toString());
+      if (formData.garantie) formDataToSend.append("garantie", formData.garantie);
+
       if (formData.categorie)
         formDataToSend.append("categorieId", formData.categorie.id);
       if (formData.genre) formDataToSend.append("genreId", formData.genre.id);
@@ -328,7 +350,7 @@ export const ProductForm = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                  <DollarSign className="h-4 w-4" /> Prix (DA)
+                  <DollarSign className="h-4 w-4" /> Prix (FCFA)
                 </label>
                 <input
                   type="number"
@@ -341,9 +363,33 @@ export const ProductForm = ({
                   }
                   className="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black transition-all duration-200"
                   min="0"
-                  step="0.01"
+                  step="1"
                   required
                 />
+              </div>
+              <div>
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <DollarSign className="h-4 w-4" /> Prix Promo (FCFA) <span className="text-xs text-gray-500 font-normal">(Optionnel)</span>
+                </label>
+                <input
+                  type="number"
+                  value={formData.prixPromo || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      prixPromo: e.target.value ? parseFloat(e.target.value) : undefined,
+                    })
+                  }
+                  className="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black transition-all duration-200"
+                  min="0"
+                  step="1"
+                  placeholder="Ex: 13000"
+                />
+                {formData.prix > 0 && formData.prixPromo && (
+                  <p className="text-xs text-green-600 mt-1 font-medium">
+                    Réduction : {Math.round(((formData.prix - formData.prixPromo) / formData.prix) * 100)}%
+                  </p>
+                )}
               </div>
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
@@ -362,6 +408,54 @@ export const ProductForm = ({
                   min="0"
                   required
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Delivery & Warranty Section */}
+          <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <Package className="h-5 w-5 text-gray-600" /> Livraison et Garantie
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <Package className="h-4 w-4" /> Délai de livraison
+                </label>
+                <select
+                  value={formData.delaiLivraison || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, delaiLivraison: e.target.value })
+                  }
+                  className="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black transition-all duration-200"
+                >
+                  <option value="">Sélectionner un délai</option>
+                  {DELIVERY_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                  <option value="Autre">Autre (préciser dans description)</option>
+                </select>
+              </div>
+              <div>
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <FileText className="h-4 w-4" /> Garantie
+                </label>
+                <select
+                  value={formData.garantie || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, garantie: e.target.value })
+                  }
+                  className="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black transition-all duration-200"
+                >
+                  <option value="">Sélectionner une garantie</option>
+                  {WARRANTY_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
@@ -420,62 +514,76 @@ export const ProductForm = ({
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                   <Palette className="h-4 w-4" /> Couleurs
                 </label>
-                <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {colors.map((color) => (
-                    <label key={color.id} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={formData.couleurs.some(
-                          (c) => c.id === color.id
-                        )}
-                        onChange={() => {
-                          const newCouleurs = formData.couleurs.some(
-                            (c) => c.id === color.id
-                          )
-                            ? formData.couleurs.filter((c) => c.id !== color.id)
-                            : [...formData.couleurs, color];
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-full justify-between">
+                      {formData.couleurs.length > 0
+                        ? `${formData.couleurs.length} couleur(s) sélectionnée(s)`
+                        : "Sélectionner les couleurs"}
+                      <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-[300px] h-[300px] overflow-y-auto">
+                    <DropdownMenuLabel>Couleurs disponibles</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {colors.map((color) => (
+                      <DropdownMenuCheckboxItem
+                        key={color.id}
+                        checked={formData.couleurs.some((c) => c.id === color.id)}
+                        onCheckedChange={(checked) => {
+                          const newCouleurs = checked
+                            ? [...formData.couleurs, color]
+                            : formData.couleurs.filter((c) => c.id !== color.id);
                           setFormData({ ...formData, couleurs: newCouleurs });
                         }}
-                        className="h-5 w-5 text-black focus:ring-black rounded"
-                      />
-                      <span className="text-sm flex items-center gap-1">
-                        {color.nom}
-                        <span
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: color.code }}
-                        ></span>
-                      </span>
-                    </label>
-                  ))}
-                </div>
+                      >
+                        <div className="flex items-center gap-2 w-full">
+                          <span
+                            className="w-4 h-4 rounded-full border border-gray-200"
+                            style={{ backgroundColor: color.code }}
+                          />
+                          {color.nom}
+                        </div>
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
               <div className="sm:col-span-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                   <Ruler className="h-4 w-4" /> Tailles
                 </label>
-                <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {sizes.map((size) => (
-                    <label key={size.id} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-full justify-between">
+                      {formData.tailles.length > 0
+                        ? `${formData.tailles.length} taille(s) sélectionnée(s)`
+                        : "Sélectionner les tailles"}
+                      <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-[300px] h-[300px] overflow-y-auto">
+                    <DropdownMenuLabel>Tailles disponibles</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {sizes.map((size) => (
+                      <DropdownMenuCheckboxItem
+                        key={size.id}
                         checked={formData.tailles.some((t) => t.id === size.id)}
-                        onChange={() => {
-                          const newTailles = formData.tailles.some(
-                            (t) => t.id === size.id
-                          )
-                            ? formData.tailles.filter((t) => t.id !== size.id)
-                            : [...formData.tailles, size];
+                        onCheckedChange={(checked) => {
+                          const newTailles = checked
+                            ? [...formData.tailles, size]
+                            : formData.tailles.filter((t) => t.id !== size.id);
                           setFormData({ ...formData, tailles: newTailles });
                         }}
-                        className="h-5 w-5 text-black focus:ring-black rounded"
-                      />
-                      <span className="text-sm">{size.nom}</span>
-                    </label>
-                  ))}
-                </div>
+                      >
+                        {size.nom}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>
