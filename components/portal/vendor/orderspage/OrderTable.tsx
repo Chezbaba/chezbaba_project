@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { extractDateString } from "@/lib/utils";
+import { extractDateString, formatPrice } from "@/lib/utils";
 import { OrderFromAPI } from "@/lib/types/order.types";
 import { getStatusColor } from "@/lib/helpers/orderStatus";
 import { CommandeStatut } from "@prisma/client";
@@ -66,7 +66,7 @@ export default function OrderTable({
                 Date: {extractDateString(order.date)}
               </div>
               <div className="text-xs font-semibold text-green-600 mb-2">
-                {order.montant.toFixed(2)} FCFA
+                {formatPrice(order.montant)}
               </div>
             </div>
           ))
@@ -140,7 +140,7 @@ export default function OrderTable({
                     </span>
                   </td>
                   <td className="px-4 py-2 sm:px-6 sm:py-4 text-xs sm:text-sm font-semibold text-green-600">
-                    {order.montant.toFixed(2)} DA
+                    {formatPrice(order.montant)}
                   </td>
                 </tr>
               ))}

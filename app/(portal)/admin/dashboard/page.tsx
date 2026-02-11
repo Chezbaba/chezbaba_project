@@ -20,6 +20,7 @@ import ErrorState from "@/components/portal/admin/dashboard/ErrorState";
 
 // Types
 import { AdminDashboardStats } from "@/lib/types/dashboard.types";
+import { formatPrice } from "@/lib/utils";
 
 // Fonts
 import { montserrat } from "@/styles/fonts";
@@ -110,9 +111,7 @@ export default function DashboardPage() {
           <StatsCard
             icon={Wallet}
             title="Total des ventes"
-            value={`${parseInt(
-              dashboardData.totalVentes
-            ).toLocaleString()} DZD`}
+            value={formatPrice(parseFloat(dashboardData.totalVentes))}
             color="emerald"
           />
           <StatsCard
@@ -153,7 +152,9 @@ export default function DashboardPage() {
             value={dashboardData.produitPlusRevenu?.nom || "Aucun revenu"}
             subtitle={
               dashboardData.produitPlusRevenu
-                ? `${dashboardData.produitPlusRevenu.totalRevenu.toLocaleString()} DZD de revenus`
+                ? `${formatPrice(
+                  dashboardData.produitPlusRevenu.totalRevenu
+                )} de revenus`
                 : "Pas encore de revenus enregistrés"
             }
             color="teal"

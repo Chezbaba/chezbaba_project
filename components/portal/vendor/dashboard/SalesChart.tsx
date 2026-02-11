@@ -47,8 +47,8 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
               <p className="text-xs sm:text-sm text-gray-700">
                 {entry.name}:{" "}
                 <span className="font-bold text-gray-900">
-                  {entry.name === "Ventes (DZD)"
-                    ? `${entry.value} DZD`
+                  {entry.name === "Ventes (FCFA)"
+                    ? `${entry.value} FCFA`
                     : entry.value}
                 </span>
               </p>
@@ -73,9 +73,8 @@ const CustomLegend = ({ payload }: LegendProps) => {
             <div
               className="w-4 h-1 sm:w-6 sm:h-1 rounded-full"
               style={{
-                background: `linear-gradient(to right, ${entry.color || ""}, ${
-                  entry.color || ""
-                }80)`,
+                background: `linear-gradient(to right, ${entry.color || ""}, ${entry.color || ""
+                  }80)`,
               }}
             ></div>
             <div
@@ -102,8 +101,8 @@ export default function SalesChart({ stats }: SalesChartProps) {
     selectedPeriod === "week"
       ? stats.weekData
       : selectedPeriod === "month"
-      ? stats.monthData
-      : stats.yearData;
+        ? stats.monthData
+        : stats.yearData;
 
   const xAxisKey = selectedPeriod === "year" ? "month" : "day";
 
@@ -111,8 +110,8 @@ export default function SalesChart({ stats }: SalesChartProps) {
     selectedPeriod === "week"
       ? "Évolution des ventes et articles vendus (7 derniers jours)"
       : selectedPeriod === "month"
-      ? "Évolution des ventes et articles vendus (30 derniers jours)"
-      : "Évolution des ventes et articles vendus (12 derniers mois)";
+        ? "Évolution des ventes et articles vendus (30 derniers jours)"
+        : "Évolution des ventes et articles vendus (12 derniers mois)";
 
   return (
     <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg border-2 border-black">
@@ -174,9 +173,9 @@ export default function SalesChart({ stats }: SalesChartProps) {
                   fontFamily: "Montserrat",
                   fill: "#1F2937",
                 }}
-                tickFormatter={(value) => `${value} DZD`}
+                tickFormatter={(value) => `${value} FCFA`}
                 label={{
-                  value: "Ventes (DZD)",
+                  value: "Ventes (FCFA)",
                   angle: -90,
                   position: "insideLeft",
                   fontSize: 12,
@@ -223,7 +222,7 @@ export default function SalesChart({ stats }: SalesChartProps) {
                   strokeWidth: 2,
                 }}
                 activeDot={{ r: 6 }}
-                name="Ventes (DZD)"
+                name="Ventes (FCFA)"
                 animationDuration={1500}
               />
               <Line
@@ -271,9 +270,9 @@ export default function SalesChart({ stats }: SalesChartProps) {
                   fontFamily: "Montserrat",
                   fill: "#1F2937",
                 }}
-                tickFormatter={(value) => `${value} DZD`}
+                tickFormatter={(value) => `${value} FCFA`}
                 label={{
-                  value: "Ventes (DZD)",
+                  value: "Ventes (FCFA)",
                   angle: -90,
                   position: "insideLeft",
                   fontSize: 12,
@@ -310,7 +309,7 @@ export default function SalesChart({ stats }: SalesChartProps) {
                 yAxisId="left"
                 dataKey="sales"
                 fill="#2563EB"
-                name="Ventes (DZD)"
+                name="Ventes (FCFA)"
                 animationDuration={1500}
                 radius={[4, 4, 0, 0]}
               />

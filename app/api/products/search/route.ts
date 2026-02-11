@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/utils/prisma";
-import { containsFilter } from "@/lib/utils";
+import { containsFilter } from "@/lib/utils/db";
 import { formatProductData, getProductSelect } from "@/lib/helpers/products";
 import { ERROR_MESSAGES } from "@/lib/constants/settings";
 import {

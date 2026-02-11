@@ -3,7 +3,7 @@
 import { X, CheckCircle } from "lucide-react"; // Import CheckCircle
 import { motion } from "framer-motion";
 import { OrderFromAPI } from "@/lib/types/order.types";
-import { extractDateString } from "@/lib/utils";
+import { extractDateString, formatPrice } from "@/lib/utils";
 import { getStatusColor, getStatusLabel } from "@/lib/helpers/orderStatus";
 import { useState } from "react";
 import { CommandeStatut } from "@prisma/client";
@@ -161,7 +161,7 @@ export default function OrderDetailModal({
                     </p>
                   </div>
                   <span className="text-gray-900 font-semibold text-sm sm:text-base mt-1 sm:mt-0">
-                    {(produit.prixUnit * produit.quantite).toFixed(2)} FCFA
+                    {formatPrice(produit.prixUnit * produit.quantite)}
                   </span>
                 </div>
               ))}
@@ -174,7 +174,7 @@ export default function OrderDetailModal({
               Total de la commande :
             </span>
             <span className="text-green-900 font-bold text-lg sm:text-2xl">
-              {order.montant.toFixed(2)} FCFA
+              {formatPrice(order.montant)}
             </span>
           </div>
         </div>

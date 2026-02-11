@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/utils/prisma";
+import { formatPrice } from "@/lib/utils";
 import { NotificationType } from "@prisma/client";
 
 // Helper function to generate random dates in the past
@@ -127,9 +128,9 @@ async function insertNotifications() {
     {
       type: NotificationType.PAIEMENT,
       objet: "Confirmation de paiement",
-      text: `Votre paiement de ${(Math.random() * 9000 + 1000).toFixed(
-        2
-      )} DA a été reçu avec succès.`,
+      text: `Votre paiement de ${formatPrice(
+        Math.random() * 9000 + 1000
+      )} a été reçu avec succès.`,
     },
     {
       type: NotificationType.SIGNALEMENT,
@@ -264,36 +265,32 @@ async function insertNotifications() {
       `Notifications insérées avec succès ! (${notifications.length} notifications)`
     );
     console.log(
-      `- Clients: ${
-        notifications.filter((n) => clients.some((c) => c.id === n.userId))
-          .length
+      `- Clients: ${notifications.filter((n) => clients.some((c) => c.id === n.userId))
+        .length
       }`
     );
     console.log(
-      `- Vendor: ${
-        notifications.filter((n) => vendors.some((c) => c.id === n.userId))
-          .length
+      `- Vendor: ${notifications.filter((n) => vendors.some((c) => c.id === n.userId))
+        .length
       }`
     );
     console.log(
       `- Admin: ${notifications.filter((n) => n.userId === admin.id).length}`
     );
     console.log(
-      `- Évaluation (Nouvelle): ${
-        notifications.filter(
-          (n) =>
-            n.type === NotificationType.EVALUATION &&
-            n.objet === "Nouvelle évaluation"
-        ).length
+      `- Évaluation (Nouvelle): ${notifications.filter(
+        (n) =>
+          n.type === NotificationType.EVALUATION &&
+          n.objet === "Nouvelle évaluation"
+      ).length
       }`
     );
     console.log(
-      `- Évaluation (Évaluez): ${
-        notifications.filter(
-          (n) =>
-            n.type === NotificationType.EVALUATION &&
-            n.objet === "Évaluez votre achat"
-        ).length
+      `- Évaluation (Évaluez): ${notifications.filter(
+        (n) =>
+          n.type === NotificationType.EVALUATION &&
+          n.objet === "Évaluez votre achat"
+      ).length
       }`
     );
   } catch (error) {

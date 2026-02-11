@@ -35,8 +35,8 @@ export default function DashboardChart({ data, period, onPeriodChange }: Dashboa
     period === "week"
       ? "Évolution des ventes et articles vendus (7 derniers jours)"
       : period === "month"
-      ? "Évolution des ventes et articles vendus (30 derniers jours)"
-      : "Évolution des ventes et articles vendus (12 derniers mois)";
+        ? "Évolution des ventes et articles vendus (30 derniers jours)"
+        : "Évolution des ventes et articles vendus (12 derniers mois)";
 
   return (
     <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg border-2 border-black">
@@ -93,9 +93,9 @@ export default function DashboardChart({ data, period, onPeriodChange }: Dashboa
                   fontFamily: "Montserrat",
                   fill: "#1F2937",
                 }}
-                tickFormatter={(value) => `${value} DZD`}
+                tickFormatter={(value) => `${value} FCFA`}
                 label={{
-                  value: "Ventes (DZD)",
+                  value: "Ventes (FCFA)",
                   angle: -90,
                   position: "insideLeft",
                   fontSize: 12,
@@ -136,7 +136,7 @@ export default function DashboardChart({ data, period, onPeriodChange }: Dashboa
                   padding: "8px",
                 }}
                 formatter={(value, name) =>
-                  name === "sales" ? `${value} DZD` : `${value}`
+                  name === "sales" ? `${value} FCFA` : `${value}`
                 }
               />
               <Legend
@@ -163,7 +163,7 @@ export default function DashboardChart({ data, period, onPeriodChange }: Dashboa
                   strokeWidth: 1,
                 }}
                 activeDot={{ r: 5 }}
-                name="Ventes (DZD)"
+                name="Ventes (FCFA)"
                 animationDuration={1500}
               />
               <Line
@@ -208,9 +208,9 @@ export default function DashboardChart({ data, period, onPeriodChange }: Dashboa
                   fontFamily: "Montserrat",
                   fill: "#1F2937",
                 }}
-                tickFormatter={(value) => `${value} DZD`}
+                tickFormatter={(value) => `${value} FCFA`}
                 label={{
-                  value: "Ventes (DZD)",
+                  value: "Ventes (FCFA)",
                   angle: -90,
                   position: "insideLeft",
                   fontSize: 12,
@@ -251,7 +251,7 @@ export default function DashboardChart({ data, period, onPeriodChange }: Dashboa
                   padding: "8px",
                 }}
                 formatter={(value, name) =>
-                  name === "sales" ? `${value} DZD` : `${value}`
+                  name === "sales" ? `${value} FCFA` : `${value}`
                 }
               />
               <Legend
@@ -268,7 +268,7 @@ export default function DashboardChart({ data, period, onPeriodChange }: Dashboa
                 yAxisId="left"
                 dataKey="sales"
                 fill="#10B981"
-                name="Ventes (DZD)"
+                name="Ventes (FCFA)"
                 animationDuration={1500}
                 radius={[4, 4, 0, 0]}
               />

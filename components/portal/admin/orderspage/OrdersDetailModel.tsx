@@ -3,7 +3,7 @@
 import { X } from "lucide-react";
 import { motion } from "framer-motion";
 import { OrderFromAPI } from "@/lib/types/order.types";
-import { extractDateString } from "@/lib/utils";
+import { extractDateString, formatPrice } from "@/lib/utils";
 import { getStatusColor, getStatusLabel } from "@/lib/helpers/orderStatus";
 
 interface OrderDetailModalProps {
@@ -111,7 +111,7 @@ export default function OrderDetailModal({
                     </p>
                   </div>
                   <span className="text-gray-900 font-semibold text-sm sm:text-base mt-1 sm:mt-0">
-                    {(produit.prixUnit * produit.quantite).toFixed(2)} DA
+                    {formatPrice(produit.prixUnit * produit.quantite)}
                   </span>
                 </div>
               ))}
@@ -124,7 +124,7 @@ export default function OrderDetailModal({
               Total de la commande :
             </span>
             <span className="text-green-900 font-bold text-lg sm:text-2xl">
-              {order.montant.toFixed(2)} DA
+              {formatPrice(order.montant)}
             </span>
           </div>
         </div>

@@ -3,7 +3,7 @@
 import { Settings, ChevronDown } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { extractDateString } from "@/lib/utils";
+import { extractDateString, formatPrice } from "@/lib/utils";
 import { OrderFromAPI } from "@/lib/types/order.types";
 import { getStatusColor } from "@/lib/helpers/orderStatus";
 import { CommandeStatut } from "@prisma/client";
@@ -74,7 +74,7 @@ export default function OrderTable({
                 Date: {extractDateString(order.date)}
               </div>
               <div className="text-xs font-semibold text-green-600 mb-2">
-                Total: {order.montant.toFixed(2)} DA
+                Total: {formatPrice(order.montant)}
               </div>
               <div
                 className="relative overflow-visible"
@@ -91,12 +91,11 @@ export default function OrderTable({
                       openDropdownId === order.id ? null : order.id
                     );
                   }}
-                  className={`w-full px-3 py-1 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-md text-xs overflow-visible ${
-                    order.statut === CommandeStatut.LIVREE ||
+                  className={`w-full px-3 py-1 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-md text-xs overflow-visible ${order.statut === CommandeStatut.LIVREE ||
                     order.statut === CommandeStatut.ANNULEE
-                      ? "bg-gray-500 text-white cursor-not-allowed"
-                      : "bg-black text-white hover:bg-gray-800"
-                  }`}
+                    ? "bg-gray-500 text-white cursor-not-allowed"
+                    : "bg-black text-white hover:bg-gray-800"
+                    }`}
                   disabled={
                     order.statut === CommandeStatut.LIVREE ||
                     order.statut === CommandeStatut.ANNULEE
@@ -105,9 +104,8 @@ export default function OrderTable({
                   <Settings className="h-4 w-4" />
                   Changer le statut
                   <ChevronDown
-                    className={`h-4 w-4 transition-transform ${
-                      openDropdownId === order.id ? "rotate-180" : ""
-                    }`}
+                    className={`h-4 w-4 transition-transform ${openDropdownId === order.id ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 <AnimatePresence>
@@ -210,7 +208,7 @@ export default function OrderTable({
                     </span>
                   </td>
                   <td className="px-4 py-2 sm:px-6 sm:py-4 text-xs sm:text-sm font-semibold text-green-600">
-                    {order.montant.toFixed(2)} DA
+                    {formatPrice(order.montant)}
                   </td>
                   <td className="px-4 py-2 sm:px-6 sm:py-4 text-xs sm:text-sm">
                     <div
@@ -228,12 +226,11 @@ export default function OrderTable({
                             openDropdownId === order.id ? null : order.id
                           );
                         }}
-                        className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg flex items-center gap-2 transition-all duration-300 shadow-md text-xs sm:text-sm ${
-                          order.statut === CommandeStatut.LIVREE ||
+                        className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg flex items-center gap-2 transition-all duration-300 shadow-md text-xs sm:text-sm ${order.statut === CommandeStatut.LIVREE ||
                           order.statut === CommandeStatut.ANNULEE
-                            ? "bg-gray-500 text-white cursor-not-allowed"
-                            : "bg-black text-white hover:bg-gray-800"
-                        }`}
+                          ? "bg-gray-500 text-white cursor-not-allowed"
+                          : "bg-black text-white hover:bg-gray-800"
+                          }`}
                         disabled={
                           order.statut === CommandeStatut.LIVREE ||
                           order.statut === CommandeStatut.ANNULEE
@@ -242,9 +239,8 @@ export default function OrderTable({
                         <Settings className="h-4 w-4" />
                         Changer
                         <ChevronDown
-                          className={`h-4 w-4 transition-transform ${
-                            openDropdownId === order.id ? "rotate-180" : ""
-                          }`}
+                          className={`h-4 w-4 transition-transform ${openDropdownId === order.id ? "rotate-180" : ""
+                            }`}
                         />
                       </button>
                       <AnimatePresence>

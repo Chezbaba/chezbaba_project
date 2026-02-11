@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { extractDateString } from "@/lib/utils";
+import { extractDateString, formatPrice } from "@/lib/utils";
 import { OrderFromAPI } from "@/lib/types/order.types";
 import { getStatusColor, getStatusLabel } from "@/lib/helpers/orderStatus";
 
@@ -87,7 +87,7 @@ export default function OrderTable({
                       {order.produits.length}
                     </td>
                     <td className="w-1/5 px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold text-gray-900">
-                      {order.montant.toFixed(2)} FCFA
+                      {formatPrice(order.montant)}
                     </td>
                   </tr>
                 ))}

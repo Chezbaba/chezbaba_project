@@ -17,7 +17,7 @@ import Pagination from "@/components/portal/client/orderspage/Pagination";
 // Types & Utils
 import { OrderFromAPI, SortConfig } from "@/lib/types/order.types";
 import { fetchPaginatedDataFromAPI } from "@/lib/utils/fetchData";
-import { extractDateString } from "@/lib/utils";
+import { extractDateString, formatPrice } from "@/lib/utils";
 
 export default function OrderHistoryPage(): JSX.Element {
   const [orders, setOrders] = useState<OrderFromAPI[]>([]);
@@ -140,11 +140,12 @@ export default function OrderHistoryPage(): JSX.Element {
     const data = orders.map((order) => ({
       ID: order.id,
       Date: extractDateString(order.date),
-      "Total (DA)": order.montant.toFixed(2),
+      "Total (FCFA)": formatPrice(order.montant),
       Articles: order.produits
         .map(
           (produit) =>
-            `${produit.nomProduit} (${produit.couleur?.nom}, ${produit.taille?.nom}): ${produit.quantite} x ${produit.prixUnit} DA`
+            `${produit.nomProduit} (${produit.couleur?.nom}, ${produit.taille?.nom
+            }): ${produit.quantite} x ${formatPrice(produit.prixUnit)}`
         )
         .join(" | "),
       Adresse: `${order.adresse?.rue ? order.adresse.rue + ", " : ""}${order.adresse?.ville ? order.adresse.ville + ", " : ""

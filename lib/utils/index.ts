@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Prisma } from "@prisma/client";
+
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -10,15 +10,7 @@ export function compareArrays(a: unknown[], b: unknown[]) {
   return a.toString() === b.toString();
 }
 
-export function isMySQL(): boolean {
-  return process.env.DATABASE_URL?.includes("mysql") ?? false;
-}
 
-export function containsFilter(value: string) {
-  return isMySQL()
-    ? { contains: value }
-    : { contains: value, mode: Prisma.QueryMode.insensitive };
-}
 
 export function extractDateString(dateInput: Date | string): string {
   const date = new Date(dateInput);
@@ -39,3 +31,7 @@ export const getVideoUrlFromPublicId = (videoPublicId: string) => {
 };
 
 export const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+export { formatPrice } from "./formatters/currency";
+
+

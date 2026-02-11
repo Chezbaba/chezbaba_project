@@ -17,7 +17,7 @@ import Pagination from "@/components/portal/vendor/orderspage/Pagination";
 // Types & Utils
 import { OrderFromAPI, SortConfig } from "@/lib/types/order.types";
 import { fetchPaginatedDataFromAPI } from "@/lib/utils/fetchData";
-import { extractDateString } from "@/lib/utils";
+import { extractDateString, formatPrice } from "@/lib/utils";
 import { CommandeStatut } from "@prisma/client";
 
 export default function OrderHistoryPage(): JSX.Element {
@@ -157,11 +157,12 @@ export default function OrderHistoryPage(): JSX.Element {
       Email: order.client?.email || "Inconnu",
       Date: extractDateString(order.date),
       Statut: order.statut,
-      "Total (DA)": order.montant.toFixed(2),
+      "Total (FCFA)": formatPrice(order.montant),
       Articles: order.produits
         .map(
           (item) =>
-            `${item.nomProduit} (${item.couleur?.nom}, ${item.taille?.nom}): ${item.quantite} x ${item.prixUnit} DA`
+            `${item.nomProduit} (${item.couleur?.nom}, ${item.taille?.nom}): ${item.quantite
+            } x ${formatPrice(item.prixUnit)}`
         )
         .join(", "),
     }));
